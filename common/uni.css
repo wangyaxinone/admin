@@ -1,0 +1,190 @@
+/* 全局公共样式 */
+
+body,
+html {
+    -webkit-user-select: auto;
+    user-select: auto;
+}
+
+.uni-app--showleftwindow uni-main {
+    position: relative;
+    background-color: #f5f5f5;
+}
+
+.uni-app--showleftwindow uni-page-wrapper {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    padding: 15px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    background-color: #F5F5F5;
+}
+
+.uni-app--showleftwindow uni-page-body {
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: -1px -1px 5px 0 rgba(0, 0, 0, .1);
+    background-color: #fff;
+}
+
+.uni-app--showleftwindow .uni-container .uni-forms {
+    padding: 15px;
+    max-width: 460px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.uni-top-window {
+    z-index: 998;
+    overflow: visible;
+}
+
+.uni-tips {
+    font-size: 12px;
+    color: #666;
+}
+
+/* 容器 */
+.uni-container {
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* 标题栏 */
+.uni-header {
+    padding: 0 15px;
+    display: flex;
+    height: 55px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px #f5f5f5 solid;
+}
+
+.uni-title {
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.uni-sub-title {
+    margin-top: 3px;
+    font-size: 14px;
+    color: #999;
+}
+
+.uni-link {
+    color: #3A8EE6;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.uni-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 按钮样式 */
+.uni-button-group {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uni-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    line-height: 1;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: initial;
+}
+
+.uni-button+.uni-button {
+    margin-left: 10px;
+}
+
+
+.uni-button:hover,
+.uni-button:focus {
+    opacity: 0.9;
+}
+
+.uni-button:active {
+    opacity: 1;
+}
+
+.uni-button-full {
+    width: 100%;
+}
+
+/* 搜索框样式 */
+.uni-search {
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    padding: 0 10px;
+    border: 1px #eee solid;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+/* 分页容器 */
+.uni-pagination-box {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+.uni-input-border,
+.uni-textarea-border {
+    width: 100%;
+    font-size: 14px;
+    color: #666;
+    border: 1px #e5e5e5 solid;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.uni-input-border {
+    padding: 0 10px;
+    height: 35px;
+
+}
+
+.uni-textarea-border {
+    padding: 10px;
+    height: 80px;
+}
+
+.uni-disabled {
+    background-color: #F5F7FA;
+    color: #C0C4CC;
+}
+
+.uni-icon-password-eye {
+	position: absolute;
+	right: 8px;
+	font-family: uniicons;
+	font-size: 20px;
+	font-weight: normal;
+	font-style: normal;
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	color: #999999;
+}
+
+.uni-eye-active {
+	color: #007AFF;
+}

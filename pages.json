@@ -1,0 +1,63 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		}, {
+			"path": "pages/login/login",
+			"style": {
+				"topWindow": false,
+				"leftWindow": false,
+				"navigationBarTitleText": "登录"
+			}
+		}, {
+			"path": "pages/error/404",
+			"style": {
+				"navigationBarTitleText": "Not Found"
+			}
+		}, {
+			"path": "pages/changepwd/changepwd",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+
+		}
+	],
+	"subPackages": [{
+		"root": "pages/system",
+		"pages": [{
+				"path": "permission",
+				"style": {
+					"navigationBarTitleText": "权限管理"
+				}
+			},
+			{
+				"path": "user",
+				"style": {
+					"navigationBarTitleText": "用户管理"
+				}
+			}
+		]
+	}],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "管理系统",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"topWindow": {
+		"path": "windows/topWindow",
+		"style": {
+			"height": "60px"
+		},
+		"matchMedia": {
+			"minWidth": 0
+		}
+	},
+	"leftWindow": {
+		"path": "windows/leftWindow",
+		"style": {
+			"width": "240px"
+		}
+	}
+}

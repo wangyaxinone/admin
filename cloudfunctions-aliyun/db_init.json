@@ -1,0 +1,15 @@
+{
+    "opendb-admin-menus": {
+        "data": [{
+            "menu_id": "system_permission",
+            "name": "权限管理",
+            "icon": "",
+            "url": "/pages/system/permission/list",
+            "sort": 1020,
+            "parent_id": "system_management",
+            "permission": [],
+            "enable": true,
+            "create_date": 1602662469396
+        }]
+    }
+}
