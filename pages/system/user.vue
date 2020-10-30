@@ -3,8 +3,11 @@
 		<view class="uni-container">
 			<uni-clientdb ref="dataQuery" :collection="collectionName" :options="options" :where="where" page-data="replace"
 			 :orderby="orderby" :getcount="true" :page-size="options.pageSize" :page-current="options.pageCurrent"
-			 v-slot:default="{data, loading}">
-				<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" 
+			 v-slot:default="{data, loading, pagination}"
+			 @load="clientdbload"
+			 >
+				{{pagination}}
+				<avue-crud :option="option" :page="pagination" :table-loading="loading" :data="data" ref="crud" v-model="form" 
 					@row-del="rowDel"
 					@row-update="rowUpdate"
 					@row-save="rowSave"
@@ -116,12 +119,42 @@
 								trigger: "blur",
 							}],
 						},
+						{
+							label: "用户状态",
+							prop: "status",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入用户状态",
+								trigger: "blur",
+							}],
+						},
+						{
+							label: "手机号码",
+							prop: "mobile",
+							span: 12,
+						},
+						{
+							label: "最后登录时间",
+							prop: "last_login_date",
+							width:120,
+							span: 12,
+						},
+						{
+							label: "最后登录时 IP 地址",
+							prop: "last_login_ip",
+							width:120,
+							span: 12,
+						},
 					],
 				},
 				data: [],
 			}
 		},
 		methods: {
+			clientdbload(data) {
+				debugger
+			},
 			getWhere() {
 				const query = this.query.trim()
 				if (!query) {
