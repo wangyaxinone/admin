@@ -6,7 +6,6 @@
 			 v-slot:default="{data, loading, pagination}"
 			 @load="clientdbload"
 			 >
-				{{pagination}}
 				<avue-crud :option="option" :page="pagination" :table-loading="loading" :data="data" ref="crud" v-model="form" 
 					@row-del="rowDel"
 					@row-update="rowUpdate"
@@ -17,6 +16,10 @@
 					@current-change="currentChange"
 					@size-change="sizeChange"
 					@on-load="loadData">
+					<template slot="last_login_date" slot-scope="scope">
+					  <uni-dateformate :date="scope.row.last_login_date" ></uni-dateformate>
+					</template>
+					
 				</avue-crud>
 			</uni-clientdb>
 		</view>
@@ -31,7 +34,9 @@
 	const dbSearchFields = ['permission_id', 'permission_name'] // 支持模糊搜索的字段列表
 	// 分页配置
 	import config from '@/admin.config.js'
+	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	export default {
+		components: {uniDateformate},
 		data() {
 			return {
 				query: '',
@@ -137,14 +142,17 @@
 						{
 							label: "最后登录时间",
 							prop: "last_login_date",
-							width:120,
+							slot: true,
+							width:140,
 							span: 12,
+							display: false,
 						},
 						{
 							label: "最后登录时 IP 地址",
 							prop: "last_login_ip",
 							width:120,
 							span: 12,
+							display: false,
 						},
 					],
 				},
@@ -153,7 +161,9 @@
 		},
 		methods: {
 			clientdbload(data) {
-				debugger
+				if(data && data.length) {
+					
+				}
 			},
 			getWhere() {
 				const query = this.query.trim()

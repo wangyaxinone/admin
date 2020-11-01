@@ -188,3 +188,6 @@ html {
 .uni-eye-active {
 	color: #007AFF;
 }
+.avue--detail .el-input__inner, .avue--detail .el-textarea__inner{
+	border: 1px solid #dcdfe6 !important;
+}

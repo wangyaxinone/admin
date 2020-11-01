@@ -25,7 +25,7 @@
 	"subPackages": [{
 		"root": "pages/system",
 		"pages": [{
-				"path": "permission",
+				"path": "menu",
 				"style": {
 					"navigationBarTitleText": "权限管理"
 				}
@@ -34,6 +34,12 @@
 				"path": "user",
 				"style": {
 					"navigationBarTitleText": "用户管理"
+				}
+			},
+			{
+				"path": "role",
+				"style": {
+					"navigationBarTitleText": "角色管理"
 				}
 			}
 		]

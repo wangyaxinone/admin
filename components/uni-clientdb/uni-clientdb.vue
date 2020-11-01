@@ -48,6 +48,9 @@
      */
     export default {
         props: {
+			prtLoad: {
+				type: Function
+			},
             options: {
                 type: [Object, Array],
                 default () {
@@ -228,10 +231,13 @@
 
                 this._getExec().then((res) => {
                     this.loading = false
-                    const {
+                    var {
                         data,
-                        total
-                    } = res.result
+                        count
+                    } = res.result;
+					if(this.prtLoad) {
+						var data = this.prtLoad(data);
+					}
                     this._isEnded = data.length < this.pageSize
 
                     callback && callback(data, this._isEnded)
@@ -246,7 +252,7 @@
                         }
                     } else if (this.pageData === pageMode.replace) {
                         this.dataList = data
-                        this.paginationInternal.total = total
+                        this.paginationInternal.total = count
                     }
 
                     // #ifdef H5
