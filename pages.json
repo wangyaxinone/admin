@@ -43,6 +43,15 @@
 				}
 			}
 		]
+	},{
+		"root": "pages/tenant",
+		"pages": [{
+				"path": "tenant",
+				"style": {
+					"navigationBarTitleText": "门店列表"
+				}
+			}
+		]
 	}],
 	"globalStyle": {
 		"navigationStyle": "custom",

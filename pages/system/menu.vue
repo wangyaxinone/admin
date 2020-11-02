@@ -30,8 +30,7 @@
 	export default {
 		data() {
 			return {
-				query: '',
-				where: '',
+				where: {},
 				orderby: dbOrderBy,
 				collectionName: dbCollectionName,
 				options: {
@@ -136,6 +135,7 @@
 							label: "菜单状态",
 							prop: "enable",
 							type: "switch",
+							search: true,
 							span: 12,
 							value: true,
 							dicData: [{
@@ -176,23 +176,6 @@
 				const column = _this.findObject(_this.option.column, "parent_id");
 				column.dicData = tree;
 				return tree;
-			},
-			getWhere() {
-				const query = this.params.name.trim()
-				if (!query) {
-					return ''
-				}
-				const queryRe = `/${query}/i`
-				return dbSearchFields.map(name => queryRe + '.test(' + name + ')').join(' || ')
-			},
-			search() {
-				debugger
-				const newWhere = this.getWhere()
-				const isSameWhere = newWhere === this.where
-				this.where = newWhere
-				if (isSameWhere) { // 相同条件时，手动强制刷新
-					this.loadData()
-				}
 			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
@@ -280,14 +263,14 @@
 					})
 			},
 			searchReset() {
-				this.where = '';
+				this.where = {};
 				this.params = {};
 				this.loadData();
 			},
 			searchChange(params, done) {
-				debugger
 				this.params = params;
-				this.params.name && (this.where = this.getWhere());
+				this.params.name && (this.where.name = new RegExp(this.params.name))
+				this.params.enable !== undefined && (this.where.enable = this.params.enable)
 				this.loadData();
 				done();
 			},

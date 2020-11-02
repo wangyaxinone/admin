@@ -19,6 +19,7 @@
   "homepage": "https://github.com/dcloudio/uni-template-admin#readme",
   "dependencies": {
     "@smallwei/avue": "^2.7.0",
+    "avue-plugin-map": "^1.0.1",
     "element-ui": "^2.14.0"
   }
 }

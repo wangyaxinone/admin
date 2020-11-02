@@ -7,9 +7,9 @@
 				<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 				 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 				 @selection-change="selectionChange" @current-change="currentChange" @size-change="sizeChange" @on-load="loadData">
-					<template slot-scope="{type,size,row}" slot="menu">
-						<el-button icon="el-icon-plus" :size="size" :type="type" @click="addChildMenus(row)">添加子菜单</el-button>
-					</template>
+					<template slot-scope="scope" slot="addressForm">
+						<avue-map v-model="map"></avue-map>
+					  </template>
 				</avue-crud>
 			</uni-clientdb>
 		</view>
@@ -30,6 +30,11 @@
 	export default {
 		data() {
 			return {
+				map: {
+					formattedAddress: "",
+					longitude: 0,
+					latitude: 0,
+				},
 				query: '',
 				where: '',
 				orderby: dbOrderBy,
@@ -54,86 +59,44 @@
 					viewBtn: true,
 					menuWidth: 300,
 					column: [{
-							label: "菜单名称",
+							label: "门店名称",
 							prop: "name",
 							search: true,
 							width:150,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入角色名称",
+								message: "请输入门店名称",
 								trigger: "blur",
 							}, ],
 						},
 						{
-							label: "菜单 Id",
-							prop: "menu_id",
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入菜单 Id",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "父级菜单",
+							label: "上级门店",
 							prop: "parent_id",
 							span: 12,
 							type: 'tree',
 							dicData: [],
 							props: {
 								label: "name",
-								value: "menu_id"
+								value: "_id"
 							},
 						},
 						{
-							label: '图标选择器',
-							prop: 'icon',
-							type: 'icon',
-							iconList: iconList
-						},
-						{
-							label: "url",
-							prop: "url",
-							span: 12,
-							rules: [{
-								required: false,
-								message: "请输入url",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "类型",
+							label: "门店类型",
 							prop: "type",
 							span: 12,
 							type: 'select',
 							value: 1,
 							dicData: [{
-								label: '菜单',
+								label: '自营',
 								value: 1
 							}, {
-								label: '按钮',
+								label: '加盟',
 								value: 2
 							}],
-							rules: [{
-								required: true,
-								message: "请输入url",
-								trigger: "change",
-							}, ],
 						},
 						{
-							label: "角色排序",
-							prop: "sort",
-							type: "number",
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入角色排序",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "菜单状态",
+							label: "门店状态",
 							prop: "enable",
 							type: "switch",
 							span: 12,
@@ -147,6 +110,26 @@
 									value: true,
 								}
 							],
+						},
+						{
+							label: "门店地址",
+							prop: "address",
+							formslot: true,
+							width:150,
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入门店名称",
+								trigger: "blur",
+							}, ],
+						},
+						{
+							label: "创建时间",
+							prop: "create_date",
+							slot: true,
+							width:140,
+							span: 12,
+							display: false,
 						},
 					],
 				},
