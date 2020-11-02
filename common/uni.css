@@ -191,3 +191,6 @@ html {
 .avue--detail .el-input__inner, .avue--detail .el-textarea__inner{
 	border: 1px solid #dcdfe6 !important;
 }
+.el-table, .el-table__body-wrapper{
+    height: auto !important;
+}

@@ -54,99 +54,59 @@
 					viewBtn: true,
 					menuWidth: 300,
 					column: [{
-							label: "菜单名称",
-							prop: "name",
+							label: "角色名",
+							prop: "role_name",
 							search: true,
 							width:150,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入角色名称",
+								message: "请输入角色名",
 								trigger: "blur",
 							}, ],
 						},
 						{
-							label: "菜单 Id",
-							prop: "menu_id",
+							label: "角色 Id",
+							prop: "role_id",
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入菜单 Id",
+								message: "请输入角色 Id",
 								trigger: "change",
 							}, ],
 						},
 						{
-							label: "父级菜单",
-							prop: "parent_id",
+							label: "所属门店",
+							prop: "tenantId",
+							type: "tree",
 							span: 12,
-							type: 'tree',
 							dicData: [],
 							props: {
-								label: "name",
-								value: "menu_id"
+								label: "tenantName",
+								value: "_id",
 							},
+							search: false,
+							rules: [{
+								required: true,
+								message: "请输入所属租户",
+								trigger: "change",
+							}, ],
 						},
 						{
-							label: '图标选择器',
-							prop: 'icon',
-							type: 'icon',
-							iconList: iconList
-						},
-						{
-							label: "url",
-							prop: "url",
+							label: "备注",
+							prop: "comment",
 							span: 12,
 							rules: [{
 								required: false,
-								message: "请输入url",
+								message: "请输入备注",
 								trigger: "change",
 							}, ],
 						},
 						{
-							label: "类型",
-							prop: "type",
+							label: "创建时间",
+							prop: "created_date",
 							span: 12,
-							type: 'select',
-							value: 1,
-							dicData: [{
-								label: '菜单',
-								value: 1
-							}, {
-								label: '按钮',
-								value: 2
-							}],
-							rules: [{
-								required: true,
-								message: "请输入url",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "角色排序",
-							prop: "sort",
-							type: "number",
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入角色排序",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "菜单状态",
-							prop: "enable",
-							type: "switch",
-							span: 12,
-							value: true,
-							dicData: [{
-									label: "禁用",
-									value: false,
-								},
-								{
-									label: "启用",
-									value: true,
-								}
-							],
+							display:false
 						},
 					],
 				},

@@ -10,16 +10,16 @@ module.exports = {
             {
                 name: 'auth',
                 enable: true,
-                ignore: 'user'
+                ignore: 'user/login'
             }
         ],
-        [
-            permission(), // uniId 校验权限中间件
-            {
-                name: 'permission',
-                enable: true,
-                ignore: ['self', 'user', 'system']
-            }
-        ]
+        // [
+        //     permission(), // uniId 校验权限中间件
+        //     {
+        //         name: 'permission',
+        //         enable: true,
+        //         ignore: ['self', 'user', 'system']
+        //     }
+        // ]
     ]
 }

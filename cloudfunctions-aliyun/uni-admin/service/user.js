@@ -10,7 +10,8 @@ module.exports = class UserService extends Service {
         const res = await uniID.login({
             username,
             password,
-            needPermission: true
+            needPermission: true,
+			queryField: ['username', 'email', 'mobile']
         })
         if (res.code) {
             return res

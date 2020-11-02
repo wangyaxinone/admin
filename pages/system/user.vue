@@ -98,7 +98,7 @@
 							span: 12,
 						},
 						{
-							label: "所属租户",
+							label: "所属门店",
 							prop: "tenantId",
 							type: "tree",
 							span: 12,

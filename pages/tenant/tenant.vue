@@ -20,9 +20,9 @@
 	const db = uniCloud.database()
 	const dbCmd = db.command
 	// 表查询配置
-	const dbCollectionName = 'opendb-admin-menus'
+	const dbCollectionName = 'opendb-admin-tenant'
 	const dbOrderBy = 'create_date desc'
-	const dbSearchFields = ['name'] // 支持模糊搜索的字段列表
+	const dbSearchFields = ['permission_id', 'permission_name'] // 支持模糊搜索的字段列表
 	// 分页配置
 	import config from '@/admin.config.js'
 	import iconList from "@/config/iconList";
@@ -178,7 +178,7 @@
 				return tree;
 			},
 			getWhere() {
-				const query = this.params.name.trim()
+				const query = this.query.trim()
 				if (!query) {
 					return ''
 				}
@@ -285,9 +285,8 @@
 				this.loadData();
 			},
 			searchChange(params, done) {
-				debugger
 				this.params = params;
-				this.params.name && (this.where = this.getWhere());
+				this.params.name && (this.where = `name==${this.params.name}`);
 				this.loadData();
 				done();
 			},
