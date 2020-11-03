@@ -3,16 +3,22 @@
 		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData">
+		 <template slot-scope="scope" slot="create_date">
+		 	<uniDateformate :date="scope.row.create_date"></uniDateformate>
+		 </template>
 		</avue-crud>
 	</view>
 </template>
 
 <script>
 	var _this
-	var dbCollectionName = '’；'
 	import {tree as tenantTree} from "@/api/tenant/tenant.js"
 	import {getList, add, update, remove, tree} from "@/api/system/role.js"
+	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	export default {
+		components: {
+			uniDateformate
+		},
 		data() {
 			return {
 				loading:false,
@@ -108,7 +114,9 @@
 						},
 						{
 							label: "创建时间",
-							prop: "created_date",
+							prop: "create_date",
+							slot: true,
+							width:150,
 							span: 12,
 							display:false
 						},
@@ -131,7 +139,6 @@
 						tree({
 							tenantId: newValue
 						}).then((tree)=>{
-							debugger
 							const column = _this.findObject(_this.option.column, "parent_id");
 							column.dicData = tree;
 						})
@@ -214,6 +221,10 @@
 				tree(this.params).then((res)=>{
 					this.loading = false;
 					this.data = res;
+					tree().then((tree)=>{
+						const column = this.findObject(this.option.column, "parent_id");
+						column.dicData = tree;
+					})
 				}).catch(()=>{
 					this.loading = false;
 				})

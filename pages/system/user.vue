@@ -1,28 +1,20 @@
 <template>
-	<view>
-		<view class="uni-container">
-			<uni-clientdb ref="dataQuery" :collection="collectionName" :options="options" :where="where" page-data="replace"
-			 :orderby="orderby" :getcount="true" :page-size="options.pageSize" :page-current="options.pageCurrent"
-			 v-slot:default="{data, loading, pagination}"
-			 @load="clientdbload"
-			 >
-				<avue-crud :option="option" :page="pagination" :table-loading="loading" :data="data" ref="crud" v-model="form" 
-					@row-del="rowDel"
-					@row-update="rowUpdate"
-					@row-save="rowSave"
-					@search-change="searchChange"
-					@search-reset="searchReset"
-					@selection-change="selectionChange"
-					@current-change="currentChange"
-					@size-change="sizeChange"
-					@on-load="loadData">
-					<template slot="last_login_date" slot-scope="scope">
-					  <uni-dateformate :date="scope.row.last_login_date" ></uni-dateformate>
-					</template>
-					
-				</avue-crud>
-			</uni-clientdb>
-		</view>
+	<view class="uni-container">
+		<avue-crud :option="option" :page="options" :table-loading="loading" :data="data" ref="crud" v-model="form"
+			@row-del="rowDel"
+			@row-update="rowUpdate"
+			@row-save="rowSave"
+			@search-change="searchChange"
+			@search-reset="searchReset"
+			@selection-change="selectionChange"
+			@current-change="currentChange"
+			@size-change="sizeChange"
+			@on-load="loadData">
+			<template slot="last_login_date" slot-scope="scope">
+			  <uni-dateformate :date="scope.row.last_login_date" ></uni-dateformate>
+			</template>
+			
+		</avue-crud>
 	</view>
 </template>
 
@@ -35,17 +27,18 @@
 	// 分页配置
 	import config from '@/admin.config.js'
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
+	import {getList, add, update, remove} from "@/api/system/user.js"
+	import {tree as tenantTree} from "@/api/tenant/tenant.js"
+	import {tree as roleTree} from "@/api/system/role.js"
 	export default {
 		components: {uniDateformate},
 		data() {
 			return {
-				query: '',
-				where: '',
-				orderby: dbOrderBy,
-				collectionName: dbCollectionName,
+				loading:false,
 				options: {
 					pageSize: config.pages.pageSize,
-					pageCurrent: config.pages.pageCurrent,
+					currentPage: config.pages.pageCurrent,
+					total: 0
 				},
 				form: {},
 				params: {},
@@ -104,7 +97,7 @@
 							span: 12,
 							dicData: [],
 							props: {
-								label: "tenantName",
+								label: "name",
 								value: "_id",
 							},
 							search: false,
@@ -117,7 +110,13 @@
 						{
 							label: "用户角色",
 							prop: "role",
+							type:'select',
+							dicData:[],
 							span: 12,
+							props: {
+								label: "role_name",
+								value: "_id"
+							},
 							rules: [{
 								required: true,
 								message: "请输入用户角色",
@@ -127,6 +126,7 @@
 						{
 							label: "用户状态",
 							prop: "status",
+							type: 'select',
 							span: 12,
 							rules: [{
 								required: true,
@@ -157,6 +157,27 @@
 					],
 				},
 				data: [],
+			}
+		},
+		created() {
+			tenantTree().then((tree)=>{
+				const column = this.findObject(this.option.column, "tenantId");
+				column.dicData = tree;
+			})
+		},
+		watch:{
+			'form.tenantId':{
+				handler(newValue){
+					if(newValue) {
+						roleTree({
+							tenantId: newValue
+						}).then((tree)=>{
+							const column = this.findObject(this.option.column, "role");
+							column.dicData = tree;
+						})
+					}
+				},
+				deep: true
 			}
 		},
 		methods: {
@@ -202,12 +223,13 @@
 				this.options.pageSize = pageSize;
 			},
 			loadData(clear = true) {
-				this.$nextTick(() => {
-					this.$refs.dataQuery.loadData({
-						clear
-					})
+				this.loading = true;
+				getList().then((res)=>{
+					this.data = res;
+					this.loading = false;
+				}).catch(()=>{
+					this.loading = false;
 				})
-				
 			}
 		}
 	}
