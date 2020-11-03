@@ -1,43 +1,21 @@
 <template>
-	<view>
-		<view class="uni-container">
-			<uni-clientdb ref="dataQuery" :collection="collectionName" :options="options" :where="where" page-data="replace"
-			 :orderby="orderby" :getcount="true" :page-size="options.pageSize" :page-current="options.pageCurrent"
-			 v-slot:default="{data, loading}" :prtLoad="clientdbload">
-				<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
-				 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
-				 @selection-change="selectionChange" @current-change="currentChange" @size-change="sizeChange" @on-load="loadData">
-					<template slot-scope="{type,size,row}" slot="menu">
-						<el-button icon="el-icon-plus" :size="size" :type="type" @click="addChildMenus(row)">添加子菜单</el-button>
-					</template>
-				</avue-crud>
-			</uni-clientdb>
-		</view>
+	<view class="uni-container">
+		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
+		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
+		 @selection-change="selectionChange" @on-load="loadData">
+		</avue-crud>
 	</view>
 </template>
 
 <script>
-	const db = uniCloud.database()
-	const dbCmd = db.command
-	// 表查询配置
-	const dbCollectionName = 'uni-id-roles'
-	const dbOrderBy = 'create_date desc'
-	const dbSearchFields = ['permission_id', 'permission_name'] // 支持模糊搜索的字段列表
-	// 分页配置
-	import config from '@/admin.config.js'
-	import iconList from "@/config/iconList";
 	var _this
+	var dbCollectionName = '’；'
+	import {tree as tenantTree} from "@/api/tenant/tenant.js"
+	import {getList, add, update, remove, tree} from "@/api/system/role.js"
 	export default {
 		data() {
 			return {
-				query: '',
-				where: '',
-				orderby: dbOrderBy,
-				collectionName: dbCollectionName,
-				options: {
-					pageSize: config.pages.pageSize,
-					pageCurrent: config.pages.pageCurrent,
-				},
+				loading:false,
 				form: {},
 				params: {},
 				option: {
@@ -66,29 +44,50 @@
 							}, ],
 						},
 						{
-							label: "角色 Id",
-							prop: "role_id",
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入角色 Id",
-								trigger: "change",
-							}, ],
-						},
-						{
 							label: "所属门店",
 							prop: "tenantId",
 							type: "tree",
 							span: 12,
 							dicData: [],
 							props: {
-								label: "tenantName",
+								label: "name",
 								value: "_id",
 							},
-							search: false,
+							search: true,
 							rules: [{
 								required: true,
 								message: "请输入所属租户",
+								trigger: "change",
+							}, ],
+						},
+						{
+							label: "上级角色",
+							prop: "parent_id",
+							span: 12,
+							type: 'tree',
+							dicData: [],
+							props: {
+								label: "role_name",
+								value: "_id"
+							},
+						},
+						
+						{
+							label: "门店管理员",
+							prop: "type",
+							span: 12,
+							type: 'select',
+							value: 2,
+							dicData: [{
+								label: '是',
+								value: 1
+							}, {
+								label: '否',
+								value: 2
+							}],
+							rules: [{
+								required: true,
+								message: "请选择是否是门店管理员",
 								trigger: "change",
 							}, ],
 						},
@@ -115,45 +114,12 @@
 		},
 		created() {
 			_this = this;
+			tenantTree().then((tree)=>{
+				const column = _this.findObject(_this.option.column, "tenantId");
+				column.dicData = tree;
+			})
 		},
 		methods: {
-			addChildMenus(row) {
-				this.$refs.crud.rowAdd();
-				setTimeout(()=>{
-					this.form.parent_id = row.menu_id;
-				},300)
-			},
-			clientdbload(data) {
-				data.sort((data1, data2) => {
-					return data1.sort > data2.sort ? 1 : -1;
-				})
-				var tree = _this.$getTree(data, {
-					id: 'menu_id',
-					children: 'children',
-					parentId: 'parent_id',
-				});
-
-				const column = _this.findObject(_this.option.column, "parent_id");
-				column.dicData = tree;
-				return tree;
-			},
-			getWhere() {
-				const query = this.query.trim()
-				if (!query) {
-					return ''
-				}
-				const queryRe = `/${query}/i`
-				return dbSearchFields.map(name => queryRe + '.test(' + name + ')').join(' || ')
-			},
-			search() {
-				debugger
-				const newWhere = this.getWhere()
-				const isSameWhere = newWhere === this.where
-				this.where = newWhere
-				if (isSameWhere) { // 相同条件时，手动强制刷新
-					this.loadData()
-				}
-			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
 					this.$message({
@@ -168,100 +134,67 @@
 						type: "warning"
 					})
 					.then(() => {
-						db.collection(dbCollectionName).doc(row._id).remove().then((res) => {
+						remove({
+							_ids: [row._id]
+						})
+						.then((res) => {
 							this.$message({
 								message: '删除成功',
 								type: 'success'
 							});
 							this.loadData();
-						}).catch((err) => {
-							this.$message({
-								message: err.message || '删除失败',
-								type: 'error'
-							});
 						})
 					})
 
 			},
 			rowUpdate(row, index, done, loading) {
-				db.collection(dbCollectionName).where({
-						_id: row._id
-					}).update({
-						name: row.name,
-						menu_id: row.menu_id,
-						parent_id: row.parent_id,
-						url: row.url,
-						type: row.type,
-						sort: row.sort,
-						enable: row.enable,
-						icon: row.icon,
-					})
-					.then(() => {
-						this.loadData();
-						this.$message({
-							message: '修改成功',
-							type: 'success'
-						});
-						done();
-					})
-					.catch((err) => {
-						this.$message({
-							message: err.message || '修改失败',
-							type: 'error'
-						});
-						done();
-					})
+				update(row)
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '修改成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+				
+					
 			},
 			rowSave(row, done, loading) {
-				db.collection(dbCollectionName).add({
-						name: row.name,
-						menu_id: row.menu_id,
-						parent_id: row.parent_id,
-						url: row.url,
-						type: row.type,
-						sort: row.sort,
-						enable: row.enable,
-						icon: row.icon,
-					})
-					.then(() => {
-						this.loadData();
-						this.$message({
-							message: '新增成功',
-							type: 'success'
-						});
-						done();
-					})
-					.catch((err) => {
-						this.$message({
-							message: err.message || '新增失败',
-							type: 'error'
-						});
-						done();
-					})
+				add(row)
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '新增成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+					
 			},
 			searchReset() {
-				this.where = '';
 				this.params = {};
 				this.loadData();
 			},
 			searchChange(params, done) {
 				this.params = params;
-				this.params.name && (this.where = `name==${this.params.name}`);
 				this.loadData();
 				done();
 			},
 			selectionChange() {},
-			currentChange(pageCurrent) {
-				this.options.pageCurrent = pageCurrent;
-			},
-			sizeChange(pageSize) {
-				this.options.pageSize = pageSize;
-			},
 			loadData(clear = true) {
-				this.$nextTick(() => {
-					this.$refs.dataQuery.loadData({
-						clear
-					})
+				this.loading = true;
+				tree(this.params).then((res)=>{
+					this.loading = false;
+					this.data = res;
+				}).catch(()=>{
+					this.loading = false;
 				})
 
 			}

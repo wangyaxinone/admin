@@ -12,6 +12,8 @@
 		}, {
 			"path": "pages/error/404",
 			"style": {
+				"topWindow": false,
+				"leftWindow": false,
 				"navigationBarTitleText": "Not Found"
 			}
 		}, {

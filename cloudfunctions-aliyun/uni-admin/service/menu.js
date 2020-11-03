@@ -45,7 +45,8 @@ module.exports = class MenuService extends Service {
         let {
             data: menuList
         } = await this.db.collection('opendb-admin-menus').where({
-            enable: true
+            enable: true,
+			type: 1
         }).orderBy('sort', 'asc').limit(1000).get()
 
         // 删除无权限访问的菜单

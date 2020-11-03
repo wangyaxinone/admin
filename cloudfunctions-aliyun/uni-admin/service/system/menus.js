@@ -14,7 +14,7 @@ module.exports = class MenuService extends Service {
 	}
 	async remove(_ids) {
 		return await this.db.collection('opendb-admin-menus').where({
-			'_id': this.db.command.in(_ids.join(','))
+			'_id': this.db.command.in(_ids)
 		}).remove();
 	}
 	async list(name) {
