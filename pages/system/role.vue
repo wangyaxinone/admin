@@ -70,6 +70,11 @@
 								label: "role_name",
 								value: "_id"
 							},
+							rules: [{
+								required: true,
+								message: "请选择上级角色",
+								trigger: "change",
+							}, ],
 						},
 						
 						{
@@ -118,6 +123,22 @@
 				const column = _this.findObject(_this.option.column, "tenantId");
 				column.dicData = tree;
 			})
+		},
+		watch:{
+			'form.tenantId':{
+				handler(newValue){
+					if(newValue) {
+						tree({
+							tenantId: newValue
+						}).then((tree)=>{
+							debugger
+							const column = _this.findObject(_this.option.column, "parent_id");
+							column.dicData = tree;
+						})
+					}
+				},
+				deep: true
+			}
 		},
 		methods: {
 			rowDel(row) {
