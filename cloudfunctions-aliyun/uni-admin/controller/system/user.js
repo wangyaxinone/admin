@@ -12,7 +12,6 @@ module.exports = class UserController extends Controller {
 			status,
 			mobile,
 			email,
-			gender,
 			comment,
 			role
 		} = this.ctx.data
@@ -25,7 +24,6 @@ module.exports = class UserController extends Controller {
 			status,
 			mobile,
 			email,
-			gender,
 			comment,
 			role
 		});
@@ -40,7 +38,6 @@ module.exports = class UserController extends Controller {
 			status,
 			mobile,
 			email,
-			gender,
 			comment,
 			role
 		} = this.ctx.data
@@ -53,7 +50,6 @@ module.exports = class UserController extends Controller {
 			status,
 			mobile,
 			email,
-			gender,
 			comment,
 			role
 		});

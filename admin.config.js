@@ -7,7 +7,7 @@ export default {
 	},
 	pages: {
 		pageSize: 10,
-		pageCurrent: 1
+		currentPage: 1
 	},
 	navBar: { // 顶部导航
 		logo: 'https://img.cdn.aliyun.dcloud.net.cn/uni-app/uniCloud/unicloudlogo.png', // 左侧 Logo

@@ -48,4 +48,10 @@ module.exports = class UserController extends Controller {
 	async tree() {
 		return await this.service.system.role.tree(this.ctx.data);
 	}
+	async getRoleMenus() {
+		return await this.service.system.role.getRoleMenus(this.ctx.data);
+	}
+	async setRoleMenus() {
+		return await this.service.system.role.setRoleMenus(this.ctx.data);
+	}
 }

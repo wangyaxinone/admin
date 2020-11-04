@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :page="options" :table-loading="loading" :data="data" ref="crud" v-model="form"
+		<avue-crud :option="option" :page="page" :table-loading="loading" :data="data" ref="crud" v-model="form"
 			@row-del="rowDel"
 			@row-update="rowUpdate"
 			@row-save="rowSave"
@@ -35,9 +35,9 @@
 		data() {
 			return {
 				loading:false,
-				options: {
+				page: {
 					pageSize: config.pages.pageSize,
-					currentPage: config.pages.pageCurrent,
+					currentPage: config.pages.currentPage,
 					total: 0
 				},
 				form: {},
@@ -89,6 +89,17 @@
 							label: "用户性别",
 							prop: "gender",
 							span: 12,
+							type: 'select',
+							dicData:[{
+								label:'未知',
+								value:0
+							},{
+								label:'男性',
+								value:1
+							},{
+								label:'女性',
+								value:2
+							}],
 						},
 						{
 							label: "所属门店",
@@ -111,6 +122,7 @@
 							label: "用户角色",
 							prop: "role",
 							type:'select',
+							multiple: true,
 							dicData:[],
 							span: 12,
 							props: {
@@ -127,6 +139,22 @@
 							label: "用户状态",
 							prop: "status",
 							type: 'select',
+							value: 0,
+							dicData:[{
+								label:'正常',
+								value:0
+							},{
+								label:'禁用',
+								value:1
+							},{
+								label:'审核中',
+								disabled:true,
+								value:2
+							},{
+								label:'审核拒绝',
+								disabled:true,
+								value:3
+							}],
 							span: 12,
 							rules: [{
 								required: true,
@@ -181,55 +209,91 @@
 			}
 		},
 		methods: {
-			clientdbload(data) {
-				if(data && data.length) {
+			rowDel(row) {
+				this.$confirm("确定将选择数据删除?", {
+						confirmButtonText: "确定",
+						cancelButtonText: "取消",
+						type: "warning"
+					})
+					.then(() => {
+						remove({
+							_ids: [row._id]
+						})
+						.then((res) => {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.loadData();
+						})
+					})
+			
+			},
+			rowUpdate(row, index, done, loading) {
+				update(row)
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '修改成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+				
 					
-				}
 			},
-			getWhere() {
-				const query = this.query.trim()
-				if (!query) {
-					return ''
-				}
-				const queryRe = `/${query}/i`
-				return dbSearchFields.map(name => queryRe + '.test(' + name + ')').join(' || ')
+			rowSave(row, done, loading) {
+				add(row)
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '新增成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+					
 			},
-			search() {
-				const newWhere = this.getWhere()
-				const isSameWhere = newWhere === this.where
-				this.where = newWhere
-				if (isSameWhere) { // 相同条件时，手动强制刷新
-					this.loadData()
-				}
-			},
-			rowDel() {},
-			rowUpdate() {},
-			rowSave() {},
 			searchReset() {
-				this.where = '';
 				this.params = {};
 				this.loadData();
 			},
-			searchChange(params, done){
+			searchChange(params, done) {
 				this.params = params;
 				this.loadData();
 				done();
 			},
 			selectionChange() {},
-			currentChange(pageCurrent) {
-				this.options.pageCurrent = pageCurrent;
+			currentChange(currentPage) {
+				this.page.currentPage = currentPage;
 			},
 			sizeChange(pageSize) {
-				this.options.pageSize = pageSize;
+				this.page.pageSize = pageSize;
 			},
 			loadData(clear = true) {
-				this.loading = true;
-				getList().then((res)=>{
-					this.data = res;
-					this.loading = false;
-				}).catch(()=>{
-					this.loading = false;
+				this.$nextTick(() => {
+					this.loading = true;
+					this.params.page = this.page.currentPage;
+					this.params.size = this.page.pageSize;
+					getList(this.params).then((res)=>{
+						this.data = res.data;
+						this.loading = false;
+						this.page.total = res.total;
+						roleTree().then((tree)=>{
+							const column = this.findObject(this.option.column, "role");
+							column.dicData = tree;
+						})
+					}).catch(()=>{
+						this.loading = false;
+					})
 				})
+				
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getServerDate, getTree} = require('../../utils.js');
+const {getServerDate, getTree, appendTenantParams} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		const currentDate = getServerDate();
@@ -9,12 +9,34 @@ module.exports = class MenuService extends Service {
 		data.update_date = currentDate;
 		data.operator = this.ctx.auth.uid;
 		data.point = new this.db.Geo.Point(data.longitude, data.latitude);
+		data.parentTenants = [];
+		if(data.parent_id) {
+			// 添加所有父级门店
+			var arr = [data.parent_id];
+			 while (arr.length) {
+				var now = arr.shift();
+				data.parentTenants.push(now);
+				var {
+					data: tenantList
+				} = await this.db.collection('opendb-admin-tenant').where({
+					_id: now
+				}).get();
+				if(tenantList && tenantList.length && tenantList[0].parent_id) {
+					arr.push(tenantList[0].parent_id);
+				}
+			}
+		}
 		var res = await this.db.collection('opendb-admin-tenant').add(data);
 		if(res.id) {
 			//添加默认门店管理员角色
+			var {
+				data: roleList
+			} = await this.db.collection('uni-id-roles').where({
+				tenantId: data.parent_id,
+			}).orderBy('sort', "asc").get();
 			var role = await this.service.system.role.add({
 				role_name: `${data.name}_管理员`,
-				parent_id: '',
+				parent_id: (roleList && roleList.length) ? roleList[0]._id : '',
 				tenantId: res.id,
 				type: 1,
 				comment: '门店管理员',
@@ -36,6 +58,9 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-tenant').doc(_id).update(data);
 	}
 	async remove(_ids) {
+		await this.db.collection('uni-id-roles').where({
+			'tenantId': this.db.command.in(_ids)
+		}).remove();
 		return await this.db.collection('opendb-admin-tenant').where({
 			'_id': this.db.command.in(_ids)
 		}).remove();
@@ -43,6 +68,11 @@ module.exports = class MenuService extends Service {
 	async list(name) {
 		var match = {};
 		name && (match.name = new RegExp(name));
+		appendTenantParams({
+			match, 
+			_this: this,
+			_id: '_id'
+		});
 		let {
 			data: menuList
 		} = await this.db.collection('opendb-admin-tenant').where(match).orderBy('sort', "asc").get();
@@ -51,6 +81,11 @@ module.exports = class MenuService extends Service {
 	async tree(name) {
 		var match = {};
 		name && (match.name = new RegExp(name));
+		appendTenantParams({
+			match, 
+			_this: this,
+			_id: '_id'
+		});
 		let {
 			data: menuList
 		} = await this.db.collection('opendb-admin-tenant').where(match).orderBy('sort', "asc").get();

@@ -1,13 +1,17 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getServerDate, getTree} = require('../../utils.js');
+const {getServerDate, getTree, getPageConfig, appendTenantParams} = require('../../utils.js');
+const uniID = require('uni-id')
 module.exports = class MenuService extends Service {
 	async add(data) {
+		console.log(this.ctx.auth);
 		data.register_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		return this.ctx;//await this.db.collection('uni-id-users').add(data);
+		data.register_ip = this.ctx.context.headers['x-mpserverless-client-ip'];
+		data.password = await uniID.encryptPwd(data.password);
+		return await this.db.collection('uni-id-users').add(data);
 	}
 	async update(data) {
 		const {
@@ -24,12 +28,32 @@ module.exports = class MenuService extends Service {
 		}).remove();
 	}
 	async list(param) {
-		var match = {};
-		param.role_name && (match.role_name = new RegExp(param.role_name));
+		var match = {
+			_id: this.db.command.exists(true)
+		};
+		param.username && (match.username = new RegExp(param.username));
+		param.nickname && (match.nickname = new RegExp(param.nickname));
+		param.status && (match.status = param.status);
+		appendTenantParams({
+			match, 
+			_this: this,
+			_id: 'tenantId'
+		});
 		param.tenantId && (match.tenantId = param.tenantId);
+		let {basePage, baseSize} = getPageConfig();
+		var page = param.page?param.page:basePage;
+		var size = param.size?param.size:baseSize;
 		let {
-			data: menuList
-		} = await this.db.collection('uni-id-users').where(match).orderBy('sort', "asc").get();
-		return menuList;
+			total
+		} = await this.db.collection('uni-id-users').where(match).count();
+		let {
+			data
+		} = await this.db.collection('uni-id-users').where(match).orderBy('sort', "asc").limit(size).skip((page-1)*size).get();
+		return {
+			total,
+			page,
+			size,
+			data
+		};
 	}
 }

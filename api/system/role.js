@@ -21,3 +21,11 @@ export const remove = (params) => {
 export const tree = (params) => {
   return request('system/role/tree', params);
 }
+
+export const getRoleMenus = (params) => {
+  return request('system/role/getRoleMenus', params);
+}
+
+export const setRoleMenus = (params) => {
+  return request('system/role/setRoleMenus', params);
+}

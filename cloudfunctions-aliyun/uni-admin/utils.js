@@ -38,7 +38,31 @@ function getTree(list, props) {
 	}
 	return roots;
 }
+/**
+ * 获取默认的分页配置
+ * */
+function getPageConfig() {
+	return {
+		basePage: 1,
+		baseSize: 10
+	}
+}
+/**
+ * 
+ * */
+function appendTenantParams(param) {
+	let {
+		match,
+		_this,
+		_id
+	} = param;
+	if(_this.ctx.auth.role.indexOf('admin') == -1) {
+		match[_id] = _this.db.command.in(_this.ctx.tenantList);
+	}
+}
 module.exports = {
 	getServerDate,
-	getTree
+	getTree,
+	getPageConfig,
+	appendTenantParams
 }

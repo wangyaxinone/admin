@@ -13,6 +13,7 @@ module.exports = class UserService extends Service {
             needPermission: true,
 			queryField: ['username', 'email', 'mobile']
         })
+		console.log(res);
         if (res.code) {
             return res
         }

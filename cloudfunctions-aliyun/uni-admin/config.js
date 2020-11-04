@@ -10,7 +10,7 @@ module.exports = {
             {
                 name: 'auth',
                 enable: true,
-                ignore: 'user/login'
+                ignore: ['user/login']
             }
         ],
         // [

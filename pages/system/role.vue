@@ -3,25 +3,42 @@
 		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData">
-		 <template slot-scope="scope" slot="create_date">
-		 	<uniDateformate :date="scope.row.create_date"></uniDateformate>
-		 </template>
+			<template slot-scope="scope" slot="create_date">
+				<uniDateformate :date="scope.row.create_date"></uniDateformate>
+			</template>
+			<template slot-scope="scope" slot="menuLeft">
+				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
+			</template>
 		</avue-crud>
+		<uniRolePermissions @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
 <script>
 	var _this
-	import {tree as tenantTree} from "@/api/tenant/tenant.js"
-	import {getList, add, update, remove, tree} from "@/api/system/role.js"
+	import {
+		tree as tenantTree
+	} from "@/api/tenant/tenant.js"
+	import {
+		getList,
+		add,
+		update,
+		remove,
+		tree,
+		getRoleMenus,
+		setRoleMenus
+	} from "@/api/system/role.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
+	import uniRolePermissions from '@/components/uni-role-permissions/uni-role-permissions.vue'
 	export default {
 		components: {
-			uniDateformate
+			uniDateformate,
+			uniRolePermissions
 		},
 		data() {
 			return {
-				loading:false,
+				loading: false,
+				selection: [],
 				form: {},
 				params: {},
 				option: {
@@ -41,7 +58,7 @@
 							label: "角色名",
 							prop: "role_name",
 							search: true,
-							width:150,
+							width: 250,
 							span: 12,
 							rules: [{
 								required: true,
@@ -54,6 +71,7 @@
 							prop: "tenantId",
 							type: "tree",
 							span: 12,
+							width: 150,
 							dicData: [],
 							props: {
 								label: "name",
@@ -70,6 +88,7 @@
 							label: "上级角色",
 							prop: "parent_id",
 							span: 12,
+							width: 150,
 							type: 'tree',
 							dicData: [],
 							props: {
@@ -82,7 +101,7 @@
 								trigger: "change",
 							}, ],
 						},
-						
+
 						{
 							label: "门店管理员",
 							prop: "type",
@@ -106,6 +125,7 @@
 							label: "备注",
 							prop: "comment",
 							span: 12,
+							width: 150,
 							rules: [{
 								required: false,
 								message: "请输入备注",
@@ -116,29 +136,30 @@
 							label: "创建时间",
 							prop: "create_date",
 							slot: true,
-							width:150,
+							width: 150,
 							span: 12,
-							display:false
+							display: false
 						},
 					],
 				},
 				data: [],
+				menusTree: []
 			}
 		},
 		created() {
 			_this = this;
-			tenantTree().then((tree)=>{
+			tenantTree().then((tree) => {
 				const column = _this.findObject(_this.option.column, "tenantId");
 				column.dicData = tree;
 			})
 		},
-		watch:{
-			'form.tenantId':{
-				handler(newValue){
-					if(newValue) {
+		watch: {
+			'form.tenantId': {
+				handler(newValue) {
+					if (newValue) {
 						tree({
 							tenantId: newValue
-						}).then((tree)=>{
+						}).then((tree) => {
 							const column = _this.findObject(_this.option.column, "parent_id");
 							column.dicData = tree;
 						})
@@ -148,6 +169,36 @@
 			}
 		},
 		methods: {
+			permissionsSubmit(permission) {
+				setRoleMenus({
+					_id: this.selection[0]._id,
+					permission: permission
+				}).then(()=>{
+					this.$refs.uniRolePermissions.hide();
+				})
+			},
+			addRolePermissions() {
+				if(this.selection &&　this.selection.length) {
+					if(this.selection.length>1) {
+						this.$message({
+							message: '只能选择一项',
+							type: 'warning'
+						});
+					}else{
+						getRoleMenus({
+							parent_id: this.selection[0].parent_id
+						}).then((res)=>{
+							this.menusTree = res;
+							this.$refs.uniRolePermissions.show();
+						})
+					}
+				}else{
+					this.$message({
+						message: '请先选择角色',
+						type: 'warning'
+					});
+				}
+			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
 					this.$message({
@@ -163,48 +214,48 @@
 					})
 					.then(() => {
 						remove({
-							_ids: [row._id]
-						})
-						.then((res) => {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							this.loadData();
-						})
+								_ids: [row._id]
+							})
+							.then((res) => {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.loadData();
+							})
 					})
 
 			},
 			rowUpdate(row, index, done, loading) {
 				update(row)
-				.then(() => {
-					this.loadData();
-					this.$message({
-						message: '修改成功',
-						type: 'success'
-					});
-					done();
-				})
-				.catch((err) => {
-					done();
-				})
-				
-					
+					.then(() => {
+						this.loadData();
+						this.$message({
+							message: '修改成功',
+							type: 'success'
+						});
+						done();
+					})
+					.catch((err) => {
+						done();
+					})
+
+
 			},
 			rowSave(row, done, loading) {
 				add(row)
-				.then(() => {
-					this.loadData();
-					this.$message({
-						message: '新增成功',
-						type: 'success'
-					});
-					done();
-				})
-				.catch((err) => {
-					done();
-				})
-					
+					.then(() => {
+						this.loadData();
+						this.$message({
+							message: '新增成功',
+							type: 'success'
+						});
+						done();
+					})
+					.catch((err) => {
+						done();
+					})
+
 			},
 			searchReset() {
 				this.params = {};
@@ -215,17 +266,19 @@
 				this.loadData();
 				done();
 			},
-			selectionChange() {},
+			selectionChange(selection) {
+				this.selection = selection;
+			},
 			loadData(clear = true) {
 				this.loading = true;
-				tree(this.params).then((res)=>{
+				tree(this.params).then((res) => {
 					this.loading = false;
 					this.data = res;
-					tree().then((tree)=>{
+					tree().then((tree) => {
 						const column = this.findObject(this.option.column, "parent_id");
 						column.dicData = tree;
 					})
-				}).catch(()=>{
+				}).catch(() => {
 					this.loading = false;
 				})
 

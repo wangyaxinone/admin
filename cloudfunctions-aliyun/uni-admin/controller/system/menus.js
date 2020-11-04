@@ -53,9 +53,9 @@ module.exports = class UserController extends Controller {
 		return await this.service.system.menus.update(_ids);
 	}
 	async list() {
-		const {
-			name,
-		} = this.ctx.data
-		return await this.service.system.menus.list(name);
+		return await this.service.system.menus.list(this.ctx.data);
+	}
+	async tree() {
+		return await this.service.system.menus.tree(this.ctx.data);
 	}
 }
