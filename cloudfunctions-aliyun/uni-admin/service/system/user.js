@@ -48,7 +48,20 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('uni-id-users').where(match).count();
 		let {
 			data
-		} = await this.db.collection('uni-id-users').where(match).orderBy('sort', "asc").limit(size).skip((page-1)*size).get();
+		} = await this.db.collection('uni-id-users').aggregate()
+		.match(match)
+		.sort({
+			'sort': 1
+		})
+		.lookup({
+			from: 'uni-id-roles',
+			localField: 'role',
+			foreignField: '_id',
+			as: 'roles',
+		})
+		.limit(size)
+		.skip((page-1)*size)
+		.end()
 		return {
 			total,
 			page,

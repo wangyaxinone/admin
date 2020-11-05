@@ -1,20 +1,34 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getServerDate, getTree, appendTenantParams} = require('../../utils.js');
+const {
+	getServerDate,
+	getTree,
+	appendTenantParams
+} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		data.create_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		return await this.db.collection('uni-id-roles').add(data);
+		var res = await this.db.collection('uni-id-roles').add(data);
+		if (res.id) {
+			return await this.db.collection('uni-id-roles').doc(res.id).update({
+				role_id: res.id
+			});
+		} else {
+			return res;
+		}
 	}
 	async update(data) {
 		const {
 			_id
 		} = data;
+		if (_id === data.parent_id) {
+			this.throw('ROLE_ERROR', `上级角色不能是当前角色`);
+		}
 		delete data._id;
-		data.update_date = new Date()/1;
+		data.update_date = new Date() / 1;
 		data.operator = this.ctx.auth._id;
 		return await this.db.collection('uni-id-roles').doc(_id).update(data);
 	}
@@ -27,7 +41,7 @@ module.exports = class MenuService extends Service {
 		var match = {};
 		param.role_name && (match.role_name = new RegExp(param.role_name));
 		appendTenantParams({
-			match, 
+			match,
 			_this: this,
 			_id: 'tenantId'
 		});
@@ -41,7 +55,7 @@ module.exports = class MenuService extends Service {
 		var match = {};
 		param.role_name && (match.role_name = new RegExp(param.role_name));
 		appendTenantParams({
-			match, 
+			match,
 			_this: this,
 			_id: 'tenantId'
 		});
@@ -52,7 +66,7 @@ module.exports = class MenuService extends Service {
 		return getTree(list);
 	}
 	async getRoleMenus(param) {
-		if(param.parent_id && param.parent_id!= '0') {
+		if (param.parent_id && param.parent_id != '0') {
 			let {
 				data: roleList
 			} = await this.db.collection('uni-id-roles').where({
@@ -60,25 +74,35 @@ module.exports = class MenuService extends Service {
 			}).get();
 			let permission = (roleList && roleList[0]) ? (roleList[0].permission || []) : [];
 			let {
-			    data: list
+				data: list
 			} = await this.db.collection('opendb-admin-menus').where({
-			    enable: true,
+				enable: true,
 				'_id': this.db.command.in(permission)
 			}).orderBy('sort', 'asc').get();
-			return getTree(list,{
-			id: 'menu_id',
-			parentId: 'parent_id',
-		});
-		}else{
-			let {
-			    data: list
-			} = await this.db.collection('opendb-admin-menus').where({
-			    enable: true
-			}).orderBy('sort', 'asc').get();
-			return getTree(list,{
-			id: 'menu_id',
-			parentId: 'parent_id',
-		});
+			return getTree(list, {
+				id: 'menu_id',
+				parentId: 'parent_id',
+			});
+		} else {
+			if(this.ctx.auth.role.indexOf('admin') == -1) {
+				var {
+					data: list
+				} = await this.db.collection('opendb-admin-menus').where({
+					enable: true,
+					'_id': this.db.command.in(this.ctx.auth.permission)
+				}).orderBy('sort', 'asc').get();
+			}else{
+				var {
+					data: list
+				} = await this.db.collection('opendb-admin-menus').where({
+					enable: true
+				}).orderBy('sort', 'asc').get();
+			}
+			
+			return getTree(list, {
+				id: 'menu_id',
+				parentId: 'parent_id',
+			});
 		}
 	}
 	async setRoleMenus(param) {

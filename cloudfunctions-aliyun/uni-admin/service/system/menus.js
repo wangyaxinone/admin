@@ -10,6 +10,9 @@ module.exports = class MenuService extends Service {
 		const {
 			_id
 		} = data;
+		if(data.menu_id === data.parent_id) {
+			this.throw('MENUS_ERROR', `上级菜单不能是当前菜单`);
+		}
 		delete data._id;
 		return await this.db.collection('opendb-admin-menus').doc(_id).update(data);
 	}
@@ -33,6 +36,24 @@ module.exports = class MenuService extends Service {
 			data: list
 		} = await this.db.collection('opendb-admin-menus').where(match).orderBy('sort', "asc").get();
 		return getTree(list,{
+			id: 'menu_id',
+			parentId: 'parent_id',
+		});
+	}
+	async navMneuOrBtnByRole(type) {
+		var match = {
+			enable: true,
+			type: type || 1
+		};
+		let permission = this.ctx.auth.permission;
+		console.log(this.ctx.auth)
+		if(this.ctx.auth.role.indexOf('admin') == -1) {
+			match._id = this.db.command.in(permission);
+		}
+		let {
+		    data: menuList
+		} = await this.db.collection('opendb-admin-menus').where(match).orderBy('sort', 'asc').get();
+		return getTree(menuList,{
 			id: 'menu_id',
 			parentId: 'parent_id',
 		});

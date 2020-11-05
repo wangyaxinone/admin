@@ -21,3 +21,7 @@ export const remove = (params) => {
 export const tree = (params) => {
   return request('system/menus/tree', params);
 }
+
+export const addBtns = (params) => {
+  return request('system/menus/addBtns', params);
+}

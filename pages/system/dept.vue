@@ -2,15 +2,11 @@
 	<view class="uni-container">
 		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
-		 @selection-change="selectionChange" @on-load="loadData" @cell-click="cellClick">
+		 @selection-change="selectionChange" @on-load="loadData">
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
-			<template slot-scope="scope" slot="menuLeft">
-				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
-			</template>
 		</avue-crud>
-		<uniRolePermissions :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -24,16 +20,11 @@
 		add,
 		update,
 		remove,
-		tree,
-		getRoleMenus,
-		setRoleMenus
-	} from "@/api/system/role.js"
+	} from "@/api/system/dept.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
-	import uniRolePermissions from '@/components/uni-role-permissions/uni-role-permissions.vue'
 	export default {
 		components: {
 			uniDateformate,
-			uniRolePermissions
 		},
 		data() {
 			return {
@@ -55,14 +46,14 @@
 					viewBtn: true,
 					menuWidth: 300,
 					column: [{
-							label: "角色名",
-							prop: "role_name",
+							label: "部门名称",
+							prop: "dept_name",
 							search: true,
-							width: 250,
+							width: 150,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入角色名",
+								message: "请输入部门名称",
 								trigger: "blur",
 							}, ],
 						},
@@ -85,39 +76,13 @@
 							}, ],
 						},
 						{
-							label: "上级角色",
-							prop: "parent_id",
+							label: "排序",
+							prop: "sort",
 							span: 12,
-							width: 150,
-							type: 'tree',
-							dicData: [],
-							props: {
-								label: "role_name",
-								value: "_id"
-							},
+							type: 'number',
 							rules: [{
-								required: true,
-								message: "请选择上级角色",
-								trigger: "change",
-							}, ],
-						},
-
-						{
-							label: "门店管理员",
-							prop: "type",
-							span: 12,
-							type: 'select',
-							value: 2,
-							dicData: [{
-								label: '是',
-								value: 1
-							}, {
-								label: '否',
-								value: 2
-							}],
-							rules: [{
-								required: true,
-								message: "请选择是否是门店管理员",
+								required: false,
+								message: "请输入备注",
 								trigger: "change",
 							}, ],
 						},
@@ -143,8 +108,6 @@
 					],
 				},
 				data: [],
-				menusTree: [],
-				defaultCheckedKeys: []
 			}
 		},
 		created() {
@@ -154,61 +117,7 @@
 				column.dicData = tree;
 			})
 		},
-		watch: {
-			'form.tenantId': {
-				handler(newValue) {
-					if (newValue) {
-						tree({
-							tenantId: newValue
-						}).then((tree) => {
-							const column = _this.findObject(_this.option.column, "parent_id");
-							column.dicData = tree;
-						})
-					}
-				},
-				deep: true
-			}
-		},
 		methods: {
-			cellClick(row, column, cell, event) {
-				this.$refs.crud.toggleRowSelection(row)
-			},
-			permissionsSubmit(permission) {
-				setRoleMenus({
-					_id: this.selection[0]._id,
-					permission: permission
-				}).then(()=>{
-					this.$refs.uniRolePermissions.hide();
-					this.$message({
-						message: '保存成功',
-						type: 'success'
-					});
-					this.loadData();
-				})
-			},
-			addRolePermissions() {
-				if(this.selection &&　this.selection.length) {
-					if(this.selection.length>1) {
-						this.$message({
-							message: '只能选择一项',
-							type: 'warning'
-						});
-					}else{
-						getRoleMenus({
-							parent_id: this.selection[0].parent_id
-						}).then((res)=>{
-							this.menusTree = res;
-							this.defaultCheckedKeys = this.selection[0].permission;
-							this.$refs.uniRolePermissions.show();
-						})
-					}
-				}else{
-					this.$message({
-						message: '请先选择角色',
-						type: 'warning'
-					});
-				}
-			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
 					this.$message({
@@ -281,13 +190,9 @@
 			},
 			loadData(clear = true) {
 				this.loading = true;
-				tree(this.params).then((res) => {
+				getList(this.params).then((res) => {
 					this.loading = false;
 					this.data = res;
-					tree().then((tree) => {
-						const column = this.findObject(this.option.column, "parent_id");
-						column.dicData = tree;
-					})
 				}).catch(() => {
 					this.loading = false;
 				})

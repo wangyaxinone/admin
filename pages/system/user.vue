@@ -13,23 +13,21 @@
 			<template slot="last_login_date" slot-scope="scope">
 			  <uni-dateformate :date="scope.row.last_login_date" ></uni-dateformate>
 			</template>
-			
+			<template slot="role" slot-scope="scope">
+				<view>{{scope.row.roleShow.join(',')}}</view>
+			</template>
 		</avue-crud>
 	</view>
 </template>
 
 <script>
-	const db = uniCloud.database()
-	// 表查询配置
-	const dbCollectionName = 'uni-id-users'
-	const dbOrderBy = 'create_date desc'
-	const dbSearchFields = ['permission_id', 'permission_name'] // 支持模糊搜索的字段列表
 	// 分页配置
 	import config from '@/admin.config.js'
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {getList, add, update, remove} from "@/api/system/user.js"
 	import {tree as tenantTree} from "@/api/tenant/tenant.js"
 	import {tree as roleTree} from "@/api/system/role.js"
+	import {getDictByDictCode} from "@/api/system/dict.js"
 	export default {
 		components: {uniDateformate},
 		data() {
@@ -90,16 +88,11 @@
 							prop: "gender",
 							span: 12,
 							type: 'select',
-							dicData:[{
-								label:'未知',
-								value:0
-							},{
-								label:'男性',
-								value:1
-							},{
-								label:'女性',
-								value:2
-							}],
+							props: {
+								label: "dict_name",
+								value: "dict_key"
+							},
+							dicData:[],
 						},
 						{
 							label: "所属门店",
@@ -122,7 +115,9 @@
 							label: "用户角色",
 							prop: "role",
 							type:'select',
+							slot: true,
 							multiple: true,
+							width: 150,
 							dicData:[],
 							span: 12,
 							props: {
@@ -140,21 +135,12 @@
 							prop: "status",
 							type: 'select',
 							value: 0,
-							dicData:[{
-								label:'正常',
-								value:0
-							},{
-								label:'禁用',
-								value:1
-							},{
-								label:'审核中',
-								disabled:true,
-								value:2
-							},{
-								label:'审核拒绝',
-								disabled:true,
-								value:3
-							}],
+							props: {
+								label: "dict_name",
+								value: "dict_key",
+								disabled: "disabled"
+							},
+							dicData:[],
 							span: 12,
 							rules: [{
 								required: true,
@@ -191,6 +177,14 @@
 			tenantTree().then((tree)=>{
 				const column = this.findObject(this.option.column, "tenantId");
 				column.dicData = tree;
+			})
+			getDictByDictCode({dict_code: 'gender'}).then((res)=>{
+				const column = this.findObject(this.option.column, "gender");
+				column.dicData = res;
+			})
+			getDictByDictCode({dict_code: 'user_status'}).then((res)=>{
+				const column = this.findObject(this.option.column, "status");
+				column.dicData = res;
 			})
 		},
 		watch:{
@@ -282,6 +276,22 @@
 					this.params.page = this.page.currentPage;
 					this.params.size = this.page.pageSize;
 					getList(this.params).then((res)=>{
+						if(res.data && res.data.length) {
+							var map = {};
+							res.data.forEach((item)=>{
+								item.roleShow = [];
+								item.roles.forEach((child)=>{
+									map[child._id] = child.role_name
+								})
+								item.role.forEach((key)=>{
+									if(map[key]) {
+										item.roleShow.push(map[key]);
+									}else{
+										item.roleShow.push(key);
+									}
+								})
+							})
+						}
 						this.data = res.data;
 						this.loading = false;
 						this.page.total = res.total;

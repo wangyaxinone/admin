@@ -44,7 +44,34 @@
 					"navigationBarTitleText": "角色管理"
 				}
 			}
-		]
+		    ,{
+                    "path" : "dict",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "dept",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "tenant_menu",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 	},{
 		"root": "pages/tenant",
 		"pages": [{

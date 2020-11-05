@@ -2,76 +2,29 @@
 	<view class="uni-container">
 		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
-		 @selection-change="selectionChange" @on-load="loadData" @cell-click="cellClick">
+		 @selection-change="selectionChange" @on-load="loadData">
 			<template slot-scope="{type,size,row}" slot="menu">
 				<el-button icon="el-icon-plus" :size="size" :type="type" @click="addChildMenus(row)">添加子菜单</el-button>
 			</template>
-			<template slot-scope="scope" slot="menuLeft">
-				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="handleAddBtn()">批量增加按钮菜单</el-button>
-			</template>
 		</avue-crud>
-		<el-dialog title="批量新增按钮" :visible.sync="dialogVisible" width="80%">
-			<view>
-				<el-table :data="tableData" style="width: 100%">
-					<el-table-column label="按钮名称">
-						<template slot-scope="scope">
-							<el-input v-model="scope.row.name" placeholder="请输入按钮名称"></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="父级菜单">
-						<template slot-scope="scope">
-							<el-input v-model="scope.row.parent_name" placeholder="请输入父级菜单"></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="按钮ID" width="300">
-						<template slot-scope="scope">
-							<el-input v-model="scope.row.menu_id" placeholder="请输入按钮ID"></el-input>
-						</template>
-					</el-table-column>
-					<el-table-column label="url" width="300">
-						<template slot-scope="scope">
-							<el-input v-model="scope.row.url" placeholder="请输入url"></el-input>
-						</template>
-					</el-table-column>
-				</el-table>
-				<view style="text-align:center;">
-				    <el-button @click="dialogVisible = false">取 消</el-button>
-				    <el-button type="primary" @click="saveBtns">确 定</el-button>
-				</view>
-			</view>
-		</el-dialog>
 	</view>
 </template>
 
 <script>
+	const db = uniCloud.database()
+	const dbCmd = db.command
+	// 表查询配置
+	const dbCollectionName = 'opendb-admin-menus'
+	const dbOrderBy = 'create_date desc'
+	const dbSearchFields = ['name'] // 支持模糊搜索的字段列表
 	// 分页配置
 	import config from '@/admin.config.js'
 	import iconList from "@/config/iconList";
-	import {
-		getList,
-		add,
-		update,
-		remove,
-		tree
-	} from "@/api/system/menu.js"
+	import {getList, add, update, remove, tree} from "@/api/system/menu.js"
 	var _this
-	const btns = [{
-		btn: 'add',
-		name: '新增'
-	}, {
-		btn: 'update',
-		name: '修改'
-	}, {
-		btn: 'remove',
-		name: '删除'
-	}, {
-		btn: 'list',
-		name: '查看'
-	}]
 	export default {
 		data() {
 			return {
-				dialogVisible: false,
 				loading: false,
 				form: {},
 				params: {},
@@ -92,7 +45,7 @@
 							label: "菜单名称",
 							prop: "name",
 							search: true,
-							width: 150,
+							width:150,
 							span: 12,
 							rules: [{
 								required: true,
@@ -187,51 +140,17 @@
 					],
 				},
 				data: [],
-				selection: [],
-				tableData: []
 			}
 		},
 		created() {
 			_this = this;
 		},
 		methods: {
-			saveBtns() {
-				
-			},
-			cellClick(row, column, cell, event) {
-				this.$refs.crud.toggleRowSelection(row)
-			},
-			handleAddBtn() {
-				if (this.selection && this.selection.length == 1) {
-					this.dialogVisible = true;
-					this.tableData = [];
-					var current = this.selection[0];
-					btns.forEach((item, idx) => {
-						var menu_id = `${current.menu_id}_${item.btn}`;
-						this.tableData.push({
-							name: item.name,
-							menu_id: menu_id,
-							parent_id: current._id,
-							parent_name: current.name,
-							icon: '',
-							url: menu_id.split('_').join('/'),
-							type: 2,
-							sort: idx,
-							enable: true,
-						})
-					})
-				} else {
-					this.$message({
-						message: '必须只能选择一项操作',
-						type: 'warning'
-					});
-				}
-			},
 			addChildMenus(row) {
 				this.$refs.crud.rowAdd();
-				setTimeout(() => {
+				setTimeout(()=>{
 					this.form.parent_id = row.menu_id;
-				}, 300)
+				},300)
 			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
@@ -248,48 +167,48 @@
 					})
 					.then(() => {
 						remove({
-								_ids: [row._id]
-							})
-							.then((res) => {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.loadData();
-							})
+							_ids: [row._id]
+						})
+						.then((res) => {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.loadData();
+						})
 					})
-
+			
 			},
 			rowUpdate(row, index, done, loading) {
 				update(row)
-					.then(() => {
-						this.loadData();
-						this.$message({
-							message: '修改成功',
-							type: 'success'
-						});
-						done();
-					})
-					.catch((err) => {
-						done();
-					})
-
-
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '修改成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+				
+					
 			},
 			rowSave(row, done, loading) {
 				add(row)
-					.then(() => {
-						this.loadData();
-						this.$message({
-							message: '新增成功',
-							type: 'success'
-						});
-						done();
-					})
-					.catch((err) => {
-						done();
-					})
-
+				.then(() => {
+					this.loadData();
+					this.$message({
+						message: '新增成功',
+						type: 'success'
+					});
+					done();
+				})
+				.catch((err) => {
+					done();
+				})
+					
 			},
 			searchReset() {
 				this.params = {};
@@ -300,18 +219,16 @@
 				this.loadData();
 				done();
 			},
-			selectionChange(selection) {
-				this.selection = selection;
-			},
+			selectionChange() {},
 			loadData(clear = true) {
 				this.loading = true;
 				this.$nextTick(() => {
-					tree().then((res) => {
+					tree().then((res)=>{
 						this.data = res;
 						this.loading = false;
 						const column = this.findObject(this.option.column, "parent_id");
 						column.dicData = res;
-					}).catch(() => {
+					}).catch(()=>{
 						this.loading = false;
 					})
 				})

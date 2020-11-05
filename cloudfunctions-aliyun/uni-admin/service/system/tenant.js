@@ -51,6 +51,9 @@ module.exports = class MenuService extends Service {
 		const {
 			_id
 		} = data;
+		if(_id === data.parent_id) {
+			this.throw('TENANT_ERROR', `上级门店不能是当前门店`);
+		}
 		delete data._id;
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth._id;

@@ -10,7 +10,8 @@ module.exports = class UserController extends Controller {
                 password: undefined,
                 permission: this.ctx.auth.permission,
             },
-            navMenu: await this.service.menu.getMenu()
+            navMenu: await this.service.system.menus.navMneuOrBtnByRole(1),
+			navBtn: await this.service.system.menus.navMneuOrBtnByRole(2)
         }
     }
 }
