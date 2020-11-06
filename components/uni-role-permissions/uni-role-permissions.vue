@@ -10,7 +10,13 @@
 						<el-button size="small">取消</el-button>
 					</view>
 				</el-tab-pane>
-				<el-tab-pane label="数据权限" name="data">配置管理</el-tab-pane>
+				<el-tab-pane v-if="type==1" label="数据权限" name="data">
+					<el-radio-group v-model="dataPermissions">
+					    <el-radio :label="3">备选项</el-radio>
+					    <el-radio :label="6">备选项</el-radio>
+					    <el-radio :label="9">备选项</el-radio>
+					</el-radio-group>
+				</el-tab-pane>
 			</el-tabs>
 		</el-dialog>
 	</view>
@@ -21,6 +27,7 @@
 		data() {
 			return {
 				dialogPermissions: false,
+				dataPermissions: '',
 				activeName: 'menu',
 				defaultProps: {
 					children: 'children',
@@ -29,6 +36,9 @@
 			};
 		},
 		props: {
+			type: {
+				type: String|Number
+			},
 			defaultCheckedKeys: {
 				type: Array
 			},

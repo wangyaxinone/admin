@@ -114,9 +114,10 @@
 						{
 							label: "用户角色",
 							prop: "role",
-							type:'select',
+							type:'tree',
 							slot: true,
 							multiple: true,
+							checkStrictly: true,
 							width: 150,
 							dicData:[],
 							span: 12,
@@ -295,10 +296,6 @@
 						this.data = res.data;
 						this.loading = false;
 						this.page.total = res.total;
-						roleTree().then((tree)=>{
-							const column = this.findObject(this.option.column, "role");
-							column.dicData = tree;
-						})
 					}).catch(()=>{
 						this.loading = false;
 					})

@@ -6,6 +6,7 @@ module.exports = class UserController extends Controller {
 		const {
 			name,
 			menu_id,
+			menu_type,
 			parent_id,
 			icon,
 			url,
@@ -16,6 +17,7 @@ module.exports = class UserController extends Controller {
 		return await this.service.system.menus.add({
 			name,
 			menu_id,
+			menu_type,
 			parent_id,
 			icon,
 			url,
@@ -29,6 +31,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			name,
 			menu_id,
+			menu_type,
 			parent_id,
 			icon,
 			url,
@@ -40,6 +43,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			name,
 			menu_id,
+			menu_type,
 			parent_id,
 			icon,
 			url,

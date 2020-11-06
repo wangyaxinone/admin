@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
+		<avue-crud :permission="permissionList" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData">
 			<template slot-scope="scope" slot="create_date">
@@ -22,9 +22,24 @@
 		remove,
 	} from "@/api/system/dept.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	export default {
 		components: {
 			uniDateformate,
+		},
+		computed:{
+			...mapState('app', ['navBtn']),
+			 permissionList() {
+				return {
+				  addBtn: this.navBtn.system_dept_add || false,
+				  viewBtn:  this.navBtn.system_dept_list || false,
+				  delBtn: this.navBtn.system_dept_remove || false,
+				  editBtn: this.navBtn.system_dept_update || false,
+				};
+			  },
 		},
 		data() {
 			return {

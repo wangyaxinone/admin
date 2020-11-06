@@ -1,24 +1,49 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
+		<avue-crud :permission="permissionList" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 :before-open="beforeOpen" @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
-		 @selection-change="selectionChange"  @on-load="loadData">
+		 @selection-change="selectionChange" @on-load="loadData">
 			<template slot-scope="scope" slot="addressForm">
 				<avue-map v-model="map"></avue-map>
 			</template>
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="{type,size,row}" slot="menu">
+				<el-button  :size="size" type="primary" @click="enterStoreHandle(row)">进入门店</el-button>
+			</template>
 		</avue-crud>
 	</view>
 </template>
 
 <script>
-	import {getList, add, update, remove} from "@/api/tenant/tenant.js"
+	import {
+		getList,
+		add,
+		update,
+		remove
+	} from "@/api/tenant/tenant.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	var _this
 	export default {
-		components:{uniDateformate},
+		components: {
+			uniDateformate
+		},
+		computed:{
+			...mapState('app', ['navBtn']),
+			 permissionList() {
+				return {
+				  addBtn: this.navBtn.tenant_tenant_add || false,
+				  viewBtn:  this.navBtn.tenant_tenant_list|| false,
+				  delBtn: this.navBtn.tenant_tenant_remove|| false,
+				  editBtn: this.navBtn.tenant_tenant_update|| false,
+				};
+			  },
+		},
 		data() {
 			return {
 				loading: false,
@@ -46,7 +71,7 @@
 							label: "门店名称",
 							prop: "name",
 							search: true,
-							width:150,
+							width: 150,
 							span: 12,
 							rules: [{
 								required: true,
@@ -99,7 +124,7 @@
 							label: "门店地址",
 							prop: "address",
 							formslot: true,
-							width:250,
+							width: 250,
 							span: 12,
 							rules: [{
 								required: true,
@@ -111,7 +136,7 @@
 							label: "创建时间",
 							prop: "create_date",
 							slot: true,
-							width:140,
+							width: 140,
 							span: 12,
 							display: false,
 						},
@@ -123,23 +148,32 @@
 		created() {
 			_this = this;
 		},
-		watch:{
-			map(newValue){
+		watch: {
+			map(newValue) {
 				this.form.address = newValue.formattedAddress;
 				this.form.longitude = newValue.longitude;
 				this.form.latitude = newValue.latitude;
 			}
 		},
 		methods: {
-			beforeOpen(done,type) {
-				if(['view','edit'].includes(type)){
-					this.map =  {
+			enterStoreHandle(row) {
+				this.$store.commit('app/SET_TENANTINFO',{
+					mode: 2, // 1 管理平台 2 门店
+					activeTenant: row._id
+				})
+				uni.redirectTo({
+					url: '/'
+				})
+			},
+			beforeOpen(done, type) {
+				if (['view', 'edit'].includes(type)) {
+					this.map = {
 						formattedAddress: this.form.address,
-						longitude:this.form.longitude,
+						longitude: this.form.longitude,
 						latitude: this.form.latitude,
 					};
-				}else{
-					this.map =  {
+				} else {
+					this.map = {
 						formattedAddress: "",
 						longitude: 0,
 						latitude: 0,
@@ -162,44 +196,44 @@
 					})
 					.then(() => {
 						remove({
-							_ids:[row._id]
-						})
-						.then((res) => {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							this.loadData();
-						})
+								_ids: [row._id]
+							})
+							.then((res) => {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.loadData();
+							})
 					})
 
 			},
 			rowUpdate(row, index, done, loading) {
 				update(row)
-				.then(() => {
-					this.loadData();
-					this.$message({
-						message: '修改成功',
-						type: 'success'
-					});
-					done();
-				})
-				.catch((err) => {
-					done();
-				})
+					.then(() => {
+						this.loadData();
+						this.$message({
+							message: '修改成功',
+							type: 'success'
+						});
+						done();
+					})
+					.catch((err) => {
+						done();
+					})
 			},
 			rowSave(row, done, loading) {
 				add(row).then(() => {
-					this.loadData();
-					this.$message({
-						message: '新增成功',
-						type: 'success'
-					});
-					done();
-				})
-				.catch((err) => {
-					done();
-				})
+						this.loadData();
+						this.$message({
+							message: '新增成功',
+							type: 'success'
+						});
+						done();
+					})
+					.catch((err) => {
+						done();
+					})
 			},
 			searchReset() {
 				this.params = {};
@@ -213,7 +247,7 @@
 			selectionChange() {},
 			loadData() {
 				this.loading = true;
-				getList(this.params).then((data)=>{
+				getList(this.params).then((data) => {
 					data.sort((data1, data2) => {
 						return data1.sort > data2.sort ? 1 : -1;
 					})
@@ -222,12 +256,12 @@
 						children: 'children',
 						parentId: 'parent_id',
 					});
-					
+
 					const column = _this.findObject(_this.option.column, "parent_id");
 					column.dicData = tree;
 					this.data = tree;
 					this.loading = false;
-				}).catch(()=>{
+				}).catch(() => {
 					this.loading = false;
 				})
 

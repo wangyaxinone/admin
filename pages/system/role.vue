@@ -10,7 +10,7 @@
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
-		<uniRolePermissions :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
+		<uniRolePermissions :type="currentSelect.type" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -90,6 +90,7 @@
 							span: 12,
 							width: 150,
 							type: 'tree',
+							hide:true,
 							dicData: [],
 							props: {
 								label: "role_name",
@@ -107,6 +108,7 @@
 							prop: "type",
 							span: 12,
 							type: 'select',
+							width:120,
 							value: 2,
 							dicData: [{
 								label: '是',
@@ -133,6 +135,18 @@
 							}, ],
 						},
 						{
+							label: "排序",
+							prop: "sort",
+							span: 12,
+							width: 100,
+							type: 'number',
+							rules: [{
+								required: true,
+								message: "请输入排序",
+								trigger: "change",
+							}, ],
+						},
+						{
 							label: "创建时间",
 							prop: "create_date",
 							slot: true,
@@ -144,7 +158,8 @@
 				},
 				data: [],
 				menusTree: [],
-				defaultCheckedKeys: []
+				defaultCheckedKeys: [],
+				currentSelect: {}
 			}
 		},
 		created() {
@@ -194,8 +209,10 @@
 							type: 'warning'
 						});
 					}else{
+						this.currentSelect = this.selection[0];
 						getRoleMenus({
-							parent_id: this.selection[0].parent_id
+							parent_id: this.selection[0].parent_id,
+							type: this.selection[0].type
 						}).then((res)=>{
 							this.menusTree = res;
 							this.defaultCheckedKeys = this.selection[0].permission;

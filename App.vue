@@ -1,6 +1,7 @@
 <script>
 	import {
 		mapGetters,
+		mapState,
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
@@ -8,7 +9,32 @@
 		computed: {
 			...mapGetters({
 				isTokenValid: 'user/isTokenValid'
-			})
+			}),
+			...mapState('app', ['tenantInfo'])
+		},
+		watch:{
+			'tenantInfo': {
+				handler(neweValue,oldValue) {
+					if(JSON.stringify(neweValue) == JSON.stringify(oldValue)) {
+						return false;
+					}
+					if(this.$route.path == "/pages/login/login") {
+						return false;
+					}
+					const loading = this.$loading({
+						  lock: true,
+						  text: 'Loading',
+						  spinner: 'el-icon-loading',
+						  background: 'rgba(0, 0, 0, 0.7)'
+					});
+					this.$store.dispatch('app/init').then(()=>{
+						loading.close();
+					}).catch(()=>{
+						loading.close();
+					})
+				},
+				deep: true,
+			}
 		},
 		methods: {
 			...mapActions({

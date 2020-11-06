@@ -24,6 +24,7 @@ module.exports = class MenuService extends Service {
 	async list(param) {
 		var match = {};
 		param.name && (match.name = new RegExp(param.name));
+		param.menu_type && (match.menu_type = param.menu_type);
 		let {
 			data: menuList
 		} = await this.db.collection('opendb-admin-menus').where(match).orderBy('sort', "asc").get();
@@ -31,6 +32,7 @@ module.exports = class MenuService extends Service {
 	}
 	async tree(param) {
 		var match = {};
+		param.menu_type && (match.menu_type = param.menu_type);
 		param.name && (match.name = new RegExp(param.name));
 		let {
 			data: list
@@ -40,15 +42,32 @@ module.exports = class MenuService extends Service {
 			parentId: 'parent_id',
 		});
 	}
-	async navMneuOrBtnByRole(type) {
+	async navMneuOrBtnByRole(type, param) {
 		var match = {
 			enable: true,
-			type: type || 1
+			type: type || 1,
 		};
 		let permission = this.ctx.auth.permission;
-		console.log(this.ctx.auth)
 		if(this.ctx.auth.role.indexOf('admin') == -1) {
-			match._id = this.db.command.in(permission);
+			var {
+				data: roleList
+			} = await this.db.collection('uni-id-roles').where({
+				'_id': this.db.command.in(this.ctx.auth.role)
+			}).get();
+			//判断是否是门店管理员，s=是返回所有权限，否返回配置的权限
+			var isTenantAdmin = false;
+			roleList.forEach((item)=>{
+				if(item.type == 1) {
+					isTenantAdmin = true;
+				}
+			})
+			if(isTenantAdmin && param.mode == 2) {
+				match.menu_type = param.mode;
+			}else{
+				match._id = this.db.command.in(permission);
+			}
+		}else{
+			match.menu_type = param.mode || 1;
 		}
 		let {
 		    data: menuList
@@ -57,5 +76,10 @@ module.exports = class MenuService extends Service {
 			id: 'menu_id',
 			parentId: 'parent_id',
 		});
+	}
+	
+	async addBtns(data) {
+		const {btns} = data;
+		return await this.db.collection('opendb-admin-menus').add(btns);
 	}
 }

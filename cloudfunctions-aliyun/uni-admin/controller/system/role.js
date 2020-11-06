@@ -8,6 +8,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			sort,
 			comment
 		} = this.ctx.data
 		return await this.service.system.role.add({
@@ -15,6 +16,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			sort,
 			comment
 		});
 	}
@@ -25,6 +27,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			sort,
 			comment
 		} = this.ctx.data
 		return await this.service.system.role.update({
@@ -33,6 +36,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			sort,
 			comment
 		});
 	}

@@ -52,7 +52,8 @@
 		add,
 		update,
 		remove,
-		tree
+		tree,
+		addBtns
 	} from "@/api/system/menu.js"
 	var _this
 	const btns = [{
@@ -196,7 +197,12 @@
 		},
 		methods: {
 			saveBtns() {
-				
+				addBtns({
+					btns: this.tableData
+				}).then(()=>{
+					this.loadData();
+					this.dialogVisible = false;
+				})
 			},
 			cellClick(row, column, cell, event) {
 				this.$refs.crud.toggleRowSelection(row)
@@ -211,13 +217,14 @@
 						this.tableData.push({
 							name: item.name,
 							menu_id: menu_id,
-							parent_id: current._id,
+							parent_id: current.menu_id,
 							parent_name: current.name,
 							icon: '',
 							url: menu_id.split('_').join('/'),
 							type: 2,
 							sort: idx,
 							enable: true,
+							menu_type: 1
 						})
 					})
 				} else {
@@ -277,6 +284,7 @@
 
 			},
 			rowSave(row, done, loading) {
+				row.menu_type = 1;
 				add(row)
 					.then(() => {
 						this.loadData();
@@ -306,7 +314,9 @@
 			loadData(clear = true) {
 				this.loading = true;
 				this.$nextTick(() => {
-					tree().then((res) => {
+					tree({
+						menu_type: 1
+					}).then((res) => {
 						this.data = res;
 						this.loading = false;
 						const column = this.findObject(this.option.column, "parent_id");

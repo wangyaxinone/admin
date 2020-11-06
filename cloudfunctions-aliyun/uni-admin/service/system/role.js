@@ -66,6 +66,19 @@ module.exports = class MenuService extends Service {
 		return getTree(list);
 	}
 	async getRoleMenus(param) {
+		const {parent_id, type} = param;
+		if(type == 2) {
+			var {
+				data: list
+			} = await this.db.collection('opendb-admin-menus').where({
+				menu_type: 2,
+				enable: true
+			}).orderBy('sort', 'asc').get();
+			return getTree(list, {
+				id: 'menu_id',
+				parentId: 'parent_id',
+			});
+		}
 		if (param.parent_id && param.parent_id != '0') {
 			let {
 				data: roleList
@@ -77,6 +90,7 @@ module.exports = class MenuService extends Service {
 				data: list
 			} = await this.db.collection('opendb-admin-menus').where({
 				enable: true,
+				menu_type: 1,
 				'_id': this.db.command.in(permission)
 			}).orderBy('sort', 'asc').get();
 			return getTree(list, {
@@ -89,13 +103,15 @@ module.exports = class MenuService extends Service {
 					data: list
 				} = await this.db.collection('opendb-admin-menus').where({
 					enable: true,
+					menu_type: 1,
 					'_id': this.db.command.in(this.ctx.auth.permission)
 				}).orderBy('sort', 'asc').get();
 			}else{
 				var {
 					data: list
 				} = await this.db.collection('opendb-admin-menus').where({
-					enable: true
+					enable: true,
+					menu_type: 1,
 				}).orderBy('sort', 'asc').get();
 			}
 			
@@ -112,6 +128,9 @@ module.exports = class MenuService extends Service {
 		} = param;
 		let update_date = getServerDate()
 		let operator = this.ctx.auth._id;
+		if(this.ctx.auth.role.indexOf(_id) != -1 ) {
+			this.throw('ROLE_ERROR', `不能操作自己的权限`);
+		}
 		return await this.db.collection('uni-id-roles').doc(_id).update({
 			permission,
 			update_date,

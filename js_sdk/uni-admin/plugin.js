@@ -16,13 +16,18 @@ import {
 import {
     initInterceptor
 } from './interceptor.js'
+
+import {
+    initLocalStorage
+} from './localStorage.js'
 export default {
     install(Vue) {
         initUtil(Vue)
         initError(Vue)
         initRequest(Vue)
         initPermission(Vue)
-
+		initLocalStorage(Vue);
+		
         initApi()
         initInterceptor()
     }

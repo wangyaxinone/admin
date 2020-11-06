@@ -33,15 +33,16 @@
 						<uni-badge class="debug-badge" :text="logs.length" type="error"></uni-badge>
 					</view>
 					<!-- #endif -->
-					<view v-for="link in links" :key="link.url" class="menu-item">
-						<uni-link :href="link.url" :text="link.text" />
-					</view>
+					
 					<template v-if="userInfo.username">
 						<view class="menu-item username">
 							<text>{{userInfo.username}}</text>️
 						</view>
 						<view class="menu-item" @click="chagePassword">
 							<text>修改密码</text>️
+						</view>
+						<view v-if="tenantInfo.mode == 2" class="menu-item" @click="clearTenantInfo">
+							<el-button icon="el-icon-film" circle></el-button>
 						</view>
 						<view class="menu-item">
 							<text class="logout pointer" @click="logout">退出</text>️
@@ -99,7 +100,7 @@
 			}
 		},
 		computed: {
-			...mapState('app', ['appName']),
+			...mapState('app', ['appName','tenantInfo']),
 			...mapState('user', ['userInfo']),
 			...mapState('error', ['logs'])
 		},
@@ -109,6 +110,12 @@
 					commit('user/REMOVE_TOKEN')
 				}
 			}),
+			clearTenantInfo() {
+				this.$store.commit('app/SET_TENANTINFO',{
+					mode: 1,
+					activeTenant: ''
+				})
+			},
 			showErrorLogs() {
 				if (this.popupMenuOpened) {
 					this.popupMenuOpened = false
@@ -123,6 +130,11 @@
 			},
 			logout() {
 				this.removeToken()
+				this.$store.commit('app/SET_NAV_MENU', [])
+				this.$store.commit('app/SET_TENANTINFO', {
+					mode: 1,
+					activeTenant: '',
+				})
 				uni.reLaunch({
 					url: config.login.url
 				})

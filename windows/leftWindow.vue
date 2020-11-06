@@ -23,7 +23,7 @@
 			}
 		},
 		computed: {
-			...mapState('app', ['inited', 'navMenu', 'active'])
+			...mapState('app', ['inited', 'navMenu', 'active', 'tenantInfo'])
 		},
 		watch: {
 			$route: {
@@ -33,7 +33,8 @@
 						this.changeMenuActive(newRoute.path)
 					}
 				}
-			}
+			},
+			
 		},
 		methods: {
 			...mapActions({
