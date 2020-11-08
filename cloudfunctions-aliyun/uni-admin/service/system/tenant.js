@@ -51,11 +51,11 @@ module.exports = class MenuService extends Service {
 				tenantId: data.parent_id,
 			}).orderBy('sort', "asc").get();
 			var role = await this.service.system.dept.add({
-				dept_name: `${data.name}_部门`,
+				dept_name: `${data.name}_管理部`,
 				parent_id: (deptList && deptList.length) ? deptList[0]._id : '',
 				tenantId: res.id,
 				sort:1,
-				comment: `${data.name}_部门`,
+				comment: `${data.name}_管理部`,
 				create_date: currentDate,
 				update_date: currentDate,
 				operator: this.ctx.auth.uid
