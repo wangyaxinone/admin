@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
+		<avue-crud :permission="permissionList" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData">
 			<template slot-scope="{type,size,row}" slot="menu">
@@ -16,7 +16,22 @@
 	import iconList from "@/config/iconList";
 	import {getList, add, update, remove, tree} from "@/api/system/dict.js"
 	var _this
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	export default {
+		computed:{
+			...mapState('app', ['navBtn']),
+			 permissionList() {
+				return {
+				  addBtn: this.navBtn.system_dict_add || false,
+				  viewBtn:  this.navBtn.system_dict_list || false,
+				  delBtn: this.navBtn.system_dict_remove || false,
+				  editBtn: this.navBtn.system_dict_update || false,
+				};
+			  },
+		},
 		data() {
 			return {
 				loading: false,

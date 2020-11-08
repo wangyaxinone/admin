@@ -23,7 +23,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/goods/goods_type",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"subPackages": [{
 		"root": "pages/system",
 		"pages": [{

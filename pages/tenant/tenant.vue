@@ -157,10 +157,9 @@
 		},
 		methods: {
 			enterStoreHandle(row) {
-				this.$store.commit('app/SET_TENANTINFO',{
-					mode: 2, // 1 管理平台 2 门店
-					activeTenant: row._id
-				})
+				this.$store.commit('app/set_ACTIVETENANTINFO',row)
+				this.$store.commit('app/SET_MODE',2)
+				this.$store.commit('app/SET_ACTIVETENANT',row._id)
 				uni.redirectTo({
 					url: '/'
 				})

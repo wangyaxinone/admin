@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :page="page" :table-loading="loading" :data="data" ref="crud" v-model="form"
+		<avue-crud :permission="permissionList" :option="option" :page="page" :table-loading="loading" :data="data" ref="crud" v-model="form"
 			@row-del="rowDel"
 			@row-update="rowUpdate"
 			@row-save="rowSave"
@@ -16,6 +16,9 @@
 			<template slot="role" slot-scope="scope">
 				<view>{{scope.row.roleShow.join(',')}}</view>
 			</template>
+			<template slot="dept" slot-scope="scope">
+				<view>{{scope.row.deptShow.join(',')}}</view>
+			</template>
 		</avue-crud>
 	</view>
 </template>
@@ -28,8 +31,24 @@
 	import {tree as tenantTree} from "@/api/tenant/tenant.js"
 	import {tree as roleTree} from "@/api/system/role.js"
 	import {getDictByDictCode} from "@/api/system/dict.js"
+	import {tree as deptTree} from "@/api/system/dept.js"
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	export default {
 		components: {uniDateformate},
+		computed:{
+			...mapState('app', ['navBtn']),
+			 permissionList() {
+				return {
+				  addBtn: this.navBtn.system_user_add || false,
+				  viewBtn:  this.navBtn.system_user_list || false,
+				  delBtn: this.navBtn.system_user_remove || false,
+				  editBtn: this.navBtn.system_user_update || false,
+				};
+			  },
+		},
 		data() {
 			return {
 				loading:false,
@@ -104,7 +123,7 @@
 								label: "name",
 								value: "_id",
 							},
-							search: false,
+							search: true,
 							rules: [{
 								required: true,
 								message: "请输入所属租户",
@@ -128,6 +147,26 @@
 							rules: [{
 								required: true,
 								message: "请输入用户角色",
+								trigger: "blur",
+							}],
+						},
+						{
+							label: "部门",
+							prop: "dept",
+							type:'select',
+							slot: true,
+							multiple: true,
+							checkStrictly: true,
+							width: 150,
+							dicData:[],
+							span: 12,
+							props: {
+								label: "dept_name",
+								value: "_id"
+							},
+							rules: [{
+								required: false,
+								message: "请输入用户部门",
 								trigger: "blur",
 							}],
 						},
@@ -197,6 +236,12 @@
 						}).then((tree)=>{
 							const column = this.findObject(this.option.column, "role");
 							column.dicData = tree;
+						})
+						deptTree({
+							tenantId: newValue
+						}).then((data)=>{
+							const column = this.findObject(this.option.column, "dept");
+							column.dicData = data;
 						})
 					}
 				},
@@ -281,6 +326,7 @@
 							var map = {};
 							res.data.forEach((item)=>{
 								item.roleShow = [];
+								item.deptShow = [];
 								item.roles.forEach((child)=>{
 									map[child._id] = child.role_name
 								})
@@ -290,6 +336,9 @@
 									}else{
 										item.roleShow.push(key);
 									}
+								})
+								item.depts.forEach((dept)=>{
+									item.deptShow.push(dept.dept_name);
 								})
 							})
 						}

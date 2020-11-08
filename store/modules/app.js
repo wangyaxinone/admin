@@ -13,15 +13,22 @@ export default {
 		navMenu: getItem("app_navMenu") || [],
 		active:  '',
 		appName: process.env.VUE_APP_NAME || '',
-		tenantInfo: getItem("app_tenantInfo") || {
-			mode: 1, // 1 管理平台 2 门店
-			activeTenant: ''
-		}
+		mode: getItem("app_mode") || 1, // 1 管理平台 2 门店
+		activeTenant: getItem("app_activeTenant") || '',
+		activeTenantInfo: getItem("app_activeTenantInfo") || {},
 	},
 	mutations: {
-		SET_TENANTINFO: (state, tenantInfo) => {
-			state.tenantInfo = tenantInfo;
-			setItem('app_tenantInfo', tenantInfo)
+		set_ACTIVETENANTINFO: (state, activeTenantInfo) => {
+			state.activeTenantInfo = activeTenantInfo;
+			setItem('app_activeTenantInfo', activeTenantInfo)
+		},
+		SET_MODE: (state, mode) => {
+			state.mode = mode;
+			setItem('app_mode', mode)
+		},
+		SET_ACTIVETENANT: (state, activeTenant) => {
+			state.activeTenant = activeTenant;
+			setItem('app_activeTenant', activeTenant)
 		},
 		SET_APP_NAME: (state, appName) => {
 			state.appName = appName
@@ -33,7 +40,7 @@ export default {
 			setItem('app_navMenu', navMenu)
 		},
 		SET_NAV_BTN: (state, navBtn) => {
-			state.navMenu = navBtn
+			state.navBtn = navBtn
 			setItem('app_navBtn', navBtn)
 		},
 		TOGGLE_MENU_ACTIVE: (state, url) => {
@@ -45,15 +52,15 @@ export default {
 			commit,
 			state
 		}) {
-			return request('app/init',state.tenantInfo)
+			return request('app/init',{
+				mode: state.mode
+			})
 				.then(res => {
-					var tenantInfo = JSON.parse(JSON.stringify(state.tenantInfo));
 					const {
 						navMenu,
 						userInfo,
 						navBtn
 					} = res;
-					tenantInfo.activeTenant = userInfo.tenantId;
 					var permission = {};//按钮权限
 					if(navBtn && navBtn.length) {
 						navBtn.forEach((item)=>{
@@ -61,7 +68,7 @@ export default {
 						})
 					}
 					commit('SET_NAV_BTN', permission)
-					commit('SET_TENANTINFO', tenantInfo)
+					commit('SET_ACTIVETENANT', userInfo.tenantId)
 					commit('SET_NAV_MENU', navMenu)
 					commit('user/SET_USER_INFO', userInfo, {
 						root: true

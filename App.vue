@@ -10,12 +10,12 @@
 			...mapGetters({
 				isTokenValid: 'user/isTokenValid'
 			}),
-			...mapState('app', ['tenantInfo'])
+			...mapState('app', ['mode'])
 		},
 		watch:{
-			'tenantInfo': {
+			'mode': {
 				handler(neweValue,oldValue) {
-					if(JSON.stringify(neweValue) == JSON.stringify(oldValue)) {
+					if(neweValue == oldValue) {
 						return false;
 					}
 					if(this.$route.path == "/pages/login/login") {

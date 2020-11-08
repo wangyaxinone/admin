@@ -17,3 +17,7 @@ export const update = (params) => {
 export const remove = (params) => {
   return request('system/dept/remove', params);
 }
+
+export const tree = (params) => {
+  return request('system/dept/tree', params);
+}

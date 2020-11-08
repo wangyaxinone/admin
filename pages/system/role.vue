@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
+		<avue-crud :permission="permissionList" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData" @cell-click="cellClick">
 			<template slot-scope="scope" slot="create_date">
@@ -30,10 +30,25 @@
 	} from "@/api/system/role.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import uniRolePermissions from '@/components/uni-role-permissions/uni-role-permissions.vue'
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
 	export default {
 		components: {
 			uniDateformate,
 			uniRolePermissions
+		},
+		computed:{
+			...mapState('app', ['navBtn']),
+			 permissionList() {
+				return {
+				  addBtn: this.navBtn.system_role_add || false,
+				  viewBtn:  this.navBtn.system_role_list || false,
+				  delBtn: this.navBtn.system_role_remove || false,
+				  editBtn: this.navBtn.system_role_update || false,
+				};
+			  },
 		},
 		data() {
 			return {

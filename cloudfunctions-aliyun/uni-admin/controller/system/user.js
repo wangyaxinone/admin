@@ -13,6 +13,7 @@ module.exports = class UserController extends Controller {
 			mobile,
 			email,
 			comment,
+			dept,
 			role
 		} = this.ctx.data
 		return await this.service.system.user.add({
@@ -25,6 +26,7 @@ module.exports = class UserController extends Controller {
 			mobile,
 			email,
 			comment,
+			dept,
 			role
 		});
 	}
@@ -39,6 +41,7 @@ module.exports = class UserController extends Controller {
 			mobile,
 			email,
 			comment,
+			dept,
 			role
 		} = this.ctx.data
 		return await this.service.system.user.update({
@@ -51,6 +54,7 @@ module.exports = class UserController extends Controller {
 			mobile,
 			email,
 			comment,
+			dept,
 			role
 		});
 	}

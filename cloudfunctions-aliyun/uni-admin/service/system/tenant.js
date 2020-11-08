@@ -44,6 +44,22 @@ module.exports = class MenuService extends Service {
 				update_date: currentDate,
 				operator: this.ctx.auth.uid
 			})
+			//添加默认门店管理员部门
+			var {
+				data: deptList
+			} = await this.db.collection('opendb-admin-dept').where({
+				tenantId: data.parent_id,
+			}).orderBy('sort', "asc").get();
+			var role = await this.service.system.dept.add({
+				dept_name: `${data.name}_部门`,
+				parent_id: (deptList && deptList.length) ? deptList[0]._id : '',
+				tenantId: res.id,
+				sort:1,
+				comment: `${data.name}_部门`,
+				create_date: currentDate,
+				update_date: currentDate,
+				operator: this.ctx.auth.uid
+			})
 		}
 		return res;
 	}
@@ -62,6 +78,9 @@ module.exports = class MenuService extends Service {
 	}
 	async remove(_ids) {
 		await this.db.collection('uni-id-roles').where({
+			'tenantId': this.db.command.in(_ids)
+		}).remove();
+		await this.db.collection('opendb-admin-dept').where({
 			'tenantId': this.db.command.in(_ids)
 		}).remove();
 		return await this.db.collection('opendb-admin-tenant').where({

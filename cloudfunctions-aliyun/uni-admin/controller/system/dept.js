@@ -6,12 +6,14 @@ module.exports = class UserController extends Controller {
 		const {
 			dept_name,
 			tenantId,
+			parent_id,
 			sort,
 			comment
 		} = this.ctx.data
 		return await this.service.system.dept.add({
 			dept_name,
 			tenantId,
+			parent_id,
 			sort,
 			comment
 		});
@@ -21,6 +23,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			dept_name,
 			tenantId,
+			parent_id,
 			sort,
 			comment
 		} = this.ctx.data
@@ -28,6 +31,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			dept_name,
 			tenantId,
+			parent_id,
 			sort,
 			comment
 		});
@@ -40,5 +44,8 @@ module.exports = class UserController extends Controller {
 	}
 	async list() {
 		return await this.service.system.dept.list(this.ctx.data);
+	}
+	async tree() {
+		return await this.service.system.dept.tree(this.ctx.data);
 	}
 }

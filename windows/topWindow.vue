@@ -41,7 +41,7 @@
 						<view class="menu-item" @click="chagePassword">
 							<text>修改密码</text>️
 						</view>
-						<view v-if="tenantInfo.mode == 2" class="menu-item" @click="clearTenantInfo">
+						<view v-if="mode == 2" class="menu-item" @click="clearTenantInfo">
 							<el-button icon="el-icon-film" circle></el-button>
 						</view>
 						<view class="menu-item">
@@ -100,7 +100,7 @@
 			}
 		},
 		computed: {
-			...mapState('app', ['appName','tenantInfo']),
+			...mapState('app', ['appName','mode']),
 			...mapState('user', ['userInfo']),
 			...mapState('error', ['logs'])
 		},
@@ -111,10 +111,10 @@
 				}
 			}),
 			clearTenantInfo() {
-				this.$store.commit('app/SET_TENANTINFO',{
-					mode: 1,
-					activeTenant: ''
-				})
+				this.$store.commit('app/SET_MODE',1)
+				uni.reLaunch({
+				    url: '/pages/tenant/tenant'
+				});
 			},
 			showErrorLogs() {
 				if (this.popupMenuOpened) {
@@ -129,12 +129,11 @@
 				this.$refs.passwordPopup.open()
 			},
 			logout() {
-				this.removeToken()
+				this.$store.commit('app/set_ACTIVETENANTINFO',{})
 				this.$store.commit('app/SET_NAV_MENU', [])
-				this.$store.commit('app/SET_TENANTINFO', {
-					mode: 1,
-					activeTenant: '',
-				})
+				this.$store.commit('app/SET_MODE', 1)
+				this.$store.commit('app/SET_ACTIVETENANT', '')
+				this.removeToken()
 				uni.reLaunch({
 					url: config.login.url
 				})

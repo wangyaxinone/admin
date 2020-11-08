@@ -1,7 +1,7 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getServerDate, getTree} = require('../../utils.js');
+const {getPageConfig, getServerDate, getTree, appendTenantParams} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		data.create_date = getServerDate();
@@ -24,12 +24,36 @@ module.exports = class MenuService extends Service {
 		}).remove();
 	}
 	async list(param) {
-		var match = {};
+		var match = {
+			_id: param._id? param._id :this.db.command.exists(true)
+		};
 		param.dept_name && (match.dept_name = new RegExp(param.dept_name));
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
 		param.tenantId && (match.tenantId = param.tenantId);
 		let {
-			data: menuList
+			data
 		} = await this.db.collection('opendb-admin-dept').where(match).orderBy('sort', "asc").get();
-		return menuList;
+		return data;
+	}
+	async tree(param) {
+		var match = {
+			_id: param._id? param._id :this.db.command.exists(true)
+		};
+		param.dept_name && (match.dept_name = new RegExp(param.dept_name));
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
+		param.tenantId && (match.tenantId = param.tenantId);
+		
+		let {
+			data
+		} = await this.db.collection('opendb-admin-dept').where(match).orderBy('sort', "asc").get();
+		return getTree(data);
 	}
 }

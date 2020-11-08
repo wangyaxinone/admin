@@ -18,7 +18,7 @@
 		tree as tenantTree
 	} from "@/api/tenant/tenant.js"
 	import {
-		tree,
+		getList,
 		add,
 		update,
 		remove,
@@ -69,7 +69,7 @@
 					viewBtn: true,
 					menuWidth: 300,
 					column: [{
-							label: "部门名称",
+							label: "分类名称",
 							prop: "dept_name",
 							search: true,
 							width: 150,
@@ -78,42 +78,6 @@
 								required: true,
 								message: "请输入部门名称",
 								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "所属门店",
-							prop: "tenantId",
-							type: "tree",
-							span: 12,
-							width: 150,
-							dicData: [],
-							props: {
-								label: "name",
-								value: "_id",
-							},
-							search: true,
-							rules: [{
-								required: true,
-								message: "请输入所属租户",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "上级部门",
-							prop: "parent_id",
-							span: 12,
-							width: 150,
-							type: 'tree',
-							hide:true,
-							dicData: [],
-							props: {
-								label: "dept_name",
-								value: "_id"
-							},
-							rules: [{
-								required: true,
-								message: "请选择上级部门",
-								trigger: "change",
 							}, ],
 						},
 						{
@@ -238,9 +202,12 @@
 			loadData(clear = true) {
 				this.$nextTick(()=>{
 					this.loading = true;
-					tree(this.params).then((res) => {
+					this.params.page = this.page.currentPage;
+					this.params.size = this.page.pageSize;
+					getList(this.params).then((res) => {
 						this.loading = false;
-						this.data = res;
+						this.data = res.data;
+						this.page.total = res.total;
 					}).catch(() => {
 						this.loading = false;
 					})

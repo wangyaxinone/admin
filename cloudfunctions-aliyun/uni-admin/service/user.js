@@ -13,7 +13,6 @@ module.exports = class UserService extends Service {
             needPermission: true,
 			queryField: ['username', 'email', 'mobile']
         })
-		console.log(res);
         if (res.code) {
             return res
         }
@@ -21,13 +20,13 @@ module.exports = class UserService extends Service {
         if (this.ctx.auth.role.includes('admin')) {
             return res
         }
-        const navMenu = await this.service.menu.getMenu()
+        const navMenu = await this.service.system.menus.navMneuOrBtnByRole(1,this.ctx.data)
         if (navMenu.length) {
             return res
         }
         return {
             code: 10001,
-            message: '该账号暂无权限登录:'+JSON.stringify(this.ctx.auth.role)
+            message: '该账号没有配置角色权限，暂无权限登录！！！'
         }
     }
 

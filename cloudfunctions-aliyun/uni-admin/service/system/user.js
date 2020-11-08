@@ -29,7 +29,7 @@ module.exports = class MenuService extends Service {
 	}
 	async list(param) {
 		var match = {
-			_id: this.db.command.exists(true)
+			_id: param._id? param._id :this.db.command.exists(true)
 		};
 		param.username && (match.username = new RegExp(param.username));
 		param.nickname && (match.nickname = new RegExp(param.nickname));
@@ -58,6 +58,12 @@ module.exports = class MenuService extends Service {
 			localField: 'role',
 			foreignField: '_id',
 			as: 'roles',
+		})
+		.lookup({
+			from: 'opendb-admin-dept',
+			localField: 'dept',
+			foreignField: '_id',
+			as: 'depts',
 		})
 		.limit(size)
 		.skip((page-1)*size)
