@@ -18,11 +18,11 @@
 		tree as tenantTree
 	} from "@/api/tenant/tenant.js"
 	import {
-		tree,
+		getList,
 		add,
 		update,
 		remove,
-	} from "@/api/system/dept.js"
+	} from "@/api/system/permissionTemplate.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
 		mapState,
@@ -61,23 +61,21 @@
 					searchShow: true,
 					searchMenuSpan: 6,
 					rowKey: "_id",
-					defaultExpandAll: true,
 					tip: false,
-					tree: true,
 					border: true,
 					index: true,
 					selection: true,
 					viewBtn: true,
 					menuWidth: 300,
 					column: [{
-							label: "部门名称",
-							prop: "dept_name",
+							label: "模板名称",
+							prop: "name",
 							search: true,
 							width: 200,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入部门名称",
+								message: "请输入模板名称",
 								trigger: "blur",
 							}, ],
 						},
@@ -94,45 +92,8 @@
 							},
 							search: true,
 							rules: [{
-								required: true,
+								required: false,
 								message: "请输入所属租户",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "上级部门",
-							prop: "parent_id",
-							span: 12,
-							width: 150,
-							type: 'tree',
-							hide:true,
-							dicData: [],
-							props: {
-								label: "dept_name",
-								value: "_id"
-							},
-							rules: [{
-								required: true,
-								message: "请选择上级部门",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "是否制作菜品",
-							prop: "isCook",
-							span: 12,
-							width: 120,
-							type: 'select',
-							dicData:[{
-								label:'是',
-								value: 1
-							},{
-								label:'否',
-								value: 2
-							}],
-							rules: [{
-								required: true,
-								message: "请选择是否制作菜品",
 								trigger: "change",
 							}, ],
 						},
@@ -177,21 +138,6 @@
 				const column = _this.findObject(_this.option.column, "tenantId");
 				column.dicData = tree;
 			})
-		},
-		watch:{
-			'form.tenantId':{
-				handler(newValue){
-					if(newValue) {
-						tree({
-							tenantId: newValue
-						}).then((data)=>{
-							const column = this.findObject(this.option.column, "parent_id");
-							column.dicData = data;
-						})
-					}
-				},
-				deep: true
-			}
 		},
 		methods: {
 			rowDel(row) {
@@ -273,9 +219,12 @@
 			loadData(clear = true) {
 				this.$nextTick(()=>{
 					this.loading = true;
-					tree(this.params).then((res) => {
+					this.params.page = this.page.currentPage;
+					this.params.size = this.page.pageSize;
+					getList(this.params).then((res) => {
 						this.loading = false;
-						this.data = res;
+						this.data = res.data;
+						this.page.total = res.total;
 					}).catch(() => {
 						this.loading = false;
 					})

@@ -12,9 +12,9 @@
 				</el-tab-pane>
 				<el-tab-pane v-if="type==1" label="数据权限" name="data">
 					<el-radio-group v-model="dataPermissions">
-					    <el-radio :label="3">备选项</el-radio>
-					    <el-radio :label="6">备选项</el-radio>
-					    <el-radio :label="9">备选项</el-radio>
+					    <el-radio :label="3">门店及子门店所属数据</el-radio>
+					    <el-radio :label="6">门店所属数据</el-radio>
+					    <el-radio :label="9">账号所属数据</el-radio>
 					</el-radio-group>
 				</el-tab-pane>
 			</el-tabs>

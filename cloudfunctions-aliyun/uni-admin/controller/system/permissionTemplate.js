@@ -4,39 +4,31 @@ const {
 module.exports = class UserController extends Controller {
 	async add() {
 		const {
-			dept_name,
+			name,
 			tenantId,
-			parent_id,
 			sort,
-			isCook,
 			comment
 		} = this.ctx.data
-		return await this.service.system.dept.add({
-			dept_name,
+		return await this.service.system.permissionTemplate.add({
+			name,
 			tenantId,
-			parent_id,
 			sort,
-			isCook,
 			comment
 		});
 	}
 	async update() {
 		const {
 			_id,
-			dept_name,
+			name,
 			tenantId,
-			parent_id,
 			sort,
-			isCook,
 			comment
 		} = this.ctx.data
-		return await this.service.system.dept.update({
+		return await this.service.system.permissionTemplate.update({
 			_id,
-			dept_name,
+			name,
 			tenantId,
-			parent_id,
 			sort,
-			isCook,
 			comment
 		});
 	}
@@ -44,12 +36,9 @@ module.exports = class UserController extends Controller {
 		const {
 			_ids,
 		} = this.ctx.data
-		return await this.service.system.dept.remove(_ids);
+		return await this.service.system.permissionTemplate.remove(_ids);
 	}
 	async list() {
-		return await this.service.system.dept.list(this.ctx.data);
-	}
-	async tree() {
-		return await this.service.system.dept.tree(this.ctx.data);
+		return await this.service.system.permissionTemplate.list(this.ctx.data);
 	}
 }

@@ -11,7 +11,7 @@
 			<view class="navbar-left pointer">
 				<navigator class="logo" open-type="reLaunch" url="/">
 					<image :src="logo" mode="heightFix"></image>
-					<text>{{appName}}</text>
+					<text style="font-size:16px;font-weight:bold;color:#333;">{{activeTenant ? activeTenantInfo.name : appName}}</text>
 				</navigator>
 				<uni-icons @click="toggleSidebar" type="bars" class="menu-icon" size="30" color="#999"></uni-icons>
 			</view>
@@ -35,18 +35,21 @@
 					<!-- #endif -->
 					
 					<template v-if="userInfo.username">
-						<view class="menu-item username">
-							<text>{{userInfo.username}}</text>️
+						
+						<view  v-if="mode == 2 && isTenantAdminOrAdmin" class="menu-item" @click="clearTenantInfo">
+							<el-tooltip content="返回管理端" placement="bottom">
+							  <el-button icon="el-icon-s-fold" circle></el-button>
+							</el-tooltip>
 						</view>
-						<view class="menu-item" @click="chagePassword">
-							<text>修改密码</text>️
-						</view>
-						<view v-if="mode == 2" class="menu-item" @click="clearTenantInfo">
-							<el-button icon="el-icon-film" circle></el-button>
-						</view>
-						<view class="menu-item">
-							<text class="logout pointer" @click="logout">退出</text>️
-						</view>
+						<el-dropdown  v-if="userInfo.username">
+						  <span class="el-dropdown-link">
+						    <text style="line-height: 50px;">{{userInfo.username}}</text>️<i class="el-icon-arrow-down el-icon--right"></i>
+						  </span>
+						  <el-dropdown-menu slot="dropdown">
+						    <el-dropdown-item @click.native="chagePassword">修改密码</el-dropdown-item>
+						    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+						  </el-dropdown-menu>
+						</el-dropdown>
 					</template>
 					<view class="popup-menu__arrow"></view>
 				</view>
@@ -100,7 +103,7 @@
 			}
 		},
 		computed: {
-			...mapState('app', ['appName','mode']),
+			...mapState('app', ['appName','mode','isTenantAdminOrAdmin','activeTenant','activeTenantInfo']),
 			...mapState('user', ['userInfo']),
 			...mapState('error', ['logs'])
 		},
@@ -112,6 +115,8 @@
 			}),
 			clearTenantInfo() {
 				this.$store.commit('app/SET_MODE',1)
+				this.$store.commit('app/set_ACTIVETENANTINFO',{})
+				this.$store.commit('app/SET_ACTIVETENANT', '')
 				uni.reLaunch({
 				    url: '/pages/tenant/tenant'
 				});
@@ -235,6 +240,7 @@
 
 	.menu-item {
 		padding: 5px;
+		margin-right:10px;
 	}
 
 	.debug {

@@ -38,7 +38,8 @@
 		},
 		methods: {
 			...mapActions({
-				init: 'app/init'
+				init: 'app/init',
+				getMode: 'app/mode'
 			})
 		},
 		onPageNotFound(msg) {
@@ -54,6 +55,7 @@
 				})
 			} else {
 				this.init()
+				this.mode !=2 && this.getMode();
 			}
 		},
 		onShow: function() {

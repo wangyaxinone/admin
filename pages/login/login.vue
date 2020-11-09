@@ -80,7 +80,8 @@
 		},
 		methods: {
 			...mapActions({
-				init: 'app/init'
+				init: 'app/init',
+				mode: 'app/mode'
 			}),
 			...mapMutations({
 				setToken(commit, tokenInfo) {
@@ -103,6 +104,7 @@
 							token: res.token,
 							tokenExpired: res.tokenExpired
 						})
+						this.mode();
 						return this.init().then(() => {
 							uni.showToast({
 								title: '登录成功',

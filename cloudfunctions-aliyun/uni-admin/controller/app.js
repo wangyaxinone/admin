@@ -14,4 +14,7 @@ module.exports = class UserController extends Controller {
 			navBtn: await this.service.system.menus.navMneuOrBtnByRole(2,this.ctx.data)
         }
     }
+	async modeAndTenant() {
+		return await this.service.system.user.modeAndTenant()
+	}
 }

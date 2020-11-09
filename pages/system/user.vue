@@ -153,7 +153,7 @@
 						{
 							label: "部门",
 							prop: "dept",
-							type:'select',
+							type:'tree',
 							slot: true,
 							multiple: true,
 							checkStrictly: true,
@@ -192,6 +192,11 @@
 							label: "手机号码",
 							prop: "mobile",
 							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入手机号码",
+								trigger: "blur",
+							}],
 						},
 						{
 							label: "最后登录时间",

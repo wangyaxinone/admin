@@ -68,6 +68,7 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
+					defaultExpandAll: true,
 					menuWidth: 300,
 					column: [{
 							label: "角色名",

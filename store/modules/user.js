@@ -3,7 +3,7 @@ export default {
     state: {
         token: uni.getStorageSync('uni_id_token'),
         tokenExpired: uni.getStorageSync('uni_id_token_expired'),
-        userInfo: {}
+        userInfo: uni.getStorageSync('userInfo') || {}
     },
     getters: {
         isTokenValid(state) {
@@ -25,11 +25,13 @@ export default {
             state.tokenExpired = 0
             state.userInfo = {}
 			uni.clearStorage();
+			uni.removeStorageSync('userInfo')
             uni.removeStorageSync('uni_id_token')
             uni.removeStorageSync('uni_id_token_expired')
         },
         SET_USER_INFO: (state, userInfo) => {
             state.userInfo = userInfo
+			uni.setStorageSync('userInfo', userInfo)
         }
     },
     actions: {}

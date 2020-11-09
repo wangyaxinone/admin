@@ -80,6 +80,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "permissionTemplate",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 	},{
 		"root": "pages/tenant",

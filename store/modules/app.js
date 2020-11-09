@@ -13,6 +13,9 @@ export default {
 		navMenu: getItem("app_navMenu") || [],
 		active:  '',
 		appName: process.env.VUE_APP_NAME || '',
+		
+		
+		isTenantAdminOrAdmin: getItem("app_isTenantAdminOrAdmin") || false,
 		mode: getItem("app_mode") || 1, // 1 管理平台 2 门店
 		activeTenant: getItem("app_activeTenant") || '',
 		activeTenantInfo: getItem("app_activeTenantInfo") || {},
@@ -21,6 +24,10 @@ export default {
 		set_ACTIVETENANTINFO: (state, activeTenantInfo) => {
 			state.activeTenantInfo = activeTenantInfo;
 			setItem('app_activeTenantInfo', activeTenantInfo)
+		},
+		set_ISTENANTADMINORADMIN: (state, isTenantAdminOrAdmin) => {
+			state.isTenantAdminOrAdmin = isTenantAdminOrAdmin;
+			setItem('app_isTenantAdminOrAdmin', isTenantAdminOrAdmin)
 		},
 		SET_MODE: (state, mode) => {
 			state.mode = mode;
@@ -48,6 +55,14 @@ export default {
 		}
 	},
 	actions: {
+		mode({commit}){
+			return request('app/modeAndTenant').then((res)=>{
+				commit('SET_MODE', res.mode)
+				commit('SET_ACTIVETENANT', res.activeTenant)
+				commit('set_ISTENANTADMINORADMIN', res.isTenantAdminOrAdmin)
+				res.activeTenantInfo && commit('set_ACTIVETENANTINFO', res.activeTenantInfo)
+			})
+		},
 		init({
 			commit,
 			state
@@ -68,7 +83,6 @@ export default {
 						})
 					}
 					commit('SET_NAV_BTN', permission)
-					commit('SET_ACTIVETENANT', userInfo.tenantId)
 					commit('SET_NAV_MENU', navMenu)
 					commit('user/SET_USER_INFO', userInfo, {
 						root: true

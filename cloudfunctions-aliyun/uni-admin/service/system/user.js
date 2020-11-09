@@ -75,4 +75,40 @@ module.exports = class MenuService extends Service {
 			data
 		};
 	}
+	async modeAndTenant(param) {
+		// 定义超级管理员，门店管理员数据格式
+		var modeData = {
+			mode: 1,
+			isTenantAdminOrAdmin: true,
+			activeTenant: ''
+		}
+		if(this.ctx.auth.role.indexOf('admin') == -1) {
+			let {
+				data: list
+			} = await this.db.collection('uni-id-roles')
+			.where({
+				_id: this.db.command.in(this.ctx.auth.role)
+			})
+			.orderBy('sort', "asc")
+			.get();
+			var isTenantAdmin = false;
+			if(list &&　list.length) {
+				list.forEach((item)=>{
+					if(item.type == 1) {
+						isTenantAdmin = true;
+					}
+				})
+			}
+			if(!isTenantAdmin) {
+				var {data} = await this.db.collection('opendb-admin-tenant').doc(this.ctx.auth.userInfo.tenantId).get()
+				modeData = {
+					mode: 2,
+					isTenantAdminOrAdmin: false,
+					activeTenant: this.ctx.auth.userInfo.tenantId,
+					activeTenantInfo:  data.length? data[0]: []
+				}
+			}
+		}
+		return modeData;
+	}
 }
