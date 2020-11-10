@@ -36,11 +36,16 @@ function getTree(nodes, props) {
 			roots.push(node);
 		}
 	}
-	return roots;
+	return JSON.parse(JSON.stringify(roots));
+}
+
+function isEmptyObject(data) {
+	return JSON.stringify(data) == "{}";
 }
 
 export function initUtil(Vue) {
 	Vue.prototype.$formatDate = formatDate
 	Vue.prototype.$formatBytes = formatBytes
 	Vue.prototype.$getTree = getTree
+	Vue.prototype.$isEmptyObject = isEmptyObject
 }

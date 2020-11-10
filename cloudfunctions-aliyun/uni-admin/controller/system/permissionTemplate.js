@@ -6,12 +6,14 @@ module.exports = class UserController extends Controller {
 		const {
 			name,
 			tenantId,
+			isAdminTemplate,
 			sort,
 			comment
 		} = this.ctx.data
 		return await this.service.system.permissionTemplate.add({
 			name,
 			tenantId,
+			isAdminTemplate,
 			sort,
 			comment
 		});
@@ -21,6 +23,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			name,
 			tenantId,
+			isAdminTemplate,
 			sort,
 			comment
 		} = this.ctx.data
@@ -28,6 +31,7 @@ module.exports = class UserController extends Controller {
 			_id,
 			name,
 			tenantId,
+			isAdminTemplate,
 			sort,
 			comment
 		});
@@ -40,5 +44,23 @@ module.exports = class UserController extends Controller {
 	}
 	async list() {
 		return await this.service.system.permissionTemplate.list(this.ctx.data);
+	}
+	async select() {
+		return await this.service.system.permissionTemplate.select(this.ctx.data);
+	}
+	async getPermissionByTenant() {
+		return await this.service.system.permissionTemplate.getPermissionByTenant(this.ctx.data);
+	}
+	async setPermission() {
+		const {
+			_id,
+			permissions,
+			dataPermissions,
+		} = this.ctx.data
+		return await this.service.system.permissionTemplate.setPermission({
+			_id,
+			permissions,
+			dataPermissions,
+		});
 	}
 }

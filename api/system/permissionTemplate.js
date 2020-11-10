@@ -18,4 +18,12 @@ export const remove = (params) => {
   return request('system/permissionTemplate/remove', params);
 }
 
+export const getPermissionByTenant = (params) => {
+  return request('system/permissionTemplate/getPermissionByTenant', params);
+}
+
+export const setPermission = (params) => {
+  return request('system/permissionTemplate/setPermission', params);
+}
+
 

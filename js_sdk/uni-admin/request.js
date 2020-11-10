@@ -1,6 +1,7 @@
 import store from '@/store'
 import config from '@/admin.config.js'
 const debugOptions = config.navBar.debug
+import { Message } from 'element-ui';
 export function request(action, data, {
 	functionName = 'uni-admin',
 	showModal = true
@@ -36,10 +37,7 @@ export function request(action, data, {
 		}
 		return Promise.resolve(result)
 	}).catch(err => {
-		showModal && uni.showModal({
-			content: err.message || '请求服务失败',
-			showCancel: false
-		})
+		Message.error(err.message || '请求服务失败');
 		if (debugOptions && debugOptions.enable === true) {
 			store.dispatch('error/add', {
 				err: err.toString(),

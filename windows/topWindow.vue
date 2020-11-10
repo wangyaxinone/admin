@@ -19,19 +19,14 @@
 				<text class="title-text">{{navigationBarTitleText}}</text>
 			</view>
 			<view class="navbar-right pointer">
-				<view v-show="userInfo.username" @click="togglePopupMenu" class="navbar-user">
-					<view class="username"><text>{{userInfo.username}}</text>️</view>
-					<uni-icons class="arrowdown" type="arrowdown" color="#bbb" size="14"></uni-icons>
-				</view>
-				<view class="uni-mask" @click="togglePopupMenu"></view>
 				<view class="navbar-menu">
 					<!-- #ifdef H5 -->
-					<view v-if="logs.length" @click="showErrorLogs" class="menu-item debug pointer">
+					<!-- <view v-if="logs.length" @click="showErrorLogs" class="menu-item debug pointer">
 						<svg class="svg-icon">
 							<use xlink:href="#icon-bug"></use>
 						</svg>
 						<uni-badge class="debug-badge" :text="logs.length" type="error"></uni-badge>
-					</view>
+					</view> -->
 					<!-- #endif -->
 					
 					<template v-if="userInfo.username">

@@ -10,7 +10,7 @@
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
-		<uniRolePermissions :type="currentSelect.type" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
+		<uniRolePermissions :type="currentSelect.type" :dataPermissTree="dataPermissTree" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -29,7 +29,7 @@
 		setRoleMenus
 	} from "@/api/system/role.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
-	import uniRolePermissions from '@/components/uni-role-permissions/uni-role-permissions.vue'
+	import uniRolePermissions from '@/components/uni-role-permissionsByRole/uni-role-permissions.vue'
 	import {
 		mapState,
 		mapActions
@@ -175,6 +175,8 @@
 				data: [],
 				menusTree: [],
 				defaultCheckedKeys: [],
+				dataPermissTree: [],
+				defaultCheckedData: {},
 				currentSelect: {}
 			}
 		},
@@ -204,10 +206,11 @@
 			cellClick(row, column, cell, event) {
 				this.$refs.crud.toggleRowSelection(row)
 			},
-			permissionsSubmit(permission) {
+			permissionsSubmit(data) {
 				setRoleMenus({
 					_id: this.selection[0]._id,
-					permission: permission
+					permission: data.permissions,
+					dataPermission: data.dataPermissions,
 				}).then(()=>{
 					this.$refs.uniRolePermissions.hide();
 					this.$message({
@@ -230,8 +233,24 @@
 							parent_id: this.selection[0].parent_id,
 							type: this.selection[0].type
 						}).then((res)=>{
-							this.menusTree = res;
-							this.defaultCheckedKeys = this.selection[0].permission;
+							this.menusTree = this.$getTree(res, {
+								id: 'menu_id',
+								children: 'children',
+								parentId: 'parent_id',
+							});
+							var pageMenus = res.filter((item)=>{
+								if(item.type == 1) {
+									return true;
+								}
+							})
+							var dataPermissTree = this.$getTree(pageMenus, {
+								id: 'menu_id',
+								children: 'children',
+								parentId: 'parent_id',
+							});
+							this.dataPermissTree = dataPermissTree;
+							this.defaultCheckedKeys = this.selection[0].permission || [];
+							this.defaultCheckedData = this.selection[0].dataPermission || {};
 							this.$refs.uniRolePermissions.show();
 						})
 					}
@@ -286,6 +305,8 @@
 
 			},
 			rowSave(row, done, loading) {
+				row.permission = [];
+				row.dataPermission = {};
 				add(row)
 					.then(() => {
 						this.loadData();

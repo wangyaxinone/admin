@@ -1,14 +1,18 @@
 <template>
 	<view class="uni-container">
-		<avue-crud :permission="permissionList" :page="page" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
-		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
-		 @current-change="currentChange"
-		 @size-change="sizeChange"
-		 @selection-change="selectionChange" @on-load="loadData">
+		<avue-crud :permission="permissionList" :page="page" :option="option" :table-loading="loading" :data="data" ref="crud"
+		 v-model="form" @row-del="rowDel" @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange"
+		 @search-reset="searchReset" @current-change="currentChange" @size-change="sizeChange" @selection-change="selectionChange"
+		 @on-load="loadData" @cell-click="cellClick">
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="menuLeft">
+				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
+			</template>
 		</avue-crud>
+		<uniRolePermissions :type="1" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit"
+		 :menusTree="menusTree" :dataPermissTree="dataPermissTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -22,27 +26,32 @@
 		add,
 		update,
 		remove,
+		getPermissionByTenant,
+		setPermission
 	} from "@/api/system/permissionTemplate.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
+	import uniRolePermissions from '@/components/uni-role-permissions/uni-role-permissions.vue'
 	import {
 		mapState,
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
+
 	export default {
 		components: {
 			uniDateformate,
+			uniRolePermissions
 		},
-		computed:{
+		computed: {
 			...mapState('app', ['navBtn']),
-			 permissionList() {
+			permissionList() {
 				return {
-				  addBtn: this.navBtn.system_dept_add || false,
-				  viewBtn:  this.navBtn.system_dept_list || false,
-				  delBtn: this.navBtn.system_dept_remove || false,
-				  editBtn: this.navBtn.system_dept_update || false,
+					addBtn: this.navBtn.system_dept_add || false,
+					viewBtn: this.navBtn.system_dept_list || false,
+					delBtn: this.navBtn.system_dept_remove || false,
+					editBtn: this.navBtn.system_dept_update || false,
 				};
-			  },
+			},
 		},
 		data() {
 			return {
@@ -98,6 +107,26 @@
 							}, ],
 						},
 						{
+							label: "门店管理员模板",
+							prop: "isAdminTemplate",
+							span: 12,
+							type: 'select',
+							width: 120,
+							value: 2,
+							dicData: [{
+								label: '是',
+								value: 1
+							}, {
+								label: '否',
+								value: 2
+							}],
+							rules: [{
+								required: true,
+								message: "请选择是否是门店管理员模板",
+								trigger: "change",
+							}, ],
+						},
+						{
 							label: "排序",
 							prop: "sort",
 							span: 12,
@@ -130,6 +159,11 @@
 					],
 				},
 				data: [],
+				menusTree: [],
+				dataPermissTree: [],
+				defaultCheckedKeys: [],
+				defaultCheckedData: {},
+				currentSelect: {}
 			}
 		},
 		created() {
@@ -140,6 +174,65 @@
 			})
 		},
 		methods: {
+			permissionsSubmit(data) {
+				setPermission({
+					_id: this.selection[0]._id,
+					permissions: data.permissions,
+					dataPermissions: data.dataPermissions
+				}).then(()=>{
+					this.$refs.uniRolePermissions.hide();
+					this.$message({
+						message: '保存成功',
+						type: 'success'
+					});
+					this.loadData();
+				})
+			},
+			cellClick(row, column, cell, event) {
+				this.$refs.crud.toggleRowSelection(row)
+			},
+			addRolePermissions() {
+				var _this = this;
+				if (this.selection && this.selection.length) {
+					if (this.selection.length > 1) {
+						this.$message({
+							message: '只能选择一项',
+							type: 'warning'
+						});
+					} else {
+						this.currentSelect = this.selection[0];
+						getPermissionByTenant({
+							tenantId: this.selection[0].tenantId,
+							isAdminTemplate: this.selection[0].isAdminTemplate
+						}).then((res) => {
+							_this.menusTree = _this.$getTree(res, {
+								id: 'menu_id',
+								children: 'children',
+								parentId: 'parent_id',
+							});
+							var pageMenus = res.filter((item)=>{
+								if(item.type == 1) {
+									return true;
+								}
+							})
+							var dataPermissTree = _this.$getTree(pageMenus, {
+								id: 'menu_id',
+								children: 'children',
+								parentId: 'parent_id',
+							});
+							_this.dataPermissTree = dataPermissTree;
+							_this.defaultCheckedKeys = _this.selection[0].permissions || [];
+							_this.defaultCheckedData = _this.selection[0].dataPermissions || {};
+							_this.$refs.uniRolePermissions.show();
+						})
+					}
+				} else {
+					this.$message({
+						message: '请先选择角色',
+						type: 'warning'
+					});
+				}
+			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
 					this.$message({
@@ -184,6 +277,8 @@
 
 			},
 			rowSave(row, done, loading) {
+				row.permissions = [];
+				row.dataPermissions = {};
 				add(row)
 					.then(() => {
 						this.loadData();
@@ -217,7 +312,7 @@
 				this.page.pageSize = pageSize;
 			},
 			loadData(clear = true) {
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.loading = true;
 					this.params.page = this.page.currentPage;
 					this.params.size = this.page.pageSize;

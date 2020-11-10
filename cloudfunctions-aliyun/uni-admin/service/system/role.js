@@ -74,10 +74,7 @@ module.exports = class MenuService extends Service {
 				menu_type: 2,
 				enable: true
 			}).orderBy('sort', 'asc').get();
-			return getTree(list, {
-				id: 'menu_id',
-				parentId: 'parent_id',
-			});
+			return list;
 		}
 		if (param.parent_id && param.parent_id != '0') {
 			let {
@@ -93,10 +90,7 @@ module.exports = class MenuService extends Service {
 				menu_type: 1,
 				'_id': this.db.command.in(permission)
 			}).orderBy('sort', 'asc').get();
-			return getTree(list, {
-				id: 'menu_id',
-				parentId: 'parent_id',
-			});
+			return list;
 		} else {
 			if(this.ctx.auth.role.indexOf('admin') == -1) {
 				var {
@@ -115,16 +109,14 @@ module.exports = class MenuService extends Service {
 				}).orderBy('sort', 'asc').get();
 			}
 			
-			return getTree(list, {
-				id: 'menu_id',
-				parentId: 'parent_id',
-			});
+			return list;
 		}
 	}
 	async setRoleMenus(param) {
 		let {
 			_id,
 			permission,
+			dataPermission,
 		} = param;
 		let update_date = getServerDate()
 		let operator = this.ctx.auth._id;
@@ -133,6 +125,7 @@ module.exports = class MenuService extends Service {
 		}
 		return await this.db.collection('uni-id-roles').doc(_id).update({
 			permission,
+			dataPermission,
 			update_date,
 			operator
 		});

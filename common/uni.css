@@ -194,3 +194,6 @@ html {
 .el-table, .el-table__body-wrapper{
     height: auto !important;
 }
+.dataTree .el-tree-node__content{
+	height: 38px !important;
+}

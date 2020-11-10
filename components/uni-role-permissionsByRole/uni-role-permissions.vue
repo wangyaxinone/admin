@@ -1,6 +1,14 @@
 <template>
 	<view>
 		<el-dialog title="权限" :visible.sync="dialogPermissions" width="30%">
+			<el-select v-model="value" placeholder="请选择">
+			    <el-option
+			      v-for="item in options"
+			      :key="item.value"
+			      :label="item.label"
+			      :value="item.value">
+			    </el-option>
+			</el-select>
 			<el-tabs v-model="activeName">
 				<el-tab-pane label="菜单权限" name="menu">
 					<el-tree ref="tree" :default-checked-keys="defaultCheckedKeys" :data="menusTree" default-expand-all check-strictly show-checkbox node-key="_id" :props="defaultProps">

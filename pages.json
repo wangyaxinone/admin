@@ -36,7 +36,7 @@
 	"subPackages": [{
 		"root": "pages/system",
 		"pages": [{
-				"path": "menu",
+				"path": "menus",
 				"style": {
 					"navigationBarTitleText": "权限管理"
 				}
