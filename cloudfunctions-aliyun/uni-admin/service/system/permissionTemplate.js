@@ -13,6 +13,7 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		data.tenantId || (data.tenantId = this.ctx.auth.userInfo.tenantId);
+		data.tenantId || (data.tenantId = '');
 		return await this.db.collection('opendb-admin-permissionTemplate').add(data);
 	}
 	async update(data) {
@@ -23,6 +24,7 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		data.tenantId || (data.tenantId = this.ctx.auth.userInfo.tenantId);
+		data.tenantId || (data.tenantId = '');
 		return await this.db.collection('opendb-admin-permissionTemplate').doc(_id).update(data);
 	}
 	async remove(_ids) {
@@ -66,39 +68,40 @@ module.exports = class MenuService extends Service {
 		};
 	}
 	async select(param) {
-		var match = {
-			_id: param._id ? param._id : this.db.command.exists(false)
-		};
-		param.dept_name && (match.dept_name = new RegExp(param.dept_name));
-		appendTenantParams({
-			match,
-			_this: this,
-			_id: 'tenantId'
-		});
-		param.tenantId && (match.tenantId = param.tenantId);
-		let {
-			basePage,
-			baseSize
-		} = getPageConfig();
-		var page = param.page ? param.page : basePage;
-		var size = param.size ? param.size : baseSize;
-		let {
-			total
-		} = await this.db.collection('opendb-admin-permissionTemplate').where(match).count();
+		var match = {};
+		param.name && (match.name = new RegExp(param.name));
+		param.isAdminTemplate && (match.isAdminTemplate = param.isAdminTemplate);
+		var tenantIds = [param.tenantId]
+		if(param.parent_id && param.parent_id != '0') {
+			let {
+				data: roles
+			} = await this.db.collection('uni-id-roles').where({
+				_id: param.parent_id
+			}).orderBy('sort', "asc").get();
+			if(roles[0] && roles[0].tenantId) {
+				tenantIds.push(roles[0].tenantId);
+			}
+		}else{
+			tenantIds.push('');
+		}
+		match.tenantId = this.db.command.in(tenantIds);
 		let {
 			data
 		} = await this.db.collection('opendb-admin-permissionTemplate')
-			.where(match)
-			.orderBy('sort', "asc")
-			.limit(size)
-			.skip((page - 1) * size)
-			.get();
-		return {
-			total,
-			page,
-			size,
-			data
-		};
+			.aggregate()
+			.match(match)
+			.sort({
+				'sort': 1
+			})
+			.lookup({
+				from: 'opendb-admin-tenant',
+				localField: 'tenantId',
+				foreignField: '_id',
+				as: 'tenant',
+			})
+			.end();
+		return data;
+		
 	}
 	async getPermissionByTenant(param) {
 		var match = {

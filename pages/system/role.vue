@@ -10,7 +10,7 @@
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
-		<uniRolePermissions :type="currentSelect.type" :dataPermissTree="dataPermissTree" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
+		<uniRolePermissions :template="template" :templateList="templateList" :type="currentSelect.type" :dataPermissTree="dataPermissTree" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -28,6 +28,9 @@
 		getRoleMenus,
 		setRoleMenus
 	} from "@/api/system/role.js"
+	import {
+		select
+	} from "@/api/system/permissionTemplate.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import uniRolePermissions from '@/components/uni-role-permissionsByRole/uni-role-permissions.vue'
 	import {
@@ -177,7 +180,9 @@
 				defaultCheckedKeys: [],
 				dataPermissTree: [],
 				defaultCheckedData: {},
-				currentSelect: {}
+				currentSelect: {},
+				template:'self',
+				templateList: []
 			}
 		},
 		created() {
@@ -209,6 +214,7 @@
 			permissionsSubmit(data) {
 				setRoleMenus({
 					_id: this.selection[0]._id,
+					template: data.value,
 					permission: data.permissions,
 					dataPermission: data.dataPermissions,
 				}).then(()=>{
@@ -228,7 +234,13 @@
 							type: 'warning'
 						});
 					}else{
+						const loading = this.$loading({
+							lock: true,
+							text: 'Loading',
+							spinner: 'el-icon-loading',
+						});
 						this.currentSelect = this.selection[0];
+						this.template = this.currentSelect.template || 'self';
 						getRoleMenus({
 							parent_id: this.selection[0].parent_id,
 							type: this.selection[0].type
@@ -251,7 +263,19 @@
 							this.dataPermissTree = dataPermissTree;
 							this.defaultCheckedKeys = this.selection[0].permission || [];
 							this.defaultCheckedData = this.selection[0].dataPermission || {};
-							this.$refs.uniRolePermissions.show();
+							select({
+								tenantId: this.selection[0].tenantId,
+								isAdminTemplate: this.selection[0].type,
+								parent_id: this.selection[0].parent_id
+							}).then((res)=>{
+								this.templateList = res;
+								this.templateList.push({
+									name: '自定义权限',
+									_id: 'self'
+								})
+								loading.close();
+								this.$refs.uniRolePermissions.show();
+							})
 						})
 					}
 				}else{

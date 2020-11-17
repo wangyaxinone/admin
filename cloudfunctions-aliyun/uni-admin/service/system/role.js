@@ -115,6 +115,7 @@ module.exports = class MenuService extends Service {
 	async setRoleMenus(param) {
 		let {
 			_id,
+			template,
 			permission,
 			dataPermission,
 		} = param;
@@ -125,6 +126,7 @@ module.exports = class MenuService extends Service {
 		}
 		return await this.db.collection('uni-id-roles').doc(_id).update({
 			permission,
+			template,
 			dataPermission,
 			update_date,
 			operator

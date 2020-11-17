@@ -10,7 +10,7 @@
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
 			<template slot-scope="{type,size,row}" slot="menu">
-				<el-button  :size="size" type="primary" @click="enterStoreHandle(row)">进入门店</el-button>
+				<el-button :disabled="!row.enable" :size="size" type="primary" @click="enterStoreHandle(row)">进入门店</el-button>
 			</template>
 		</avue-crud>
 	</view>

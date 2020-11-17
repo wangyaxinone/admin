@@ -94,6 +94,7 @@
 							type: "tree",
 							span: 12,
 							width: 150,
+							value:'',
 							dicData: [],
 							props: {
 								label: "name",

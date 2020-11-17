@@ -26,4 +26,8 @@ export const setPermission = (params) => {
   return request('system/permissionTemplate/setPermission', params);
 }
 
+export const select = (params) => {
+  return request('system/permissionTemplate/select', params);
+}
+
 

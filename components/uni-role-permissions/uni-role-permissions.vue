@@ -14,7 +14,7 @@
 							<el-select size="mini" 
 							v-if="!data.children || !data.children.length" 
 							style="float:right;" 
-							v-model="defaultCheckedData[data.url]" placeholder="请选择">
+							v-model="defaultCheckedData[data.api]" placeholder="请选择">
 							    <el-option
 							      v-for="item in options"
 							      :key="item.value"

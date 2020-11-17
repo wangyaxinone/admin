@@ -3,13 +3,13 @@
 		<el-dialog title="权限" :visible.sync="dialogPermissions" width="30%">
 			<el-select v-model="value" placeholder="请选择">
 			    <el-option
-			      v-for="item in options"
+			      v-for="item in templateList"
 			      :key="item.value"
-			      :label="item.label"
-			      :value="item.value">
+			      :label="(item.tenant && item.tenant[0] ? (item.tenant[0].name  + '-') : '') + item.name"
+			      :value="item._id">
 			    </el-option>
 			</el-select>
-			<el-tabs v-model="activeName">
+			<el-tabs v-if="value=='self'" v-model="activeName">
 				<el-tab-pane label="菜单权限" name="menu">
 					<el-tree ref="tree" :default-checked-keys="defaultCheckedKeys" :data="menusTree" default-expand-all check-strictly show-checkbox node-key="_id" :props="defaultProps">
 					</el-tree>
@@ -22,7 +22,7 @@
 							<el-select size="mini" 
 							v-if="!data.children || !data.children.length" 
 							style="float:right;" 
-							v-model="defaultCheckedData[data.url]" placeholder="请选择">
+							v-model="defaultCheckedData[data.api]" placeholder="请选择">
 							    <el-option
 							      v-for="item in options"
 							      :key="item.value"
@@ -37,7 +37,7 @@
 			</el-tabs>
 			<view style="text-align:center;margin-top:20px;">
 				<el-button size="small" type="primary" @click="submitMenuPermissions">保存</el-button>
-				<el-button size="small">取消</el-button>
+				<el-button size="small" @click="dialogPermissions = false">取消</el-button>
 			</view>
 		</el-dialog>
 	</view>
@@ -47,6 +47,7 @@
 	export default {
 		data() {
 			return {
+				value: '',
 				options: [
 					{
 						label: '当前门店及子门店',
@@ -86,6 +87,17 @@
 			},
 			dataPermissTree: {
 				type: Array
+			},
+			templateList: {
+				type: Array
+			},
+			template: {
+				type: String
+			}
+		},
+		watch:{
+			template() {
+				this.value = this.template;
 			}
 		},
 		methods: {
@@ -98,11 +110,23 @@
 				this.dialogPermissions = false;
 			},
 			submitMenuPermissions() {
-				var permissions = this.$refs.tree.getCheckedKeys();
-				this.$emit('permissionsSubmit', {
-					dataPermissions: this.defaultCheckedData,
-					permissions
-				})
+				debugger
+				var data = {
+					value: this.value
+				}
+				if(this.value == 'self') {
+					data.permissions = this.$refs.tree.getCheckedKeys();
+					data.dataPermissions = this.defaultCheckedData;
+				}else{
+					this.templateList.forEach((item)=>{
+						if(item._id == this.value) {
+							data.permissions = item.permissions;
+							data.dataPermissions = item.dataPermissions;
+						}
+					})
+				}
+				
+				this.$emit('permissionsSubmit', data)
 			}
 		}
 	}

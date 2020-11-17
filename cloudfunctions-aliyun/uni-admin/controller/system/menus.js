@@ -10,6 +10,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			icon,
 			url,
+			api,
 			type,
 			sort,
 			enable
@@ -21,6 +22,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			icon,
 			url,
+			api,
 			type,
 			sort,
 			enable
@@ -35,6 +37,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			icon,
 			url,
+			api,
 			type,
 			sort,
 			enable
@@ -47,6 +50,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			icon,
 			url,
+			api,
 			type,
 			sort,
 			enable
