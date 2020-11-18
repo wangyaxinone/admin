@@ -3,7 +3,7 @@
 		<avue-crud :permission="permissionList" :option="option" :table-loading="loading" :data="data" ref="crud" v-model="form" @row-del="rowDel"
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @selection-change="selectionChange" @on-load="loadData">
-			<template slot-scope="{type,size,row}" slot="menu">
+			<template v-if="$store.state.user.userInfo.role.indexOf('admin')>-1" slot-scope="{type,size,row}" slot="menu">
 				<el-button icon="el-icon-plus" :size="size" :type="type" @click="addChildMenus(row)">添加子字典</el-button>
 			</template>
 		</avue-crud>

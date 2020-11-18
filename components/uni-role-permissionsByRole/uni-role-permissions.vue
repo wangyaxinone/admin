@@ -96,8 +96,14 @@
 			}
 		},
 		watch:{
-			template() {
-				this.value = this.template;
+			template:{
+				handler:function() {
+					this.$nextTick(() => {
+						this.value = this.template;
+					})
+				},
+				deep: true,
+				immediate:true
 			}
 		},
 		methods: {
@@ -110,7 +116,6 @@
 				this.dialogPermissions = false;
 			},
 			submitMenuPermissions() {
-				debugger
 				var data = {
 					value: this.value
 				}

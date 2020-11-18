@@ -82,7 +82,9 @@ module.exports = class MenuService extends Service {
 				tenantIds.push(roles[0].tenantId);
 			}
 		}else{
-			tenantIds.push('');
+			if(this.ctx.auth.role.indexOf('admin') != -1) {
+				tenantIds.push('');
+			}
 		}
 		match.tenantId = this.db.command.in(tenantIds);
 		let {
@@ -148,6 +150,12 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		data.tenantId || (data.tenantId = this.ctx.auth.userInfo.tenantId);
+		await this.db.collection('uni-id-roles').where({
+			template: _id
+		}).update({
+			permission: this.db.command.set(data.permissions),
+			dataPermission: this.db.command.set(data.dataPermissions),
+		})
 		return await this.db.collection('opendb-admin-permissionTemplate').doc(_id).update(data);
 	}
 }

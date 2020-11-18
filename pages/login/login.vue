@@ -41,8 +41,8 @@
 				showPassword: true,
 				loading: false,
 				formData: {
-					username: '',
-					password: '',
+					username: 'admin',
+					password: '123456',
 				},
 				rules: {
 					// 对name字段进行必填验证

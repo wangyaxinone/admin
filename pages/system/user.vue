@@ -74,7 +74,6 @@
 					column: [{
 							label: "用户名称",
 							prop: "username",
-							search: true,
 							span: 12,
 							rules: [{
 								required: true,

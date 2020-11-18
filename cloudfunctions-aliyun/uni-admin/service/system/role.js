@@ -66,7 +66,7 @@ module.exports = class MenuService extends Service {
 		return getTree(list);
 	}
 	async getRoleMenus(param) {
-		const {parent_id, type} = param;
+		const {parent_id, type, permission} = param;
 		if(type == 2) {
 			var {
 				data: list
@@ -98,7 +98,7 @@ module.exports = class MenuService extends Service {
 				} = await this.db.collection('opendb-admin-menus').where({
 					enable: true,
 					menu_type: 1,
-					'_id': this.db.command.in(this.ctx.auth.permission)
+					'_id': this.db.command.in(permission)
 				}).orderBy('sort', 'asc').get();
 			}else{
 				var {
@@ -125,9 +125,9 @@ module.exports = class MenuService extends Service {
 			this.throw('ROLE_ERROR', `不能操作自己的权限`);
 		}
 		return await this.db.collection('uni-id-roles').doc(_id).update({
-			permission,
+			permission: this.db.command.set(permission),
 			template,
-			dataPermission,
+			dataPermission: this.db.command.set(dataPermission),
 			update_date,
 			operator
 		});

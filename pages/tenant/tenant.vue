@@ -18,7 +18,7 @@
 
 <script>
 	import {
-		getList,
+		tree,
 		add,
 		update,
 		remove
@@ -247,19 +247,10 @@
 			selectionChange() {},
 			loadData() {
 				this.loading = true;
-				getList(this.params).then((data) => {
-					data.sort((data1, data2) => {
-						return data1.sort > data2.sort ? 1 : -1;
-					})
-					var tree = _this.$getTree(data, {
-						id: '_id',
-						children: 'children',
-						parentId: 'parent_id',
-					});
-
+				tree(this.params).then((data) => {
 					const column = _this.findObject(_this.option.column, "parent_id");
-					column.dicData = tree;
-					this.data = tree;
+					column.dicData = data;
+					this.data = data;
 					this.loading = false;
 				}).catch(() => {
 					this.loading = false;

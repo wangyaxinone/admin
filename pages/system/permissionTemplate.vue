@@ -7,7 +7,7 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
-			<template slot-scope="scope" slot="menuLeft">
+			<template slot-scope="scope" slot="menuLeft" v-if="navBtn.system_permissionTemplate_permission">
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
@@ -46,10 +46,10 @@
 			...mapState('app', ['navBtn']),
 			permissionList() {
 				return {
-					addBtn: this.navBtn.system_dept_add || false,
-					viewBtn: this.navBtn.system_dept_list || false,
-					delBtn: this.navBtn.system_dept_remove || false,
-					editBtn: this.navBtn.system_dept_update || false,
+					addBtn: this.navBtn.system_permissionTemplate_add || false,
+					viewBtn: this.navBtn.system_permissionTemplate_list || false,
+					delBtn: this.navBtn.system_permissionTemplate_remove || false,
+					editBtn: this.navBtn.system_permissionTemplate_update || false,
 				};
 			},
 		},

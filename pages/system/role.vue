@@ -6,7 +6,7 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
-			<template slot-scope="scope" slot="menuLeft">
+			<template slot-scope="scope" slot="menuLeft" v-if="navBtn.system_role_permission">
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
@@ -243,7 +243,8 @@
 						this.template = this.currentSelect.template || 'self';
 						getRoleMenus({
 							parent_id: this.selection[0].parent_id,
-							type: this.selection[0].type
+							type: this.selection[0].type,
+							permission: this.selection[0].permission,
 						}).then((res)=>{
 							this.menusTree = this.$getTree(res, {
 								id: 'menu_id',
@@ -268,11 +269,12 @@
 								isAdminTemplate: this.selection[0].type,
 								parent_id: this.selection[0].parent_id
 							}).then((res)=>{
-								this.templateList = res;
-								this.templateList.push({
+								var templateList = res; 
+								templateList.push({
 									name: '自定义权限',
 									_id: 'self'
 								})
+								this.templateList = templateList;
 								loading.close();
 								this.$refs.uniRolePermissions.show();
 							})

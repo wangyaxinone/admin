@@ -15,27 +15,8 @@ module.exports = (options) => {
             ctx.throw('TOKEN_INVALID', `${auth.message}，${auth.code}`)
         }
         ctx.auth = auth // 设置当前请求的 auth 对象
-		ctx.tenantList = [];
-		let currentTenantId = ctx.auth.userInfo.tenantId;
-		ctx.tenantList.push(currentTenantId);
-		let {
-			data: tenants
-		} = await db.collection('opendb-admin-tenant')
-		.where({
-			parentTenants: dbCmd.all([currentTenantId])
-		})
-		.field({
-			'_id': true
-		})
-		.get();
-		if(tenants && tenants.length) {
-			tenants.forEach((item)=>{
-				ctx.tenantList.push(item._id);
-			})
-		}
-		console.log(ctx.tenantList);
+		
         await next() // 执行后续中间件
-
         const {
             token,
             tokenExpired
