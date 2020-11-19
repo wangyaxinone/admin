@@ -30,8 +30,12 @@ module.exports = class UserService extends Service {
 		})
 		.get();
 		var dataPermission = {};
+		var isTenantAdminOrAdmin = false;
 		if(roles.data && roles.data.length) {
 			roles.data.forEach((role)=>{
+				if(role.type == 1) {
+					isTenantAdminOrAdmin = true;
+				}
 				for(var key in role.dataPermission){
 					if(dataPermission[key]) {
 						role.dataPermission[key] < dataPermission[key] && (dataPermission[key] = role.dataPermission[key])
@@ -60,6 +64,7 @@ module.exports = class UserService extends Service {
 		await this.db.collection('uni-id-users').doc(this.ctx.auth.uid).update({
 			dataPermission: this.db.command.set(this.ctx.dataPermission),
 			tenantList: this.db.command.set(this.ctx.tenantList),
+			isTenantAdminOrAdmin
 		});
         const navMenu = await this.service.system.menus.navMneuOrBtnByRole(1,this.ctx.data)
         if (navMenu.length) {

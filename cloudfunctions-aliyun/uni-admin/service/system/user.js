@@ -9,6 +9,7 @@ module.exports = class MenuService extends Service {
 		data.register_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		data.register_ip = this.ctx.context.headers['x-mpserverless-client-ip'];
 		data.password = await uniID.encryptPwd(data.password);
 		return await this.db.collection('uni-id-users').add(data);

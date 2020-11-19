@@ -4,6 +4,10 @@ const {
 const {getServerDate, getTree} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
+		data.create_date = getServerDate();
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		return await this.db.collection('opendb-admin-dict').add(data);
 	}
 	async update(data) {
@@ -13,6 +17,8 @@ module.exports = class MenuService extends Service {
 		if(data._id === data.parent_id) {
 			this.throw('DICT_ERROR', `上级字典不能是当前字典`);
 		}
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
 		delete data._id;
 		return await this.db.collection('opendb-admin-dict').doc(_id).update(data);
 	}

@@ -154,6 +154,16 @@
 							}, ],
 						},
 						{
+							label: "api",
+							prop: "api",
+							span: 12,
+							rules: [{
+								required: false,
+								message: "请输入api",
+								trigger: "change",
+							}, ],
+						},
+						{
 							label: "类型",
 							prop: "type",
 							span: 12,

@@ -10,7 +10,7 @@
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
-		<uniRolePermissions :template="template" :templateList="templateList" :type="currentSelect.type" :dataPermissTree="dataPermissTree" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
+		<uniRolePermissions :template="template" :templateList="templateList" :isAdminTemplate="currentSelect.type" :dataPermissTree="dataPermissTree" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit" :menusTree="menusTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
 
@@ -246,6 +246,8 @@
 							type: this.selection[0].type,
 							permission: this.selection[0].permission,
 						}).then((res)=>{
+							this.defaultCheckedKeys = this.selection[0].permission || [];
+							this.defaultCheckedData = this.selection[0].dataPermission || {};
 							this.menusTree = this.$getTree(res, {
 								id: 'menu_id',
 								children: 'children',
@@ -262,8 +264,7 @@
 								parentId: 'parent_id',
 							});
 							this.dataPermissTree = dataPermissTree;
-							this.defaultCheckedKeys = this.selection[0].permission || [];
-							this.defaultCheckedData = this.selection[0].dataPermission || {};
+							
 							select({
 								tenantId: this.selection[0].tenantId,
 								isAdminTemplate: this.selection[0].type,

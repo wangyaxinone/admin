@@ -43,6 +43,9 @@
 				  editBtn: this.navBtn.tenant_tenant_update|| false,
 				};
 			  },
+			  isAdmin() {
+			  	return this.$store.state.user.userInfo.role.indexOf('admin')>-1;
+			  },
 		},
 		data() {
 			return {
@@ -90,6 +93,11 @@
 								label: "name",
 								value: "_id"
 							},
+							rules: [{
+								required: false,
+								message: "请输入门店名称",
+								trigger: "blur",
+							}, ],
 						},
 						{
 							label: "门店类型",
@@ -150,6 +158,25 @@
 			_this = this;
 		},
 		watch: {
+			isAdmin:{
+				handler:function() {
+					const column = this.findObject(this.option.column, "parent_id");
+					if(this.isAdmin) {
+						column.rules = [{
+							required: false,
+							message: "请输入门店名称",
+							trigger: "blur",
+						}];
+					}else{
+						column.rules = [{
+							required: true,
+							message: "请输入门店名称",
+							trigger: "blur",
+						}];
+					}
+				},
+				immediate:true 
+			},
 			map(newValue) {
 				this.form.address = newValue.formattedAddress;
 				this.form.longitude = newValue.longitude;

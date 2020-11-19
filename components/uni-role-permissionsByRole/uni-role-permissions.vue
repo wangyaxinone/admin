@@ -15,11 +15,12 @@
 					</el-tree>
 					
 				</el-tab-pane>
-				<el-tab-pane v-if="type==1" label="数据权限" name="data">
+				<el-tab-pane  label="数据权限" name="data">
 					<el-tree class="dataTree" ref="data"  :data="dataPermissTree" :expand-on-click-node="false" default-expand-all  node-key="_id" :props="defaultProps">
 						<view style="width:100%;" class="custom-tree-node" slot-scope="{ node, data }">
 							<view style="float:left;">{{ node.label }}</view>
 							<el-select size="mini" 
+							clearable 
 							v-if="!data.children || !data.children.length" 
 							style="float:right;" 
 							v-model="defaultCheckedData[data.api]" placeholder="请选择">
@@ -73,6 +74,9 @@
 			};
 		},
 		props: {
+			isAdminTemplate: {
+				type: String|Number
+			},
 			type: {
 				type: String|Number
 			},
@@ -104,6 +108,38 @@
 				},
 				deep: true,
 				immediate:true
+			},
+			isAdminTemplate:{
+				handler:function() {
+					if(this.isAdminTemplate == '1') {
+						this.options = [
+							{
+								label: '当前门店及子门店',
+								value: 1
+							},
+							{
+								label: '当前门店',
+								value: 2
+							},
+							{
+								label: '当前用户',
+								value: 3
+							}
+						];
+					}else{
+						this.options = [
+							{
+								label: '当前门店',
+								value: 2
+							},
+							{
+								label: '当前用户',
+								value: 3
+							}
+						];
+					}
+				},
+				immediate:true 
 			}
 		},
 		methods: {

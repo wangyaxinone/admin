@@ -11,7 +11,7 @@
 				<el-button type="danger" icon="el-icon-plus" size="small" plain @click.stop="addRolePermissions()">权限</el-button>
 			</template>
 		</avue-crud>
-		<uniRolePermissions :type="1" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit"
+		<uniRolePermissions :isAdminTemplate="isAdminTemplate" :type="1" :defaultCheckedData="defaultCheckedData" :defaultCheckedKeys="defaultCheckedKeys" @permissionsSubmit="permissionsSubmit"
 		 :menusTree="menusTree" :dataPermissTree="dataPermissTree" ref="uniRolePermissions"></uniRolePermissions>
 	</view>
 </template>
@@ -60,6 +60,7 @@
 					currentPage: config.pages.currentPage,
 					total: 0
 				},
+				isAdminTemplate: '',
 				loading: false,
 				selection: [],
 				form: {},
@@ -202,10 +203,13 @@
 						});
 					} else {
 						this.currentSelect = this.selection[0];
+						this.isAdminTemplate = this.selection[0].isAdminTemplate;
 						getPermissionByTenant({
 							tenantId: this.selection[0].tenantId,
 							isAdminTemplate: this.selection[0].isAdminTemplate
 						}).then((res) => {
+							_this.defaultCheckedKeys = _this.selection[0].permissions || [];
+							var dataPermissions = _this.selection[0].dataPermissions || {};
 							_this.menusTree = _this.$getTree(res, {
 								id: 'menu_id',
 								children: 'children',
@@ -216,14 +220,20 @@
 									return true;
 								}
 							})
+							var newdataPermissions = {};
+							pageMenus.forEach((item)=>{
+								if(dataPermissions[item.api]) {
+									newdataPermissions[item.api] = dataPermissions[item.api];
+								}
+							})
+							_this.defaultCheckedData = newdataPermissions || {};
 							var dataPermissTree = _this.$getTree(pageMenus, {
 								id: 'menu_id',
 								children: 'children',
 								parentId: 'parent_id',
 							});
 							_this.dataPermissTree = dataPermissTree;
-							_this.defaultCheckedKeys = _this.selection[0].permissions || [];
-							_this.defaultCheckedData = _this.selection[0].dataPermissions || {};
+							
 							_this.$refs.uniRolePermissions.show();
 						})
 					}

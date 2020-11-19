@@ -4,6 +4,10 @@ const {
 const {getServerDate, getTree} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
+		data.create_date = getServerDate();
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		return await this.db.collection('opendb-admin-menus').add(data);
 	}
 	async update(data) {
@@ -14,6 +18,8 @@ module.exports = class MenuService extends Service {
 			this.throw('MENUS_ERROR', `上级菜单不能是当前菜单`);
 		}
 		delete data._id;
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
 		return await this.db.collection('opendb-admin-menus').doc(_id).update(data);
 	}
 	async remove(_ids) {

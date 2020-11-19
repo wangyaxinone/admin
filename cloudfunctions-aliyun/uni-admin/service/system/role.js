@@ -11,6 +11,7 @@ module.exports = class MenuService extends Service {
 		data.create_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		var res = await this.db.collection('uni-id-roles').add(data);
 		if (res.id) {
 			return await this.db.collection('uni-id-roles').doc(res.id).update({

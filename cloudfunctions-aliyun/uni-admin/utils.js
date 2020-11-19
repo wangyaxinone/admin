@@ -56,22 +56,28 @@ function appendTenantParams(param) {
 		_this,
 		_id
 	} = param;
-	if(_this.ctx.auth.role.indexOf('admin') == -1) {
-		var type = _this.ctx.auth.userInfo.dataPermission[_this.ctx.event.action];
-		if(!type) {
-			ctx.throw('FORBIDDEN', `${_this.ctx.event.action}没有配置数据权限`)
-		}
-		if(type == 3) {
-			if(_this.ctx.event.action == 'system/user/list') {
-				match._id = _this.ctx.auth.userInfo._id;
-			}else{
-				match.creater = _this.ctx.auth.userInfo._id;
-			}
-		}else if(type == 2){
+	if(_this.ctx.auth.role.indexOf('admin') > -1) {
+		return;
+	}
+	var dataPermission = _this.ctx.auth.userInfo.dataPermission;
+	var type = dataPermission[_this.ctx.event.action];
+	if(!type) {
+		if(_this.ctx.auth.userInfo.isTenantAdminOrAdmin) {
 			match[_id] = _this.ctx.auth.userInfo.tenantList[0];
-		}else if(type == 1) {
-			match[_id] = _this.db.command.in(_this.ctx.auth.userInfo.tenantList);
+			return;
 		}
+		_this.ctx.throw('FORBIDDEN', `${_this.ctx.event.action}没有配置数据权限`)
+	}
+	if(type == 3) {
+		if(_this.ctx.event.action == 'system/user/list') {
+			match._id = _this.ctx.auth.userInfo._id;
+		}else{
+			match.creater = _this.ctx.auth.userInfo._id;
+		}
+	}else if(type == 2){
+		match[_id] = _this.ctx.auth.userInfo.tenantList[0];
+	}else if(type == 1) {
+		match[_id] = _this.db.command.in(_this.ctx.auth.userInfo.tenantList);
 	}
 	console.log(match);
 }

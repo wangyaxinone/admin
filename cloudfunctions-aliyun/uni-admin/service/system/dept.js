@@ -7,6 +7,7 @@ module.exports = class MenuService extends Service {
 		data.create_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		return await this.db.collection('opendb-admin-dept').add(data);
 	}
 	async update(data) {

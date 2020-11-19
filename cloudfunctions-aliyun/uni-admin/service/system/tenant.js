@@ -8,6 +8,7 @@ module.exports = class MenuService extends Service {
 		data.create_date = currentDate;
 		data.update_date = currentDate;
 		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		data.point = new this.db.Geo.Point(data.longitude, data.latitude);
 		data.parentTenants = [];
 		if(data.parent_id) {

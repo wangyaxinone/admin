@@ -12,6 +12,7 @@ module.exports = class MenuService extends Service {
 		data.create_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
+		data.creater = this.ctx.auth.uid;
 		data.tenantId || (data.tenantId = this.ctx.auth.userInfo.tenantId);
 		data.tenantId || (data.tenantId = '');
 		return await this.db.collection('opendb-admin-permissionTemplate').add(data);
@@ -149,13 +150,17 @@ module.exports = class MenuService extends Service {
 		delete data._id;
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		data.tenantId || (data.tenantId = this.ctx.auth.userInfo.tenantId);
 		await this.db.collection('uni-id-roles').where({
 			template: _id
 		}).update({
 			permission: this.db.command.set(data.permissions),
 			dataPermission: this.db.command.set(data.dataPermissions),
 		})
-		return await this.db.collection('opendb-admin-permissionTemplate').doc(_id).update(data);
+		return await this.db.collection('opendb-admin-permissionTemplate').doc(_id).update({
+			update_date: getServerDate(),
+			operator: this.ctx.auth.uid,
+			permissions: this.db.command.set(data.permissions),
+			dataPermissions: this.db.command.set(data.dataPermissions),
+		});
 	}
 }

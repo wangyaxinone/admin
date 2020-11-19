@@ -15,14 +15,11 @@
 <script>
 	var _this
 	import {
-		tree as tenantTree
-	} from "@/api/tenant/tenant.js"
-	import {
 		getList,
 		add,
 		update,
 		remove,
-	} from "@/api/system/dept.js"
+	} from "@/api/goods/goods_type.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
 		mapState,
@@ -37,10 +34,10 @@
 			...mapState('app', ['navBtn']),
 			 permissionList() {
 				return {
-				  addBtn: this.navBtn.system_dept_add || false,
-				  viewBtn:  this.navBtn.system_dept_list || false,
-				  delBtn: this.navBtn.system_dept_remove || false,
-				  editBtn: this.navBtn.system_dept_update || false,
+				  addBtn: this.navBtn.goods_type_add || false,
+				  viewBtn:  this.navBtn.goods_type_list || false,
+				  delBtn: this.navBtn.goods_type_remove || false,
+				  editBtn: this.navBtn.goods_type_update || false,
 				};
 			  },
 		},
@@ -70,16 +67,17 @@
 					menuWidth: 300,
 					column: [{
 							label: "分类名称",
-							prop: "dept_name",
+							prop: "name",
 							search: true,
 							width: 150,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入部门名称",
+								message: "请输入分类名称",
 								trigger: "blur",
 							}, ],
 						},
+						
 						{
 							label: "排序",
 							prop: "sort",
@@ -117,10 +115,7 @@
 		},
 		created() {
 			_this = this;
-			tenantTree().then((tree) => {
-				const column = _this.findObject(_this.option.column, "tenantId");
-				column.dicData = tree;
-			})
+			
 		},
 		methods: {
 			rowDel(row) {
@@ -167,6 +162,7 @@
 
 			},
 			rowSave(row, done, loading) {
+				row.tenantId = this.$store.state.app.activeTenant;
 				add(row)
 					.then(() => {
 						this.loadData();
@@ -204,6 +200,7 @@
 					this.loading = true;
 					this.params.page = this.page.currentPage;
 					this.params.size = this.page.pageSize;
+					this.params.tenantId = this.$store.state.app.activeTenant;
 					getList(this.params).then((res) => {
 						this.loading = false;
 						this.data = res.data;
