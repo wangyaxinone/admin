@@ -247,23 +247,12 @@
 							permission: this.selection[0].permission,
 						}).then((res)=>{
 							this.defaultCheckedKeys = this.selection[0].permission || [];
-							this.defaultCheckedData = this.selection[0].dataPermission || {};
+							this.defaultCheckedData = this.selection[0].dataPermission || '';
 							this.menusTree = this.$getTree(res, {
 								id: 'menu_id',
 								children: 'children',
 								parentId: 'parent_id',
 							});
-							var pageMenus = res.filter((item)=>{
-								if(item.type == 1) {
-									return true;
-								}
-							})
-							var dataPermissTree = this.$getTree(pageMenus, {
-								id: 'menu_id',
-								children: 'children',
-								parentId: 'parent_id',
-							});
-							this.dataPermissTree = dataPermissTree;
 							
 							select({
 								tenantId: this.selection[0].tenantId,

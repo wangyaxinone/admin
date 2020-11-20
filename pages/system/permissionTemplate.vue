@@ -164,7 +164,7 @@
 				menusTree: [],
 				dataPermissTree: [],
 				defaultCheckedKeys: [],
-				defaultCheckedData: {},
+				defaultCheckedData: '',
 				currentSelect: {}
 			}
 		},
@@ -209,30 +209,12 @@
 							isAdminTemplate: this.selection[0].isAdminTemplate
 						}).then((res) => {
 							_this.defaultCheckedKeys = _this.selection[0].permissions || [];
-							var dataPermissions = _this.selection[0].dataPermissions || {};
+							_this.defaultCheckedData = _this.selection[0].dataPermissions || '';
 							_this.menusTree = _this.$getTree(res, {
 								id: 'menu_id',
 								children: 'children',
 								parentId: 'parent_id',
 							});
-							var pageMenus = res.filter((item)=>{
-								if(item.type == 1) {
-									return true;
-								}
-							})
-							var newdataPermissions = {};
-							pageMenus.forEach((item)=>{
-								if(dataPermissions[item.api]) {
-									newdataPermissions[item.api] = dataPermissions[item.api];
-								}
-							})
-							_this.defaultCheckedData = newdataPermissions || {};
-							var dataPermissTree = _this.$getTree(pageMenus, {
-								id: 'menu_id',
-								children: 'children',
-								parentId: 'parent_id',
-							});
-							_this.dataPermissTree = dataPermissTree;
 							
 							_this.$refs.uniRolePermissions.show();
 						})

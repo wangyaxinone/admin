@@ -29,19 +29,15 @@ module.exports = class UserService extends Service {
 			_id: this.db.command.in(this.ctx.auth.userInfo.role)
 		})
 		.get();
-		var dataPermission = {};
+		var dataPermission = '';
 		var isTenantAdminOrAdmin = false;
 		if(roles.data && roles.data.length) {
 			roles.data.forEach((role)=>{
 				if(role.type == 1) {
 					isTenantAdminOrAdmin = true;
 				}
-				for(var key in role.dataPermission){
-					if(dataPermission[key]) {
-						role.dataPermission[key] < dataPermission[key] && (dataPermission[key] = role.dataPermission[key])
-					}else{
-						dataPermission[key] = role.dataPermission[key];
-					}
+				if(!dataPermission || role.dataPermission < dataPermission) {
+					dataPermission = role.dataPermission;
 				}
 			})
 		}
@@ -61,10 +57,23 @@ module.exports = class UserService extends Service {
 				this.ctx.tenantList.push(item._id);
 			})
 		}
+		let {
+		    data: menuList
+		} = await this.db.collection('opendb-admin-menus').where({
+			_id: this.db.command.in(this.ctx.auth.permission)
+		}).field({
+			'menu_id': true
+		}).orderBy('sort', 'asc').get();
+		var permission = {};
+		menuList.forEach((item)=>{
+			permission[item.menu_id] = true;
+		})
+		
 		await this.db.collection('uni-id-users').doc(this.ctx.auth.uid).update({
-			dataPermission: this.db.command.set(this.ctx.dataPermission),
+			dataPermission: this.ctx.dataPermission,
 			tenantList: this.db.command.set(this.ctx.tenantList),
-			isTenantAdminOrAdmin
+			isTenantAdminOrAdmin,
+			permission
 		});
         const navMenu = await this.service.system.menus.navMneuOrBtnByRole(1,this.ctx.data)
         if (navMenu.length) {

@@ -34,7 +34,8 @@ module.exports = class MenuService extends Service {
 				data: roleList
 			} = await this.db.collection('uni-id-roles').where({
 				tenantId: data.parent_id,
-			}).orderBy('sort', "asc").get();
+				type: 1
+			}).orderBy('create_date', "asc").get();
 			var role = await this.service.system.role.add({
 				role_name: `${data.name}_管理员`,
 				parent_id: (roleList && roleList.length) ? roleList[0]._id : '',
@@ -51,7 +52,7 @@ module.exports = class MenuService extends Service {
 				data: deptList
 			} = await this.db.collection('opendb-admin-dept').where({
 				tenantId: data.parent_id,
-			}).orderBy('sort', "asc").get();
+			}).orderBy('create_date', "asc").get();
 			var role = await this.service.system.dept.add({
 				dept_name: `${data.name}_管理部`,
 				parent_id: (deptList && deptList.length) ? deptList[0]._id : '',

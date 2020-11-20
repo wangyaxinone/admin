@@ -60,7 +60,7 @@ function appendTenantParams(param) {
 		return;
 	}
 	var dataPermission = _this.ctx.auth.userInfo.dataPermission;
-	var type = dataPermission[_this.ctx.event.action];
+	var type = dataPermission;
 	if(!type) {
 		if(_this.ctx.auth.userInfo.isTenantAdminOrAdmin) {
 			match[_id] = _this.ctx.auth.userInfo.tenantList[0];
@@ -77,7 +77,12 @@ function appendTenantParams(param) {
 	}else if(type == 2){
 		match[_id] = _this.ctx.auth.userInfo.tenantList[0];
 	}else if(type == 1) {
-		match[_id] = _this.db.command.in(_this.ctx.auth.userInfo.tenantList);
+		// 有新增门店权限 则可以查看门店及子门店权限
+		if(_this.ctx.auth.userInfo.permission['tenant_tenant_add']) {
+			match[_id] = _this.db.command.in(_this.ctx.auth.userInfo.tenantList);
+		}else{
+			match[_id] = _this.ctx.auth.userInfo.tenantList[0];
+		}
 	}
 	console.log(match);
 }

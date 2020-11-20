@@ -22,17 +22,22 @@
 				"navigationBarTitleText": "修改密码"
 			}
 
+		}, {
+			"path": "pages/goods/goodsType",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		},{
+			"path": "pages/goods/goods",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/goods/goods_type",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"subPackages": [{
 		"root": "pages/system",
 		"pages": [{
@@ -52,53 +57,44 @@
 				"style": {
 					"navigationBarTitleText": "角色管理"
 				}
-			}
-		    ,{
-                    "path" : "dict",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "dept",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "tenant_menu",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-                ,{
-                    "path" : "permissionTemplate",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
-	},{
-		"root": "pages/tenant",
-		"pages": [{
-				"path": "tenant",
+			}, {
+				"path": "dict",
 				"style": {
-					"navigationBarTitleText": "门店列表"
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
 				}
+
+			}, {
+				"path": "dept",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "tenant_menu",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "permissionTemplate",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
 			}
 		]
+	}, {
+		"root": "pages/tenant",
+		"pages": [{
+			"path": "tenant",
+			"style": {
+				"navigationBarTitleText": "门店列表"
+			}
+		}]
 	}],
 	"globalStyle": {
 		"navigationStyle": "custom",
