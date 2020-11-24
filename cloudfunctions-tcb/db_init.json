@@ -1,0 +1,2374 @@
+{
+    "opendb-admin-dept": {
+        "data": [
+            {
+                "dept_name": "体验门店_管理部",
+                "parent_id": "",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "isCook": 2,
+                "sort": 999,
+                "comment": "体验门店_管理部",
+                "create_date": 1605778047160,
+                "update_date": 1605778047160,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                }
+            },
+            {
+                "dept_name": "体验一店_管理部",
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99eb"
+                },
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "isCook": 2,
+                "sort": 999,
+                "comment": "体验一店_管理部",
+                "create_date": 1605836021200,
+                "update_date": 1605836021200,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                }
+            },
+            {
+                "dept_name": "面房",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99eb"
+                },
+                "sort": 1,
+                "isCook": 1,
+                "comment": "",
+                "create_date": 1606094215046,
+                "update_date": 1606094215046,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                }
+            },
+            {
+                "dept_name": "厨房",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99eb"
+                },
+                "sort": 2,
+                "isCook": 1,
+                "comment": "2",
+                "create_date": 1606094230405,
+                "update_date": 1606094230405,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                }
+            },
+            {
+                "dept_name": "服务部",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99eb"
+                },
+                "sort": 3,
+                "isCook": 2,
+                "comment": "3",
+                "create_date": 1606094264399,
+                "update_date": 1606094264399,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                }
+            }
+        ]
+    },
+    "opendb-admin-dict": {
+        "data": [
+            {
+                "dict_name": "性别",
+                "dict_key": -1,
+                "dict_code": "gender",
+                "parent_id": "",
+                "disabled": false,
+                "sort": 0,
+                "comment": ""
+            },
+            {
+                "dict_name": "未知",
+                "dict_key": 0,
+                "dict_code": "gender",
+                "parent_id": {
+                    "$oid": "5fa36aebf10d240001736efa"
+                },
+                "disabled": false,
+                "sort": 0,
+                "comment": ""
+            },
+            {
+                "dict_name": "男",
+                "dict_key": 1,
+                "dict_code": "gender",
+                "parent_id": {
+                    "$oid": "5fa36aebf10d240001736efa"
+                },
+                "disabled": false,
+                "sort": 1,
+                "comment": ""
+            },
+            {
+                "dict_name": "女",
+                "dict_key": 2,
+                "dict_code": "gender",
+                "parent_id": {
+                    "$oid": "5fa36aebf10d240001736efa"
+                },
+                "disabled": false,
+                "sort": 2,
+                "comment": ""
+            },
+            {
+                "dict_name": "用户状态",
+                "dict_key": -1,
+                "dict_code": "user_status",
+                "parent_id": "",
+                "disabled": false,
+                "sort": 2,
+                "comment": ""
+            },
+            {
+                "dict_name": "正常",
+                "dict_key": 0,
+                "dict_code": "user_status",
+                "parent_id": {
+                    "$oid": "5fa36c807a68ba000195131c"
+                },
+                "disabled": false,
+                "sort": 0,
+                "comment": ""
+            },
+            {
+                "dict_name": "禁用",
+                "dict_key": 1,
+                "dict_code": "user_status",
+                "parent_id": {
+                    "$oid": "5fa36c807a68ba000195131c"
+                },
+                "disabled": false,
+                "sort": 1,
+                "comment": ""
+            },
+            {
+                "dict_name": "审核中",
+                "dict_key": 2,
+                "dict_code": "user_status",
+                "parent_id": {
+                    "$oid": "5fa36c807a68ba000195131c"
+                },
+                "disabled": true,
+                "sort": 2,
+                "comment": ""
+            },
+            {
+                "dict_name": "审核拒绝",
+                "dict_key": 3,
+                "dict_code": "user_status",
+                "parent_id": {
+                    "$oid": "5fa36c807a68ba000195131c"
+                },
+                "disabled": true,
+                "sort": 3,
+                "comment": ""
+            }
+        ]
+    },
+    "opendb-admin-folder": {
+        "data": [
+            {
+                "parentId": "",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "folderName": "图片",
+                "fullName": "/图片",
+                "sort": 0,
+                "key": "图片",
+                "remark": "",
+                "create_date": 1606116664528,
+                "update_date": 1606116664528,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                }
+            },
+            {
+                "parentId": "",
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "folderName": "asdasdasdad",
+                "fullName": "/asdasdasdad",
+                "sort": 0,
+                "key": "asdasdasdad",
+                "remark": "",
+                "create_date": 1606187551279,
+                "update_date": 1606187551279,
+                "operator": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                },
+                "creater": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                }
+            }
+        ]
+    },
+    "opendb-admin-goods": {
+        "data": []
+    },
+    "opendb-admin-goodsType": {
+        "data": [
+            {
+                "name": "炒菜",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "sort": 1,
+                "comment": "炒菜",
+                "create_date": 1605780834590,
+                "update_date": 1605834468607,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                }
+            },
+            {
+                "name": "凉菜",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "sort": 2,
+                "comment": "前台",
+                "create_date": 1605795722129,
+                "update_date": 1605834480687,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                }
+            }
+        ]
+    },
+    "opendb-admin-menus": {
+        "data": [
+            {
+                "create_date": 1602662469396,
+                "enable": true,
+                "icon": "uni-icons-gear",
+                "menu_id": "system_management",
+                "name": "系统管理",
+                "parent_id": "",
+                "permission": [],
+                "sort": 1000,
+                "url": "/pages/system",
+                "type": 1,
+                "menu_type": 1
+            },
+            {
+                "menu_id": "system_user",
+                "name": "用户管理",
+                "icon": "iconfont iconicon_boss",
+                "url": "/pages/system/user",
+                "sort": 1,
+                "parent_id": "system_management",
+                "permission": [],
+                "enable": true,
+                "create_date": 1602662469396,
+                "type": 1,
+                "menu_type": 1,
+                "api": "system/user/list"
+            },
+            {
+                "menu_id": "system_menu",
+                "name": "系统菜单",
+                "icon": "iconfont iconicon_work",
+                "url": "/pages/system/menus",
+                "sort": 1020,
+                "parent_id": "system_management",
+                "permission": [],
+                "enable": true,
+                "create_date": 1602662469396,
+                "type": 1,
+                "menu_type": 1,
+                "api": "system/menus/tree"
+            },
+            {
+                "name": "字典管理",
+                "menu_id": "system_dict",
+                "parent_id": "system_management",
+                "url": "/pages/system/dict",
+                "type": 1,
+                "sort": 10000,
+                "enable": true,
+                "create_date": 1604207086961,
+                "icon": "iconfont iconicon_compile",
+                "menu_type": 1,
+                "api": "system/dict/tree"
+            },
+            {
+                "name": "门店管理",
+                "menu_id": "tenant_management",
+                "parent_id": "",
+                "url": "/pages/tenant",
+                "type": 1,
+                "sort": 1,
+                "enable": true,
+                "icon": "iconfont iconicon_subordinate",
+                "create_date": 1604234823164,
+                "menu_type": 1
+            },
+            {
+                "name": "门店列表",
+                "menu_id": "tenant_tenant",
+                "parent_id": "tenant_management",
+                "url": "/pages/tenant/tenant",
+                "type": 1,
+                "sort": 1,
+                "enable": true,
+                "icon": "iconfont iconicon_work",
+                "create_date": 1604235091068,
+                "menu_type": 1,
+                "api": "system/tenant/tree"
+            },
+            {
+                "name": "角色管理",
+                "menu_id": "system_role",
+                "parent_id": "system_management",
+                "url": "/pages/system/role",
+                "type": 1,
+                "sort": 2,
+                "enable": true,
+                "icon": "iconfont iconicon_scan_namecard",
+                "create_date": 1604239509007,
+                "menu_type": 1,
+                "api": "system/role/tree"
+            },
+            {
+                "name": "部门管理",
+                "menu_id": "system_dept",
+                "parent_id": "system_management",
+                "icon": "iconfont iconicon_subordinate",
+                "url": "/pages/system/dept",
+                "type": 1,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1,
+                "api": "system/dept/tree"
+            },
+            {
+                "name": "门店菜单",
+                "menu_id": "system_tenant_menu",
+                "parent_id": "system_management",
+                "icon": "iconfont icon-biaodan",
+                "url": "/pages/system/tenant_menu",
+                "type": 1,
+                "sort": 4,
+                "enable": true,
+                "menu_type": 1,
+                "api": "system/menus/tree"
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_user_list",
+                "parent_id": "system_user",
+                "parent_name": "用户管理",
+                "icon": "",
+                "url": "system/user/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_user_remove",
+                "parent_id": "system_user",
+                "parent_name": "用户管理",
+                "icon": "",
+                "url": "system/user/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_user_add",
+                "parent_id": "system_user",
+                "parent_name": "用户管理",
+                "icon": "",
+                "url": "system/user/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_user_update",
+                "parent_id": "system_user",
+                "parent_name": "用户管理",
+                "icon": "",
+                "url": "system/user/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_role_update",
+                "parent_id": "system_role",
+                "parent_name": "角色管理",
+                "icon": "",
+                "url": "system/role/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_role_remove",
+                "parent_id": "system_role",
+                "parent_name": "角色管理",
+                "icon": "",
+                "url": "system/role/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_role_add",
+                "parent_id": "system_role",
+                "parent_name": "角色管理",
+                "icon": "",
+                "url": "system/role/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_role_list",
+                "parent_id": "system_role",
+                "parent_name": "角色管理",
+                "icon": "",
+                "url": "system/role/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_dept_list",
+                "parent_id": "system_dept",
+                "parent_name": "部门管理",
+                "icon": "",
+                "url": "system/dept/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_dept_add",
+                "parent_id": "system_dept",
+                "parent_name": "部门管理",
+                "icon": "",
+                "url": "system/dept/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_dept_update",
+                "parent_id": "system_dept",
+                "parent_name": "部门管理",
+                "icon": "",
+                "url": "system/dept/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_dept_remove",
+                "parent_id": "system_dept",
+                "parent_name": "部门管理",
+                "icon": "",
+                "url": "system/dept/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_tenant_menu_remove",
+                "parent_id": "system_tenant_menu",
+                "parent_name": "门店菜单",
+                "icon": "",
+                "url": "system/tenant_menu/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_tenant_menu_add",
+                "parent_id": "system_tenant_menu",
+                "parent_name": "门店菜单",
+                "icon": "",
+                "url": "system/tenant_menu/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_tenant_menu_update",
+                "parent_id": "system_tenant_menu",
+                "parent_name": "门店菜单",
+                "icon": "",
+                "url": "system/tenant_menu/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_tenant_menu_list",
+                "parent_id": "system_tenant_menu",
+                "parent_name": "门店菜单",
+                "icon": "",
+                "url": "system/tenant_menu/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_menu_add",
+                "parent_id": "system_menu",
+                "parent_name": "系统菜单",
+                "icon": "",
+                "url": "system/menus/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_menu_list",
+                "parent_id": "system_menu",
+                "parent_name": "系统菜单",
+                "icon": "",
+                "url": "system/menus/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_menu_update",
+                "parent_id": "system_menu",
+                "parent_name": "系统菜单",
+                "icon": "",
+                "url": "system/menus/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_menu_remove",
+                "parent_id": "system_menu",
+                "parent_name": "系统菜单",
+                "icon": "",
+                "url": "system/menus/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_dict_add",
+                "parent_id": "system_dict",
+                "parent_name": "字典管理",
+                "icon": "",
+                "url": "system/dict/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_dict_update",
+                "parent_id": "system_dict",
+                "parent_name": "字典管理",
+                "icon": "",
+                "url": "system/dict/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_dict_list",
+                "parent_id": "system_dict",
+                "parent_name": "字典管理",
+                "icon": "",
+                "url": "system/dict/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_dict_remove",
+                "parent_id": "system_dict",
+                "parent_name": "字典管理",
+                "icon": "",
+                "url": "system/dict/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "tenant_tenant_update",
+                "parent_id": "tenant_tenant",
+                "parent_name": "门店列表",
+                "icon": "",
+                "url": "system/tenant/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "tenant_tenant_add",
+                "parent_id": "tenant_tenant",
+                "parent_name": "门店列表",
+                "icon": "",
+                "url": "system/tenant/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "删除",
+                "menu_id": "tenant_tenant_remove",
+                "parent_id": "tenant_tenant",
+                "parent_name": "门店列表",
+                "icon": "",
+                "url": "system/tenant/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "tenant_tenant_list",
+                "parent_id": "tenant_tenant",
+                "parent_name": "门店列表",
+                "icon": "",
+                "url": "system/tenant/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "商品管理",
+                "menu_id": "goods_management",
+                "menu_type": 2,
+                "parent_id": "",
+                "icon": "iconfont iconicon_work",
+                "url": "/pages/goods",
+                "type": 1,
+                "sort": 1,
+                "enable": true
+            },
+            {
+                "name": "商品分类",
+                "menu_id": "goods_type",
+                "menu_type": 2,
+                "parent_id": "goods_management",
+                "icon": "iconfont iconicon_subordinate",
+                "url": "/pages/goods/goodsType",
+                "type": 1,
+                "sort": 1,
+                "enable": true,
+                "api": "goods/goodsType/list",
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "update_date": 1605864860009
+            },
+            {
+                "name": "删除",
+                "menu_id": "goods_type_remove",
+                "parent_id": "goods_type",
+                "parent_name": "商品分类",
+                "icon": "",
+                "url": "goods/goods_type/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "查看",
+                "menu_id": "goods_type_list",
+                "parent_id": "goods_type",
+                "parent_name": "商品分类",
+                "icon": "",
+                "url": "goods/goods_type/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "修改",
+                "menu_id": "goods_type_update",
+                "parent_id": "goods_type",
+                "parent_name": "商品分类",
+                "icon": "",
+                "url": "goods/goods_type/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "新增",
+                "menu_id": "goods_type_add",
+                "parent_id": "goods_type",
+                "parent_name": "商品分类",
+                "icon": "",
+                "url": "goods/goods_type/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "商品列表",
+                "menu_id": "goods_list",
+                "menu_type": 2,
+                "parent_id": "goods_management",
+                "icon": "iconfont iconicon_subordinate",
+                "url": "/pages/goods/goods",
+                "type": 1,
+                "sort": 2,
+                "enable": true,
+                "api": "",
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "update_date": 1605864870225
+            },
+            {
+                "name": "修改",
+                "menu_id": "goods_list_update",
+                "parent_id": "goods_list",
+                "parent_name": "商品列表",
+                "icon": "",
+                "url": "goods/goods_list/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "新增",
+                "menu_id": "goods_list_add",
+                "parent_id": "goods_list",
+                "parent_name": "商品列表",
+                "icon": "",
+                "url": "goods/goods_list/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "查看",
+                "menu_id": "goods_list_list",
+                "parent_id": "goods_list",
+                "parent_name": "商品列表",
+                "icon": "",
+                "url": "goods/goods_list/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "删除",
+                "menu_id": "goods_list_remove",
+                "parent_id": "goods_list",
+                "parent_name": "商品列表",
+                "icon": "",
+                "url": "goods/goods_list/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "订单管理",
+                "menu_id": "order_management",
+                "menu_type": 2,
+                "parent_id": "",
+                "icon": "iconfont iconicon_send",
+                "url": "/pages/order",
+                "type": 1,
+                "sort": 2,
+                "enable": true
+            },
+            {
+                "name": "订单列表",
+                "menu_id": "order_list",
+                "menu_type": 2,
+                "parent_id": "order_management",
+                "icon": "iconfont iconicon_subordinate",
+                "url": "/pages/order/order_list",
+                "type": 1,
+                "sort": 1,
+                "enable": true
+            },
+            {
+                "name": "新增",
+                "menu_id": "order_list_add",
+                "parent_id": "order_list",
+                "parent_name": "订单列表",
+                "icon": "",
+                "url": "order/order_list/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "修改",
+                "menu_id": "order_list_update",
+                "parent_id": "order_list",
+                "parent_name": "订单列表",
+                "icon": "",
+                "url": "order/order_list/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "删除",
+                "menu_id": "order_list_remove",
+                "parent_id": "order_list",
+                "parent_name": "订单列表",
+                "icon": "",
+                "url": "order/order_list/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "查看",
+                "menu_id": "order_list_list",
+                "parent_id": "order_list",
+                "parent_name": "订单列表",
+                "icon": "",
+                "url": "order/order_list/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 2
+            },
+            {
+                "name": "权限模板",
+                "menu_id": "system_permissionTemplate",
+                "menu_type": 1,
+                "parent_id": "system_management",
+                "icon": "iconfont iconicon_coinpurse_line",
+                "url": "/pages/system/permissionTemplate",
+                "type": 1,
+                "sort": 5,
+                "enable": true,
+                "api": "system/permissionTemplate/list"
+            },
+            {
+                "name": "删除",
+                "menu_id": "system_permissionTemplate_remove",
+                "parent_id": "system_permissionTemplate",
+                "parent_name": "权限模板",
+                "icon": "",
+                "url": "system/permissionTemplate/remove",
+                "type": 2,
+                "sort": 2,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "修改",
+                "menu_id": "system_permissionTemplate_update",
+                "parent_id": "system_permissionTemplate",
+                "parent_name": "权限模板",
+                "icon": "",
+                "url": "system/permissionTemplate/update",
+                "type": 2,
+                "sort": 1,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "查看",
+                "menu_id": "system_permissionTemplate_list",
+                "parent_id": "system_permissionTemplate",
+                "parent_name": "权限模板",
+                "icon": "",
+                "url": "system/permissionTemplate/list",
+                "type": 2,
+                "sort": 3,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "新增",
+                "menu_id": "system_permissionTemplate_add",
+                "parent_id": "system_permissionTemplate",
+                "parent_name": "权限模板",
+                "icon": "",
+                "url": "system/permissionTemplate/add",
+                "type": 2,
+                "sort": 0,
+                "enable": true,
+                "menu_type": 1
+            },
+            {
+                "name": "权限",
+                "menu_id": "system_role_permission",
+                "menu_type": 1,
+                "parent_id": "system_role",
+                "icon": "iconfont iconicon_setting",
+                "url": "",
+                "api": "",
+                "type": 2,
+                "sort": 5,
+                "enable": true
+            },
+            {
+                "name": "权限",
+                "menu_id": "system_permissionTemplate_permission",
+                "menu_type": 1,
+                "parent_id": "system_permissionTemplate",
+                "icon": "iconfont iconicon_setting",
+                "url": "",
+                "api": "",
+                "type": 2,
+                "sort": 5,
+                "enable": true
+            },
+            {
+                "name": "资源管理",
+                "menu_id": "file_management",
+                "menu_type": 2,
+                "parent_id": "0",
+                "icon": "iconfont iconicon_coinpurse_line",
+                "url": "/pages/file/file",
+                "api": "",
+                "type": 1,
+                "sort": 3,
+                "enable": true,
+                "create_date": 1606094740577,
+                "update_date": 1606188142149,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                }
+            }
+        ]
+    },
+    "opendb-admin-permissionTemplate": {
+        "data": [
+            {
+                "name": "单门店模板",
+                "tenantId": "",
+                "isAdminTemplate": 1,
+                "sort": 0,
+                "comment": "",
+                "create_date": 1605606038127,
+                "update_date": 1605838395570,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "dataPermissions": 2,
+                "permissions": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059385"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50b"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50d"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fb4e7a2db55510001da8681"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c05"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c07"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    },
+                    {
+                        "$oid": "5fa382ed2ee2c00001e6b116"
+                    },
+                    {
+                        "$oid": "5fa4a89f9eacd2000165b270"
+                    },
+                    {
+                        "$oid": "5fa90cf2314a31000169898d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16b"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16c"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16e"
+                    },
+                    {
+                        "$oid": "5fb4ed36c18eb50001bbd371"
+                    },
+                    {
+                        "$oid": "5f9b831807cf0600010c8fa5"
+                    },
+                    {
+                        "$oid": "5fa4a8b20a5b5400010206ae"
+                    },
+                    {
+                        "$oid": "5f9e41ef6515b10001bd0b1f"
+                    },
+                    {
+                        "$oid": "5fa4a8c4bd6ecd00017547ac"
+                    }
+                ]
+            },
+            {
+                "name": "多门店模板",
+                "tenantId": "",
+                "isAdminTemplate": 1,
+                "sort": 0,
+                "comment": "",
+                "create_date": 1605777709683,
+                "update_date": 1605842001568,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "dataPermissions": 1,
+                "permissions": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d27"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d29"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059385"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50b"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50d"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fb4e7a2db55510001da8681"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c05"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c07"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    },
+                    {
+                        "$oid": "5fa382ed2ee2c00001e6b116"
+                    },
+                    {
+                        "$oid": "5fa4a89f9eacd2000165b270"
+                    },
+                    {
+                        "$oid": "5fa90cf2314a31000169898d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16b"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16c"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16e"
+                    },
+                    {
+                        "$oid": "5fb4ed36c18eb50001bbd371"
+                    },
+                    {
+                        "$oid": "5f9b831807cf0600010c8fa5"
+                    },
+                    {
+                        "$oid": "5fa4a8b20a5b5400010206ae"
+                    },
+                    {
+                        "$oid": "5f9e41ef6515b10001bd0b1f"
+                    },
+                    {
+                        "$oid": "5fa4a8c4bd6ecd00017547ac"
+                    }
+                ]
+            },
+            {
+                "name": "厨师",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "isAdminTemplate": 2,
+                "sort": 1,
+                "comment": "",
+                "create_date": 1605778330489,
+                "update_date": 1606094038971,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "dataPermissions": 2,
+                "permissions": [
+                    {
+                        "$oid": "5fa4bd08ab6ef40001834610"
+                    },
+                    {
+                        "$oid": "5fa4be9272a3ec0001cf7f60"
+                    },
+                    {
+                        "$oid": "5fa4bede72a3ec0001cf7fe3"
+                    },
+                    {
+                        "$oid": "5fa4bf185c41b90001dcca42"
+                    },
+                    {
+                        "$oid": "5fa4bf305fb6630001eb4c35"
+                    },
+                    {
+                        "$oid": "5fa4bf735c41b90001dcca9e"
+                    },
+                    {
+                        "$oid": "5fa4bfe551fa9f00017392f6"
+                    }
+                ]
+            },
+            {
+                "name": "店长",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "isAdminTemplate": 1,
+                "comment": "",
+                "create_date": 1605836232866,
+                "update_date": 1605885189931,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "dataPermissions": 2,
+                "permissions": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    }
+                ],
+                "sort": 1
+            },
+            {
+                "name": "子门店模板",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "isAdminTemplate": 1,
+                "sort": 3,
+                "comment": "",
+                "create_date": 1605840814831,
+                "update_date": 1605840869251,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "dataPermissions": 2,
+                "permissions": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059385"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50b"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50d"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fb4e7a2db55510001da8681"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c05"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c07"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    },
+                    {
+                        "$oid": "5fa90cf2314a31000169898d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16b"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16c"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16e"
+                    },
+                    {
+                        "$oid": "5fb4ed36c18eb50001bbd371"
+                    }
+                ]
+            },
+            {
+                "name": "店长模板",
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "isAdminTemplate": 1,
+                "sort": 1,
+                "comment": "",
+                "create_date": 1605841088412,
+                "update_date": 1605841130695,
+                "operator": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                },
+                "creater": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                },
+                "dataPermissions": 2,
+                "permissions": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    }
+                ]
+            }
+        ]
+    },
+    "opendb-admin-tenant": {
+        "data": [
+            {
+                "name": "体验门店",
+                "parent_id": "",
+                "type": 1,
+                "enable": true,
+                "address": "山西省太原市迎泽区桥东街道并州北路山西省歌舞剧院住宅楼",
+                "longitude": 112.57200922519,
+                "latitude": 37.851916462459,
+                "create_date": 1605778046809,
+                "update_date": 1605778046809,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "point": {
+                    "type": "Point",
+                    "coordinates": [
+                        112.57200922519,
+                        37.851916462459
+                    ]
+                },
+                "parentTenants": []
+            },
+            {
+                "name": "体验一店",
+                "parent_id": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "type": 1,
+                "enable": true,
+                "address": "山西省太原市迎泽区迎泽街道青年东街12号",
+                "longitude": 112.56960596591,
+                "latitude": 37.852750898685,
+                "create_date": 1605836020814,
+                "update_date": 1605836020814,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "point": {
+                    "type": "Point",
+                    "coordinates": [
+                        112.56960596591,
+                        37.852750898685
+                    ]
+                },
+                "parentTenants": [
+                    {
+                        "$oid": "5fb63a7e3fbe800001bf2ffa"
+                    }
+                ]
+            }
+        ],
+        "schema": {
+            "bsonType": "object",
+            "required": [],
+            "permission": {
+                "read": false,
+                "create": false,
+                "update": false,
+                "delete": false
+            },
+            "properties": {
+                "_id": {
+                    "description": "ID，系统自动生成"
+                }
+            }
+        }
+    },
+    "opendb-admin-tenant-menus": {
+        "data": []
+    },
+    "uni-id-permissions": {
+        "data": []
+    },
+    "uni-id-roles": {
+        "data": [
+            {
+                "role_name": "体验门店_管理员",
+                "parent_id": "",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "type": 1,
+                "sort": 999,
+                "comment": "门店管理员",
+                "create_date": 1605778046949,
+                "update_date": 1605846491199,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "role_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99ea"
+                },
+                "dataPermission": 1,
+                "permission": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d27"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d29"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059385"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50b"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50d"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fb4e7a2db55510001da8681"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c05"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c07"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    },
+                    {
+                        "$oid": "5fa382ed2ee2c00001e6b116"
+                    },
+                    {
+                        "$oid": "5fa4a89f9eacd2000165b270"
+                    },
+                    {
+                        "$oid": "5fa90cf2314a31000169898d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16b"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16c"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16e"
+                    },
+                    {
+                        "$oid": "5fb4ed36c18eb50001bbd371"
+                    },
+                    {
+                        "$oid": "5f9b831807cf0600010c8fa5"
+                    },
+                    {
+                        "$oid": "5fa4a8b20a5b5400010206ae"
+                    },
+                    {
+                        "$oid": "5f9e41ef6515b10001bd0b1f"
+                    },
+                    {
+                        "$oid": "5fa4a8c4bd6ecd00017547ac"
+                    }
+                ],
+                "template": {
+                    "$oid": "5fb6392da93e420001b32b18"
+                }
+            },
+            {
+                "role_name": "厨师",
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99ea"
+                },
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "type": 2,
+                "sort": 1,
+                "comment": "",
+                "create_date": 1605778436390,
+                "update_date": 1605778504497,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "role_id": {
+                    "$oid": "5fb63c054d03d00001a12c6d"
+                },
+                "dataPermission": 2,
+                "permission": [
+                    {
+                        "$oid": "5fa4bd08ab6ef40001834610"
+                    },
+                    {
+                        "$oid": "5fa4be9272a3ec0001cf7f60"
+                    },
+                    {
+                        "$oid": "5fa4bede72a3ec0001cf7fe3"
+                    },
+                    {
+                        "$oid": "5fa4bf185c41b90001dcca42"
+                    },
+                    {
+                        "$oid": "5fa4bf305fb6630001eb4c35"
+                    },
+                    {
+                        "$oid": "5fa4bf735c41b90001dcca9e"
+                    },
+                    {
+                        "$oid": "5fa4bfe551fa9f00017392f6"
+                    }
+                ],
+                "template": {
+                    "$oid": "5fb63b9a1348460001746b9d"
+                }
+            },
+            {
+                "role_name": "体验一店_管理员",
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99ea"
+                },
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "type": 1,
+                "sort": 999,
+                "comment": "门店管理员",
+                "create_date": 1605836021030,
+                "update_date": 1605840881163,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "role_id": {
+                    "$oid": "5fb71cf5861e0d0001e42d34"
+                },
+                "dataPermission": 2,
+                "permission": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059385"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50b"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50d"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fb4e7a2db55510001da8681"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c05"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c07"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    },
+                    {
+                        "$oid": "5fa90cf2314a31000169898d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16b"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16c"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16d"
+                    },
+                    {
+                        "$oid": "5fa90d6799c9960001fcd16e"
+                    },
+                    {
+                        "$oid": "5fb4ed36c18eb50001bbd371"
+                    }
+                ],
+                "template": {
+                    "$oid": "5fb72fae1348460001e04fe2"
+                }
+            },
+            {
+                "role_name": "店长",
+                "parent_id": {
+                    "$oid": "5fb63a7fe1ba050001bf99ea"
+                },
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "type": 1,
+                "sort": 1,
+                "comment": "",
+                "create_date": 1605838952498,
+                "update_date": 1605840150136,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "role_id": {
+                    "$oid": "5fb7286848eb4300019d8207"
+                },
+                "dataPermission": 2,
+                "permission": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059383"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    }
+                ],
+                "template": {
+                    "$oid": "5fb71dc8976b4e0001fd5162"
+                }
+            },
+            {
+                "role_name": "店长",
+                "parent_id": {
+                    "$oid": "5fb71cf5861e0d0001e42d34"
+                },
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "type": 1,
+                "sort": 1,
+                "comment": "",
+                "create_date": 1605841069123,
+                "update_date": 1605841591646,
+                "operator": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                },
+                "creater": {
+                    "$oid": "5fb63c2b4d03d00001a12cb5"
+                },
+                "role_id": {
+                    "$oid": "5fb730ad74defa0001a8bd85"
+                },
+                "dataPermission": 2,
+                "permission": [
+                    {
+                        "$oid": "5f9eae4769850700015c0951"
+                    },
+                    {
+                        "$oid": "5f9eaf5372a3ec0001cb3a0e"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d28"
+                    },
+                    {
+                        "$oid": "5fa4a8de72a3ec0001cf6d2a"
+                    },
+                    {
+                        "$oid": "5f9b6f574276820001782619"
+                    },
+                    {
+                        "$oid": "5f9b828a5c41b90001d594c0"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059384"
+                    },
+                    {
+                        "$oid": "5fa4a81b8d94860001059386"
+                    },
+                    {
+                        "$oid": "5f9ec0955fb6630001e718f9"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50c"
+                    },
+                    {
+                        "$oid": "5fa4a8559b97b300010dd50e"
+                    },
+                    {
+                        "$oid": "5fa380a10a5b540001013faa"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c06"
+                    },
+                    {
+                        "$oid": "5fa4a86163ec2c0001be3c08"
+                    }
+                ],
+                "template": {
+                    "$oid": "5fb730c01348460001e051fd"
+                }
+            }
+        ]
+    },
+    "uni-id-users": {
+        "data": [
+            {
+                "username": "admin",
+                "password": "03caebb36670995fc261a275d212cad65e4bbebd",
+                "role": [
+                    "admin"
+                ],
+                "register_date": 1604022192917,
+                "register_ip": "117.136.91.130",
+                "token": [
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3Mjg1LCJleHAiOjE2MDYyNzM2ODV9.0fsZ-op3gG9AmQTuTgnLoEHU8j_9Xo0K0SCTtHwJ6vk",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3MzA1LCJleHAiOjE2MDYyNzM3MDV9.-mgwQumsnJ6rCmBaRGFFYQuSJoW_j9uhRWpCdcolw3I",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3Mzk5LCJleHAiOjE2MDYyNzM3OTl9.QaLioQfEqr89wsw8DSOxGARQQkx56PDkxxtFDjueMIU",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg4MTIyLCJleHAiOjE2MDYyNzQ1MjJ9.pX1oUP_OPLFZVsT8enHoqIQ4MiJ8VqBxO6-bazU7hds",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTkyMDI1LCJleHAiOjE2MDYyNzg0MjV9.FriT0JoHj0Dn1mRcw-USWhYKJ0bzx0uGmq2y1TY0vZY",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MjEyMzAyLCJleHAiOjE2MDYyOTg3MDJ9.CWRfaOOAN45fVTZ-Giu5Gol1qRE0cBzhRWNO_zZvidI"
+                ],
+                "last_login_date": 1606212302830,
+                "last_login_ip": "1.68.60.252",
+                "login_ip_limit": []
+            },
+            {
+                "username": "wyx",
+                "password": "03caebb36670995fc261a275d212cad65e4bbebd",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "nickname": "王亚鑫",
+                "gender": 1,
+                "status": 0,
+                "mobile": "13980239227",
+                "dept": [
+                    {
+                        "$oid": "5fb63a7fe1ba050001bf99eb"
+                    }
+                ],
+                "role": [
+                    {
+                        "$oid": "5fb63a7fe1ba050001bf99ea"
+                    }
+                ],
+                "register_date": 1605778129732,
+                "update_date": 1605778129732,
+                "operator": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "creater": {
+                    "$oid": "5f9b6fb063ec2c0001b70ff8"
+                },
+                "register_ip": "1.68.100.76",
+                "last_login_date": 1606193294897,
+                "last_login_ip": "1.68.60.252",
+                "login_ip_limit": [],
+                "token": [
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmI2M2FkMWRlNjViYjAwMDFmMTMxMmIiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3NTU5LCJleHAiOjE2MDYyNzM5NTl9.algHbLC8URzDs8JLcfJac_N5syLx6fw79OV0lXV67tU",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmI2M2FkMWRlNjViYjAwMDFmMTMxMmIiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTkzMjk0LCJleHAiOjE2MDYyNzk2OTR9.AFB5zqDkD6OQ31VPOfhR0aeSDb2UqEwxF4n0bOb-ew4"
+                ],
+                "dataPermission": 1,
+                "isTenantAdminOrAdmin": true,
+                "tenantList": [
+                    {
+                        "$oid": "5fb63a7e3fbe800001bf2ffa"
+                    },
+                    {
+                        "$oid": "5fb71cf4861e0d0001e42d33"
+                    }
+                ],
+                "permission": {
+                    "system_dept": true,
+                    "system_dept_add": true,
+                    "system_dept_list": true,
+                    "system_dept_remove": true,
+                    "system_dept_update": true,
+                    "system_dict": true,
+                    "system_dict_list": true,
+                    "system_management": true,
+                    "system_menu": true,
+                    "system_menu_list": true,
+                    "system_permissionTemplate": true,
+                    "system_permissionTemplate_add": true,
+                    "system_permissionTemplate_list": true,
+                    "system_permissionTemplate_permission": true,
+                    "system_permissionTemplate_remove": true,
+                    "system_permissionTemplate_update": true,
+                    "system_role": true,
+                    "system_role_add": true,
+                    "system_role_list": true,
+                    "system_role_permission": true,
+                    "system_role_remove": true,
+                    "system_role_update": true,
+                    "system_tenant_menu": true,
+                    "system_tenant_menu_list": true,
+                    "system_user": true,
+                    "system_user_add": true,
+                    "system_user_list": true,
+                    "system_user_remove": true,
+                    "system_user_update": true,
+                    "tenant_management": true,
+                    "tenant_tenant": true,
+                    "tenant_tenant_add": true,
+                    "tenant_tenant_list": true,
+                    "tenant_tenant_remove": true,
+                    "tenant_tenant_update": true
+                }
+            },
+            {
+                "username": "yxr",
+                "password": "03caebb36670995fc261a275d212cad65e4bbebd",
+                "tenantId": {
+                    "$oid": "5fb71cf4861e0d0001e42d33"
+                },
+                "nickname": "闫学荣",
+                "gender": 2,
+                "status": 0,
+                "mobile": "13753131055",
+                "dept": [
+                    {
+                        "$oid": "5fb71cf5db55510001de3432"
+                    }
+                ],
+                "role": [
+                    {
+                        "$oid": "5fb71cf5861e0d0001e42d34"
+                    }
+                ],
+                "register_date": 1605778474860,
+                "update_date": 1605840905033,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "register_ip": "1.68.100.76",
+                "last_login_date": 1606187526443,
+                "last_login_ip": "1.68.60.252",
+                "login_ip_limit": [],
+                "token": [
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmI2M2MyYjRkMDNkMDAwMDFhMTJjYjUiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3NTI2LCJleHAiOjE2MDYyNzM5MjZ9.NsX_eiVqZsQ-cH0BrX4MehDD-lEe4CyKCE3uxgwY0N4"
+                ],
+                "dataPermission": 2,
+                "isTenantAdminOrAdmin": true,
+                "tenantList": [
+                    {
+                        "$oid": "5fb71cf4861e0d0001e42d33"
+                    }
+                ],
+                "permission": {
+                    "system_dept": true,
+                    "system_dept_add": true,
+                    "system_dept_list": true,
+                    "system_dept_remove": true,
+                    "system_dept_update": true,
+                    "system_management": true,
+                    "system_permissionTemplate": true,
+                    "system_permissionTemplate_add": true,
+                    "system_permissionTemplate_list": true,
+                    "system_permissionTemplate_permission": true,
+                    "system_permissionTemplate_remove": true,
+                    "system_permissionTemplate_update": true,
+                    "system_role": true,
+                    "system_role_add": true,
+                    "system_role_list": true,
+                    "system_role_permission": true,
+                    "system_role_remove": true,
+                    "system_role_update": true,
+                    "system_user": true,
+                    "system_user_add": true,
+                    "system_user_list": true,
+                    "system_user_remove": true,
+                    "system_user_update": true,
+                    "tenant_management": true,
+                    "tenant_tenant": true,
+                    "tenant_tenant_list": true,
+                    "tenant_tenant_update": true
+                }
+            },
+            {
+                "username": "wzh",
+                "password": "03caebb36670995fc261a275d212cad65e4bbebd",
+                "tenantId": {
+                    "$oid": "5fb63a7e3fbe800001bf2ffa"
+                },
+                "nickname": "",
+                "gender": 1,
+                "status": 0,
+                "mobile": "1895263963",
+                "dept": [
+                    {
+                        "$oid": "5fbb0d9648eb430001a3d1b7"
+                    }
+                ],
+                "role": [
+                    {
+                        "$oid": "5fb63c054d03d00001a12c6d"
+                    }
+                ],
+                "register_date": 1605842246615,
+                "update_date": 1606094309130,
+                "operator": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "creater": {
+                    "$oid": "5fb63ad1de65bb0001f1312b"
+                },
+                "register_ip": "117.136.4.138",
+                "last_login_date": 1606094048492,
+                "last_login_ip": "1.68.61.26",
+                "login_ip_limit": [],
+                "token": [
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmI3MzU0NmQxY2I0ZDAwMDE1MTE1ZjkiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MDkzOTMyLCJleHAiOjE2MDYxODAzMzJ9.7OSV-Jk6u-WClK6V1ccCkhjK9WqmC4o2_64Q2SNFVIg",
+                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZmI3MzU0NmQxY2I0ZDAwMDE1MTE1ZjkiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MDk0MDQ4LCJleHAiOjE2MDYxODA0NDh9._Be01WDRQBonawUheOWiyVP41NEUZcRvkHElN9Buj_U"
+                ],
+                "dataPermission": 2,
+                "isTenantAdminOrAdmin": false,
+                "tenantList": [
+                    {
+                        "$oid": "5fb63a7e3fbe800001bf2ffa"
+                    },
+                    {
+                        "$oid": "5fb71cf4861e0d0001e42d33"
+                    }
+                ],
+                "permission": {
+                    "system_dept": true,
+                    "system_dept_list": true,
+                    "system_dept_update": true,
+                    "system_management": true,
+                    "system_role": true,
+                    "system_role_list": true,
+                    "system_role_update": true,
+                    "system_user": true,
+                    "system_user_add": true,
+                    "system_user_list": true,
+                    "system_user_update": true,
+                    "tenant_management": true,
+                    "tenant_tenant": true,
+                    "tenant_tenant_list": true,
+                    "tenant_tenant_update": true,
+                    "system_role_permission": true,
+                    "goods_management": true,
+                    "goods_type": true,
+                    "goods_type_list": true,
+                    "goods_list": true,
+                    "goods_list_list": true,
+                    "order_list_list": true,
+                    "order_management": true
+                }
+            }
+        ]
+    },
+    "uni-verify": {
+        "data": [],
+        "index": [
+            {
+                "IndexName": "mobile",
+                "MgoKeySchema": {
+                    "MgoIndexKeys": [
+                        {
+                            "Name": "mobile",
+                            "Direction": "1"
+                        },
+                        {
+                            "Name": "code",
+                            "Direction": "1"
+                        }
+                    ],
+                    "MgoIsUnique": false
+                }
+            },
+            {
+                "IndexName": "email",
+                "MgoKeySchema": {
+                    "MgoIndexKeys": [
+                        {
+                            "Name": "email",
+                            "Direction": "1"
+                        },
+                        {
+                            "Name": "code",
+                            "Direction": "1"
+                        }
+                    ],
+                    "MgoIsUnique": false
+                }
+            }
+        ]
+    }
+}

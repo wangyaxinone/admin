@@ -150,8 +150,10 @@
 			downLoad(item) {
 				window.location.href = item.path;
 			},
-			onSuccess() {
-				this.getFiles();
+			onSuccess(data) {
+				debugger
+				this.$refs.updateFile.hide();
+				// this.getFiles();
 			},
 			getFiles() {
 				this.files = [];
