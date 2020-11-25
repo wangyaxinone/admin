@@ -4,10 +4,15 @@ const {
 const {getPageConfig, getServerDate, getTree, appendTenantParams} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
-		data.create_date = getServerDate();
-		data.update_date = getServerDate();
-		data.operator = this.ctx.auth.uid;
-		data.creater = this.ctx.auth.uid;
+		var _this = this;
+		if(data && data.length) {
+			data.forEach((item)=>{
+				item.create_date = getServerDate();
+				item.update_date = getServerDate();
+				item.operator = _this.ctx.auth.uid;
+				item.creater = _this.ctx.auth.uid;
+			})
+		}
 		return await this.db.collection('opendb-admin-file').add(data);
 	}
 	async update(data) {
@@ -28,7 +33,7 @@ module.exports = class MenuService extends Service {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
-		param.parentId && (match.parentId = param.parentId);
+		param.route && (match.route = param.route);
 		appendTenantParams({
 			match,
 			_this: this,

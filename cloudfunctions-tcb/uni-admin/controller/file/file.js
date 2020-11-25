@@ -3,54 +3,35 @@ const {
 } = require('uni-cloud-router')
 module.exports = class UserController extends Controller {
 	async add() {
-		const {
-			parentId,
-			tenantId,
-			folderName,
-			fullName,
-			sort,
-			key,
-			remark
-		} = this.ctx.data
-		return await this.service.file.folder.add({
-			parentId,
-			tenantId,
-			folderName,
-			fullName,
-			sort,
-			key,
-			remark
-		});
+		return await this.service.file.file.add(this.ctx.data);
 	}
 	async update() {
 		const {
 			_id,
-			parentId,
+			fileID,
 			tenantId,
-			folderName,
-			fullName,
-			sort,
-			key,
-			remark
+			filename,
+			fullPath,
+			path,
+			route
 		} = this.ctx.data
-		return await this.service.file.folder.update({
+		return await this.service.file.file.update({
 			_id,
-			parentId,
+			fileID,
 			tenantId,
-			folderName,
-			fullName,
-			sort,
-			key,
-			remark
+			filename,
+			fullPath,
+			path,
+			route
 		});
 	}
 	async remove() {
 		const {
 			_ids,
 		} = this.ctx.data
-		return await this.service.file.folder.remove(_ids);
+		return await this.service.file.file.remove(_ids);
 	}
 	async list() {
-		return await this.service.file.folder.list(this.ctx.data);
+		return await this.service.file.file.list(this.ctx.data);
 	}
 }

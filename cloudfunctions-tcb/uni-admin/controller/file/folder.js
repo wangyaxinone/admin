@@ -4,49 +4,53 @@ const {
 module.exports = class UserController extends Controller {
 	async add() {
 		const {
-			fileID,
+			parentId,
 			tenantId,
-			filename,
-			fullPath,
-			path,
-			route
+			folderName,
+			fullName,
+			sort,
+			key,
+			remark
 		} = this.ctx.data
-		return await this.service.file.file.add({
-			fileID,
+		return await this.service.file.folder.add({
+			parentId,
 			tenantId,
-			filename,
-			fullPath,
-			path,
-			route
+			folderName,
+			fullName,
+			sort,
+			key,
+			remark
 		});
 	}
 	async update() {
 		const {
 			_id,
-			fileID,
+			parentId,
 			tenantId,
-			filename,
-			fullPath,
-			path,
-			route
+			folderName,
+			fullName,
+			sort,
+			key,
+			remark
 		} = this.ctx.data
-		return await this.service.file.file.update({
+		return await this.service.file.folder.update({
 			_id,
-			fileID,
+			parentId,
 			tenantId,
-			filename,
-			fullPath,
-			path,
-			route
+			folderName,
+			fullName,
+			sort,
+			key,
+			remark
 		});
 	}
 	async remove() {
 		const {
 			_ids,
 		} = this.ctx.data
-		return await this.service.file.file.remove(_ids);
+		return await this.service.file.folder.remove(_ids);
 	}
 	async list() {
-		return await this.service.file.file.list(this.ctx.data);
+		return await this.service.file.folder.list(this.ctx.data);
 	}
 }

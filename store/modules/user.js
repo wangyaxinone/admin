@@ -24,7 +24,12 @@ export default {
             state.token = ''
             state.tokenExpired = 0
             state.userInfo = {}
-			uni.clearStorage();
+			// uni.clearStorage();
+			uni.removeStorageSync('app_mode')
+			uni.removeStorageSync('app_navBtn')
+			uni.removeStorageSync('app_navMenu')
+			uni.removeStorageSync('app_activeTenant')
+			uni.removeStorageSync('app_isTenantAdminOrAdmin')
 			uni.removeStorageSync('userInfo')
             uni.removeStorageSync('uni_id_token')
             uni.removeStorageSync('uni_id_token_expired')

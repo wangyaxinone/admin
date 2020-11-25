@@ -69,7 +69,7 @@
 				this.fileList.forEach((item,idx)=>{
 					uniCloud.uploadFile({
 						filePath: item.path,
-						cloudPath: `${_this.fileNameList[idx].name}.${_this.fileNameList[idx].suffix}`,
+						cloudPath: `${this.path?this.path+'/':''}${_this.fileNameList[idx].name}.${_this.fileNameList[idx].suffix}`,
 						onUploadProgress: function(progressEvent) {
 							var percentCompleted = Math.round(
 								(progressEvent.loaded * 100) / progressEvent.total

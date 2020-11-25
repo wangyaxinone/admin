@@ -73,6 +73,10 @@
 		update,
 		remove,
 	} from "@/api/file/folder.js"
+	import {
+		add as addFile,
+		getList as getFileList
+	} from "@/api/file/file.js"
 	import updateFile from "@/components/updateFile/updateFile.vue";
 	export default {
 		components: {
@@ -151,26 +155,47 @@
 				window.location.href = item.path;
 			},
 			onSuccess(data) {
-				debugger
-				this.$refs.updateFile.hide();
-				// this.getFiles();
+				var _this = this;
+				uniCloud.getTempFileURL({
+					fileList: data.map((item)=>{return item.fileID}) || []
+				})
+				.then(res => {
+					var data = [];
+					if(res.fileList && res.fileList.length) {
+						data = res.fileList.map((item)=>{
+							var filenameArr = item.download_url.split('/');
+							var filename = filenameArr[filenameArr.length-1];
+							return {
+								fileID: item.fileID,
+								path: item.download_url,
+								tenantId: _this.$store.state.app.activeTenant,
+								filename,
+								route: _this.fileRoute.map((item)=>{return item.key}).join('/')
+							}
+						})
+					}
+					addFile(data).then(()=>{
+						this.getFiles();
+					})
+					this.$refs.updateFile.hide();
+				});
+				
+				
 			},
 			getFiles() {
 				this.files = [];
 				this.loading = true;
-				files({
+				getFileList({
 						route: this.fileRoute
 							.map((item) => {
 								return item.key;
 							})
 							.join("/"),
-						tenantId: this.$store.state.user.userInfo.tenantId
+						tenantId: this.$store.state.app.activeTenant,
 					})
 					.then((res) => {
-						if (res.data.code == 200) {
-							this.files = res.data.data;
-							this.loading = false;
-						}
+						this.files = res;
+						this.loading = false;
 					})
 					.catch(() => {
 						this.loading = false;
@@ -313,7 +338,7 @@
 						this.loading = false;
 						this.getFiles();
 					})
-					.catch(() => {
+					.catch((error) => {
 						this.loading = false;
 					});
 			},

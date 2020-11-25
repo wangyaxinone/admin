@@ -28,7 +28,7 @@ module.exports = class MenuService extends Service {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
-		param.parentId && (match.parentId = param.parentId);
+		match.parentId = param.parentId
 		appendTenantParams({
 			match,
 			_this: this,
