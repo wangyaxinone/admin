@@ -27,9 +27,9 @@ module.exports = class UserController extends Controller {
 	}
 	async remove() {
 		const {
-			_ids,
+			ids,
 		} = this.ctx.data
-		return await this.service.file.file.remove(_ids);
+		return await this.service.file.file.remove(ids);
 	}
 	async list() {
 		return await this.service.file.file.list(this.ctx.data);

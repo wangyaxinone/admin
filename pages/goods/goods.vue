@@ -66,19 +66,19 @@
 					menuWidth: 300,
 					column: [{
 							label: "商品小图",
-							prop: "commoditySmallImg",
+							prop: "goodsSmallImg",
 							formslot: true,
 							slot: true
 						},
 						{
 							label: "商品大图",
-							prop: "commodityBigImg",
+							prop: "goodsBigImg",
 							formslot: true,
 							slot: true
 						},
 						{
 							label: "商品名称",
-							prop: "commodityName",
+							prop: "goodsName",
 							search: true,
 							rules: [{
 								required: true,
@@ -104,7 +104,7 @@
 						},
 						{
 							label: "商品类型",
-							prop: "commodityType",
+							prop: "goodsType",
 							multiple: true,
 							type: "select",
 							dicData: [],
@@ -137,7 +137,7 @@
 						},
 						{
 							label: "商品成本",
-							prop: "commodityCost",
+							prop: "goodsCost",
 							type: 'number',
 							rules: [{
 								required: true,
@@ -147,7 +147,7 @@
 						},
 						{
 							label: "商品售价",
-							prop: "commodityPrice",
+							prop: "goodsPrice",
 							type: 'number',
 							rules: [{
 								required: true,
@@ -157,13 +157,13 @@
 						},
 						{
 							label: "商品会员价格",
-							prop: "commodityVipPrice",
+							prop: "goodsVipPrice",
 							type: 'number',
 						},
 
 						{
 							label: "商品属性",
-							prop: "commodityAttr",
+							prop: "goodsAttr",
 							type: "array",
 							span: 24
 						},
@@ -183,7 +183,7 @@
 							dicQuery: {
 								action: 'dict/detail',
 								params: {
-									code: "commodityStatus"
+									code: "goodsStatus"
 								}
 							},
 							props: {

@@ -8,7 +8,10 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		data.creater = this.ctx.auth.uid;
-		return await this.db.collection('opendb-admin-goodsType').add(data);
+		if(!data.tenantId){
+			data.tenantId = this.ctx.auth.userInfo.tenantId;
+		}
+		return await this.db.collection('opendb-admin-goods').add(data);
 	}
 	async update(data) {
 		const {
@@ -17,10 +20,10 @@ module.exports = class MenuService extends Service {
 		delete data._id;
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		return await this.db.collection('opendb-admin-goodsType').doc(_id).update(data);
+		return await this.db.collection('opendb-admin-goods').doc(_id).update(data);
 	}
 	async remove(_ids) {
-		return await this.db.collection('opendb-admin-goodsType').where({
+		return await this.db.collection('opendb-admin-goods').where({
 			'_id': this.db.command.in(_ids)
 		}).remove();
 	}
@@ -28,7 +31,7 @@ module.exports = class MenuService extends Service {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
-		param.name && (match.name = new RegExp(param.name));
+		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
 		appendTenantParams({
 			match,
 			_this: this,
@@ -43,10 +46,10 @@ module.exports = class MenuService extends Service {
 		var size = param.size ? param.size : baseSize;
 		let {
 			total
-		} = await this.db.collection('opendb-admin-goodsType').where(match).count();
+		} = await this.db.collection('opendb-admin-goods').where(match).count();
 		let {
 			data
-		} = await this.db.collection('opendb-admin-goodsType')
+		} = await this.db.collection('opendb-admin-goods')
 			.where(match)
 			.orderBy('sort', "asc")
 			.limit(size)
@@ -72,7 +75,7 @@ module.exports = class MenuService extends Service {
 		param.tenantId && (match.tenantId = param.tenantId);
 		let {
 			data
-		} = await this.db.collection('opendb-admin-goodsType')
+		} = await this.db.collection('opendb-admin-goods')
 			.where(match)
 			.orderBy('sort', "asc")
 			.get();

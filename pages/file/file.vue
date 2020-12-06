@@ -75,7 +75,8 @@
 	} from "@/api/file/folder.js"
 	import {
 		add as addFile,
-		getList as getFileList
+		getList as getFileList,
+		remove as removeFile
 	} from "@/api/file/file.js"
 	import updateFile from "@/components/updateFile/updateFile.vue";
 	export default {
@@ -284,7 +285,16 @@
 						type: "warning",
 					})
 					.then(() => {
-
+						debugger
+						removeFile({
+							ids: [item.fileID]
+						}).then(()=>{
+							this.$message({
+								type: "success",
+								message: "删除成功",
+							});
+							this.loadData();
+						})
 					})
 					.catch(() => {
 						this.$message({

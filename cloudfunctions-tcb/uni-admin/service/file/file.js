@@ -1,19 +1,41 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getPageConfig, getServerDate, getTree, appendTenantParams} = require('../../utils.js');
+const {
+	getPageConfig,
+	getServerDate,
+	getTree,
+	appendTenantParams
+} = require('../../utils.js');
 module.exports = class MenuService extends Service {
-	async add(data) {
+	async add(params) {
 		var _this = this;
-		if(data && data.length) {
-			data.forEach((item)=>{
-				item.create_date = getServerDate();
-				item.update_date = getServerDate();
-				item.operator = _this.ctx.auth.uid;
-				item.creater = _this.ctx.auth.uid;
-			})
+		var newData = [];
+		for (var i = 0; i < params.length; i++) {
+			var item = params[i];
+			item.create_date = getServerDate();
+			item.update_date = getServerDate();
+			item.operator = _this.ctx.auth.uid;
+			item.creater = _this.ctx.auth.uid;
+			var {
+				data: files
+			} = await this.db.collection('opendb-admin-file').where({
+				fileID: item.fileID
+			}).get();
+			if (files && files.length) {
+				await this.db.collection('opendb-admin-file').where({
+					fileID: item.fileID
+				}).update(item);
+				
+			} else {
+				newData.push(item);
+			}
 		}
-		return await this.db.collection('opendb-admin-file').add(data);
+		if (newData && newData.length) {
+			return await this.db.collection('opendb-admin-file').add(newData);
+		} else {
+			return await this.list({});
+		}
 	}
 	async update(data) {
 		const {
@@ -25,15 +47,21 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-file').doc(_id).update(data);
 	}
 	async remove(_ids) {
-		return await this.db.collection('opendb-admin-file').where({
-			'_id': this.db.command.in(_ids)
-		}).remove();
+		let result = await uniCloud.deleteFile({
+		    fileList: _ids
+		});
+		if(result && result.fileList) {
+			return await this.db.collection('opendb-admin-file').where({
+				'fileID': this.db.command.in(_ids)
+			}).remove();
+		}
+		
 	}
 	async list(param) {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
-		param.route && (match.route = param.route);
+		match.route = param.route
 		appendTenantParams({
 			match,
 			_this: this,

@@ -4,44 +4,77 @@ const {
 module.exports = class UserController extends Controller {
 	async add() {
 		const {
-			name,
-			tenantId,
-			sort,
-			comment
+			goodsSmallImg,
+			goodsBigImg,
+			goodsName,
+			deptId,
+			goodsType,
+			unit,
+			goodsCost,
+			goodsPrice,
+			goodsVipPrice,
+			goodsAttr,
+			status,
+			remark,
+			tenantId
 		} = this.ctx.data
-		return await this.service.goods.goodsType.add({
-			name,
-			tenantId,
-			sort,
-			comment
+		return await this.service.goods.goods.add({
+			goodsSmallImg,
+			goodsBigImg,
+			goodsName,
+			deptId,
+			goodsType,
+			unit,
+			goodsCost,
+			goodsPrice,
+			goodsVipPrice,
+			goodsAttr,
+			status,
+			remark,
+			tenantId
 		});
 	}
 	async update() {
 		const {
 			_id,
-			name,
-			tenantId,
-			sort,
-			comment
+			goodsSmallImg,
+			goodsBigImg,
+			goodsName,
+			deptId,
+			goodsType,
+			unit,
+			goodsCost,
+			goodsPrice,
+			goodsVipPrice,
+			goodsAttr,
+			status,
+			remark,
+			tenantId
 		} = this.ctx.data
-		return await this.service.goods.goodsType.update({
+		return await this.service.goods.goods.update({
 			_id,
-			name,
-			tenantId,
-			sort,
-			comment
+			goodsSmallImg,
+			goodsBigImg,
+			goodsName,
+			deptId,
+			goodsType,
+			unit,
+			goodsCost,
+			goodsPrice,
+			goodsVipPrice,
+			goodsAttr,
+			status,
+			remark,
+			tenantId
 		});
 	}
 	async remove() {
 		const {
 			_ids,
 		} = this.ctx.data
-		return await this.service.goods.goodsType.remove(_ids);
+		return await this.service.goods.goods.remove(_ids);
 	}
 	async list() {
-		return await this.service.goods.goodsType.list(this.ctx.data);
-	}
-	async select() {
-		return await this.service.goods.goodsType.select(this.ctx.data);
+		return await this.service.goods.goods.list(this.ctx.data);
 	}
 }

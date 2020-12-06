@@ -20,6 +20,22 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-folder').doc(_id).update(data);
 	}
 	async remove(_ids) {
+		var {data} = await this.db.collection('opendb-admin-folder').where({
+			'_id': this.db.command.in(_ids)
+		}).get();
+		if(data && data.length) {
+			for(var i=0;i<data.length;i++){
+				var item = data[i];
+				var {
+					data: files
+				} = await this.db.collection('opendb-admin-file').where({
+					route: item.fullName.slice(1)
+				}).get();
+				if(files && files.length){
+					this.throw('FILE_ERROR', `当前文件下有资源，不能删除文件夹。`);
+				}
+			}
+		}
 		return await this.db.collection('opendb-admin-folder').where({
 			'_id': this.db.command.in(_ids)
 		}).remove();
