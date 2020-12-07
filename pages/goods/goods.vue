@@ -18,7 +18,7 @@
 		add,
 		update,
 		remove,
-	} from "@/api/goods/goods_type.js"
+	} from "@/api/goods/goods.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
 		mapState,
