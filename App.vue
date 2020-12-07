@@ -54,8 +54,13 @@
 					url: config.login.url
 				})
 			} else {
-				this.init()
-				this.mode !=2 && this.getMode();
+				if(this.mode !=2){
+					this.getMode().then(()=>{
+						this.init()
+					})
+				}else{
+					this.init()
+				}
 			}
 		},
 		onShow: function() {

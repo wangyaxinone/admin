@@ -24,7 +24,16 @@
 		mapState,
 		mapActions
 	} from 'vuex'
-	import config from '@/admin.config.js'
+	import config from '@/admin.config.js';
+	import {
+		tree as deptTree
+	} from "@/api/system/dept.js"
+	import {
+		select,
+	} from "@/api/goods/goods_type.js"
+	import {
+		getDictByDictCode
+	} from "@/api/system/dict.js"
 	export default {
 		components: {
 			uniDateformate,
@@ -92,7 +101,7 @@
 							type: "tree",
 							dicData: [],
 							props: {
-								label: "deptName",
+								label: "dept_name",
 								value: "_id"
 							},
 							checkStrictly: true,
@@ -109,7 +118,7 @@
 							type: "select",
 							dicData: [],
 							props: {
-								label: "typeName",
+								label: "name",
 								value: "_id"
 							},
 							rules: [{
@@ -176,20 +185,15 @@
 						{
 							label: "商品状态",
 							prop: "status",
-							type: "select",
+							type: 'select',
 							value: 1,
-							dicUrl: "/system",
-							dicMethod: "post",
-							dicQuery: {
-								action: 'dict/detail',
-								params: {
-									code: "goodsStatus"
-								}
-							},
 							props: {
-								label: "dictValue",
-								value: "dictKey"
+								label: "dict_name",
+								value: "dict_key",
+								disabled: "disabled"
 							},
+							dicData:[],
+							span: 12,
 						},
 						{
 							label: "备注",
@@ -302,6 +306,21 @@
 						this.page.total = res.total;
 					}).catch(() => {
 						this.loading = false;
+					})
+					deptTree({
+						tenantId: this.params.tenantId,
+						isCook: 1
+					}).then((data) => {
+						const column = this.findObject(this.option.column, "deptId");
+						column.dicData = data;
+					})
+					select().then((data) => {
+						const column = this.findObject(this.option.column, "goodsType");
+						column.dicData = data;
+					})
+					getDictByDictCode({dict_code: 'goods_status'}).then((res)=>{
+						const column = this.findObject(this.option.column, "status");
+						column.dicData = res;
 					})
 				})
 			}
