@@ -25,14 +25,21 @@
 		}, {
 			"path": "pages/goods/goodsType",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "商品类型",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/goods/goodsUnit",
+			"style": {
+				"navigationBarTitleText": "商品单位",
 				"enablePullDownRefresh": false
 			}
 
 		},{
 			"path": "pages/goods/goods",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "商品列表",
 				"enablePullDownRefresh": false
 			}
 
