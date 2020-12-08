@@ -68,15 +68,4 @@ module.exports = class UserController extends Controller {
 	async list() {
 		return await this.service.system.user.list(this.ctx.data);
 	}
-	async create() {
-		var data = [];
-		for(var i =0;i<20000;i++){
-			data.push({
-				username: `demo3-${i}`,
-				password: await uniID.encryptPwd('123456'),
-				status: 0
-			})
-		}
-		return await this.service.system.user.create(data);
-	}
 }

@@ -52,8 +52,8 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-goods')
 			.where(match)
 			.orderBy('sort', "asc")
-			.limit(size)
 			.skip((page - 1) * size)
+			.limit(size)
 			.get();
 		return {
 			total,

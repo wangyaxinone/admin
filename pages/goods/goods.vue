@@ -7,7 +7,20 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="goodsSmallImgForm">
+				<div class="el-upload">
+					<img v-if="scope.row.goodsSmallImg" :src="scope.row.goodsSmallImg" class="avatar">
+					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+				</div>
+			</template>
+			<template slot-scope="scope" slot="goodsBigImgForm">
+				<div class="el-upload">
+					<img v-if="scope.row.goodsBigImg" :src="scope.row.goodsBigImg" class="avatar">
+					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+				</div>
+			</template>
 		</avue-crud>
+		<selectFile ref="selectFile"></selectFile>
 	</view>
 </template>
 
@@ -32,11 +45,16 @@
 		select,
 	} from "@/api/goods/goods_type.js"
 	import {
+		select as unitSelect
+	} from "@/api/goods/goods_unit.js"
+	import {
 		getDictByDictCode
 	} from "@/api/system/dict.js"
+	import selectFile from "@/components/selectFile/selectFile.vue"
 	export default {
 		components: {
 			uniDateformate,
+			selectFile
 		},
 		computed: {
 			...mapState('app', ['navBtn']),
@@ -131,17 +149,10 @@
 							label: "商品单位",
 							prop: "unit",
 							type: "select",
-							dicUrl: "/system",
-							dicMethod: "post",
-							dicQuery: {
-								action: 'dict/detail',
-								params: {
-									code: "unit"
-								}
-							},
+							dicData: [],
 							props: {
-								label: "dictValue",
-								value: "dictKey"
+								label: "name",
+								value: "_id"
 							},
 						},
 						{
@@ -192,7 +203,7 @@
 								value: "dict_key",
 								disabled: "disabled"
 							},
-							dicData:[],
+							dicData: [],
 							span: 12,
 						},
 						{
@@ -318,7 +329,15 @@
 						const column = this.findObject(this.option.column, "goodsType");
 						column.dicData = data;
 					})
-					getDictByDictCode({dict_code: 'goods_status'}).then((res)=>{
+					unitSelect({
+						tenantId: this.params.tenantId,
+					}).then((data) => {
+						const column = this.findObject(this.option.column, "unit");
+						column.dicData = data;
+					})
+					getDictByDictCode({
+						dict_code: 'goods_status'
+					}).then((res) => {
 						const column = this.findObject(this.option.column, "status");
 						column.dicData = res;
 					})
@@ -327,5 +346,31 @@
 		}
 	}
 </script>
-<style>
+<style scoped>
+	.el-upload {
+		border: 1px dashed #d9d9d9;
+		border-radius: 6px;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.el-upload:hover {
+		border-color: #409EFF;
+	}
+
+	.avatar-uploader-icon {
+		font-size: 28px;
+		color: #8c939d;
+		width: 178px;
+		height: 178px;
+		line-height: 178px;
+		text-align: center;
+	}
+
+	.avatar {
+		width: 178px;
+		height: 178px;
+		display: block;
+	}
 </style>

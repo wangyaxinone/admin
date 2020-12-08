@@ -14,9 +14,6 @@ module.exports = class MenuService extends Service {
 		data.password = await uniID.encryptPwd(data.password);
 		return await this.db.collection('uni-id-users').add(data);
 	}
-	async create(data) {
-		return await this.db.collection('uni-id-users').add(data);
-	}
 	async update(data) {
 		const {
 			_id

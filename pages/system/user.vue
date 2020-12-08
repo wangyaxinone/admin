@@ -19,9 +19,6 @@
 			<template slot="dept" slot-scope="scope">
 				<view>{{scope.row.deptShow.join(',')}}</view>
 			</template>
-			<template v-if="$store.state.user.userInfo.role.indexOf('admin')>-1" slot-scope="{type,size,row}" slot="menu">
-				<el-button icon="el-icon-plus" :size="size" :type="type" @click="addChildMenus(row)">创建用户10000000</el-button>
-			</template>
 		</avue-crud>
 	</view>
 </template>
@@ -30,7 +27,7 @@
 	// 分页配置
 	import config from '@/admin.config.js'
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
-	import {getList, add, update, remove, create} from "@/api/system/user.js"
+	import {getList, add, update, remove} from "@/api/system/user.js"
 	import {tree as tenantTree} from "@/api/tenant/tenant.js"
 	import {tree as roleTree} from "@/api/system/role.js"
 	import {getDictByDictCode} from "@/api/system/dict.js"
@@ -77,6 +74,7 @@
 					column: [{
 							label: "用户名称",
 							prop: "username",
+							search: true,
 							span: 12,
 							rules: [{
 								required: true,
@@ -256,11 +254,6 @@
 			}
 		},
 		methods: {
-			addChildMenus() {
-				create().then(()=>{
-					this.loadData();
-				})
-			},
 			rowDel(row) {
 				this.$confirm("确定将选择数据删除?", {
 						confirmButtonText: "确定",
@@ -317,6 +310,7 @@
 				this.loadData();
 			},
 			searchChange(params, done) {
+				this.page.currentPage = 1;
 				this.params = params;
 				this.loadData();
 				done();
