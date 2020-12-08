@@ -14,6 +14,9 @@ module.exports = class MenuService extends Service {
 		data.password = await uniID.encryptPwd(data.password);
 		return await this.db.collection('uni-id-users').add(data);
 	}
+	async create(data) {
+		return await this.db.collection('uni-id-users').add(data);
+	}
 	async update(data) {
 		const {
 			_id
@@ -51,6 +54,8 @@ module.exports = class MenuService extends Service {
 			data
 		} = await this.db.collection('uni-id-users').aggregate()
 		.match(match)
+		.skip((page-1)*size)
+		.limit(size)
 		.sort({
 			'sort': 1
 		})
@@ -66,8 +71,6 @@ module.exports = class MenuService extends Service {
 			foreignField: '_id',
 			as: 'depts',
 		})
-		.limit(size)
-		.skip((page-1)*size)
 		.end()
 		return {
 			total,

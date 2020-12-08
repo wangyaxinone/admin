@@ -17,3 +17,6 @@ export const update = (params) => {
 export const remove = (params) => {
   return request('system/user/remove', params);
 }
+export const create = (params) => {
+  return request('system/user/create', params);
+}
