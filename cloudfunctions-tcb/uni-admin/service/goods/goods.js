@@ -28,6 +28,8 @@ module.exports = class MenuService extends Service {
 		}).remove();
 	}
 	async list(param) {
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
@@ -49,12 +51,31 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-goods').where(match).count();
 		let {
 			data
-		} = await this.db.collection('opendb-admin-goods')
-			.where(match)
-			.orderBy('sort', "asc")
+		} = await this.db.collection('opendb-admin-goods').aggregate()
+			.match(match)
+			.sort({
+				'sort': 1
+			})
 			.skip((page - 1) * size)
 			.limit(size)
-			.get();
+			.lookup({
+				from: 'uni-id-users',
+				let: {
+					operator: '$operator'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id','$$operator'])
+					))
+					.project({
+						_id: 0,
+						username: 1,
+						nickname: 1
+					})
+					.done(),
+				as: 'operatorShow',
+			})
+			.end();
 		return {
 			total,
 			page,

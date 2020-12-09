@@ -7,20 +7,29 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="update_date">
+				<uniDateformate :date="scope.row.update_date"></uniDateformate>
+			</template>
+			<template slot-scope="scope" slot="goodsSmallImg">
+				<el-image :src="scope.row.goodsSmallImg"></el-image>
+			</template>
+			<template slot-scope="scope" slot="goodsBigImg">
+				<el-image :src="scope.row.goodsBigImg"></el-image>
+			</template>
 			<template slot-scope="scope" slot="goodsSmallImgForm">
-				<div class="el-upload">
+				<div class="el-upload" @click="getgoodsImg('goodsSmallImg')">
 					<img v-if="scope.row.goodsSmallImg" :src="scope.row.goodsSmallImg" class="avatar">
 					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 				</div>
 			</template>
 			<template slot-scope="scope" slot="goodsBigImgForm">
-				<div class="el-upload">
+				<div class="el-upload" @click="getgoodsImg('goodsBigImg')">
 					<img v-if="scope.row.goodsBigImg" :src="scope.row.goodsBigImg" class="avatar">
 					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 				</div>
 			</template>
 		</avue-crud>
-		<selectFile ref="selectFile"></selectFile>
+		<selectFile ref="selectFile" @submit="getImg"></selectFile>
 	</view>
 </template>
 
@@ -210,24 +219,69 @@
 							label: "备注",
 							prop: "remark",
 						},
-
+						{
+							label: "创建时间",
+							prop: "create_date",
+							addDisplay: false,
+							editDisplay: false,
+							width:130,
+							slot: true,
+						},
+						{
+							label: "最后一次操作时间",
+							prop: "update_date",
+							addDisplay: false,
+							editDisplay: false,
+							width:130,
+							slot: true,
+						},
 						{
 							label: "最后一次操作人",
 							prop: "operator",
 							addDisplay: false,
 							editDisplay: false,
-							slot: true
 						}
 					],
 				},
 				data: [],
+				imgType:''
 			}
 		},
 		created() {
 			_this = this;
-
+			deptTree({
+				tenantId: this.$store.state.app.activeTenant,
+				isCook: 1
+			}).then((data) => {
+				const column = this.findObject(this.option.column, "deptId");
+				column.dicData = data;
+			})
+			select().then((data) => {
+				const column = this.findObject(this.option.column, "goodsType");
+				column.dicData = data;
+			})
+			unitSelect({
+				tenantId: this.$store.state.app.activeTenant,
+			}).then((data) => {
+				const column = this.findObject(this.option.column, "unit");
+				column.dicData = data;
+			})
+			getDictByDictCode({
+				dict_code: 'goods_status'
+			}).then((res) => {
+				const column = this.findObject(this.option.column, "status");
+				column.dicData = res;
+			})
 		},
 		methods: {
+			getImg(item) {
+				this.form[this.imgType] = item.path;
+				this.$refs.selectFile.hide();
+			},
+			getgoodsImg(type) {
+				this.imgType = type;
+				this.$refs.selectFile.show();
+			},
 			rowDel(row) {
 				if (row.children && row.children.length) {
 					this.$message({
@@ -313,34 +367,17 @@
 					this.params.tenantId = this.$store.state.app.activeTenant;
 					getList(this.params).then((res) => {
 						this.loading = false;
+						if(res.data && res.data.length) {
+							res.data.forEach((item)=>{
+								item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+							})
+						}
 						this.data = res.data;
 						this.page.total = res.total;
 					}).catch(() => {
 						this.loading = false;
 					})
-					deptTree({
-						tenantId: this.params.tenantId,
-						isCook: 1
-					}).then((data) => {
-						const column = this.findObject(this.option.column, "deptId");
-						column.dicData = data;
-					})
-					select().then((data) => {
-						const column = this.findObject(this.option.column, "goodsType");
-						column.dicData = data;
-					})
-					unitSelect({
-						tenantId: this.params.tenantId,
-					}).then((data) => {
-						const column = this.findObject(this.option.column, "unit");
-						column.dicData = data;
-					})
-					getDictByDictCode({
-						dict_code: 'goods_status'
-					}).then((res) => {
-						const column = this.findObject(this.option.column, "status");
-						column.dicData = res;
-					})
+					
 				})
 			}
 		}

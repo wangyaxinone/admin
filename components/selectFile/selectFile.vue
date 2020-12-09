@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="提示" :visible.sync="dialogFile" width="30%">
+		<el-dialog title="资源库" :visible.sync="dialogFile" width="60%">
 			<el-container>
 				<el-main>
 					<div>
@@ -20,36 +20,18 @@
 								</el-breadcrumb>
 							</el-col>
 							<el-col :span="4" v-for="(item) in fileType" :key="item._id" style="text-align:center;cursor:pointer;padding:30px 0;height:100px;">
-								<el-popover placement="bottom" width="150" trigger="hover">
-									<div style="text-align:center;">
-										<el-button-group>
-											<el-button @click="editFolder(item)" type="primary" icon="el-icon-edit"></el-button>
-											<el-button @click="delFolder(item)" type="primary" icon="el-icon-delete"></el-button>
-										</el-button-group>
-									</div>
-									<div slot="reference" @click="pushRoute(item);">
-										<el-card shadow="hover">
-											<img :src="fileImg" alt style="height:84px" />
-											<div style="text-align:center;cursor:pointer;height:22px;overflow:hidden;line-height:22px;white-space: nowrap;word-break: break-all;text-overflow: ellipsis;">{{item.folderName}}</div>
-										</el-card>
-									</div>
-								</el-popover>
+								<div  @click="pushRoute(item);">
+									<el-card shadow="hover">
+										<img :src="fileImg" alt style="height:84px" />
+										<div style="text-align:center;cursor:pointer;height:22px;overflow:hidden;line-height:22px;white-space: nowrap;word-break: break-all;text-overflow: ellipsis;">{{item.folderName}}</div>
+									</el-card>
+								</div>
 							</el-col>
 							<el-col :span="4" v-for="(item) in files" :key="item._id" :gutter="10" style="text-align:center;cursor:pointer;padding:30px 0;height:100px;">
-								<el-popover placement="bottom" width="150" trigger="hover">
-									<div style="text-align:center;">
-										<el-button-group>
-											<el-button @click="downLoad(item)" type="primary" icon="el-icon-bottom"></el-button>
-											<el-button @click="delFile(item)" type="primary" icon="el-icon-delete"></el-button>
-										</el-button-group>
-									</div>
-									<div slot="reference">
-										<el-card shadow="hover">
-											<el-image style="height:84px" :src="item.path" fit="contain" :preview-src-list="[item.path]"></el-image>
-											<div style="text-align:center;cursor:pointer;height:22px;overflow:hidden;line-height:22px;white-space: nowrap;word-break: break-all;text-overflow: ellipsis;">{{item.filename}}</div>
-										</el-card>
-									</div>
-								</el-popover>
+								<el-card @click.native="ok(item)">
+									<el-image style="height:84px" :src="item.path" fit="contain" ></el-image>
+									<div style="text-align:center;cursor:pointer;height:22px;overflow:hidden;line-height:22px;white-space: nowrap;word-break: break-all;text-overflow: ellipsis;">{{item.filename}}</div>
+								</el-card>
 							</el-col>
 						</el-row>
 					</el-container>
@@ -87,6 +69,7 @@
 		},
 		data() {
 			return {
+				dialogFile: false,
 				loading: false,
 				fileRoute: [],
 				files: [],
@@ -154,6 +137,9 @@
 			},
 		},
 		methods: {
+			ok(item) {
+				this.$emit('submit', item);
+			},
 			show(){
 				this.dialogFile = true;
 			},

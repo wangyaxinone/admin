@@ -5,8 +5,8 @@
 		 @current-change="currentChange"
 		 @size-change="sizeChange"
 		 @selection-change="selectionChange" @on-load="loadData">
-			<template slot-scope="scope" slot="create_date">
-				<uniDateformate :date="scope.row.create_date"></uniDateformate>
+			<template slot-scope="scope" slot="update_date">
+				<uniDateformate :date="scope.row.update_date"></uniDateformate>
 			</template>
 		</avue-crud>
 	</view>
@@ -101,8 +101,8 @@
 							}, ],
 						},
 						{
-							label: "创建时间",
-							prop: "create_date",
+							label: "最后一次操作时间",
+							prop: "update_date",
 							slot: true,
 							width: 150,
 							span: 12,

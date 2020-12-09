@@ -54,10 +54,10 @@
             
         }
         ,{
-            "path" : "pages/order/order_list",
+            "path" : "pages/order/order",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "订单列表",
                 "enablePullDownRefresh": false
             }
             
