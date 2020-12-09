@@ -10,7 +10,7 @@
 							:class="{ current: item.id === currentCateId }"
 							v-for="(item, index) in goods"
 							:key="index"
-							@tap="handleMenuTap(item.id)"
+							@tap="handleMenuTap(item)"
 						>
 							<text>{{ item.name }}</text>
 							<!-- <view class="dot" v-show="menuCartNum(item.id)">{{ menuCartNum(item.id) }}</view> -->
@@ -22,14 +22,14 @@
 					<view class="wrapper">
 						<view class="list">
 							<!-- category begin -->
-							<view class="category" v-for="(item, index) in goods" :key="index" :id="`cate-${item.id}`">
+							<div class="category" ref="category" v-for="(item, index) in goods" :key="index" :id="`cate-${item.id}`">
 								<view class="title">
 									<text>{{ item.name }}</text>
 								</view>
 								<view class="items">
 									<!-- 商品 begin -->
 									<view class="good" v-for="(good, key) in item.goods_list" :key="key">
-										<image :src="good.goodsSmallImg" class="image" @tap="showGoodDetailModal(item, good)"></image>
+										<image mode="aspectFill" :src="good.goodsSmallImg" class="image" @tap="showGoodDetailModal(item, good)"></image>
 										<view class="right">
 											<text class="name">{{ good.goodsName }}</text>
 											<text class="tips">{{ good.content }}</text>
@@ -37,7 +37,7 @@
 									</view>
 									<!-- 商品 end -->
 								</view>
-							</view>
+							</div>
 							<!-- category end -->
 						</view>
 					</view>
@@ -70,8 +70,23 @@ export default {
 		hide() {
 			this.dialogVisible = false;
 		},
-		handleMenuTap() {},
-		handleGoodsScroll() {},
+		handleMenuTap(item) {
+			this.cateScrollTop = item.top + 10;
+			setTimeout(()=>{
+				this.currentCateId = item.id;
+			},300)
+		},
+		handleGoodsScroll(event) {
+			var {scrollTop} = event.detail;
+			var goods = this.goods;
+			for(var i=0;i< goods.length;i++){
+				var item = goods[i];
+				if(scrollTop >=item.top && scrollTop<=item.bottom) {
+					this.currentCateId = item.id;
+					return;
+				}
+			}
+		},
 		showGoodDetailModal() {},
 		getAllgoods() {
 			var params = {
@@ -92,6 +107,7 @@ export default {
 							});
 						});
 					}
+					this.currentCateId = goods[0].id;
 					select(params)
 						.then(res => {
 							if (res && res.length) {
@@ -105,6 +121,15 @@ export default {
 							}
 							this.goods = goods;
 							this.loading = false;
+							this.$nextTick(() => {
+								var goods = JSON.parse(JSON.stringify(this.goods));
+								var category = this.$refs.category;
+								category.forEach((dom,idx)=>{
+									goods[idx].top = dom.offsetTop;
+									goods[idx].bottom = dom.offsetTop + dom.offsetHeight;
+								})
+								this.goods = goods;
+							})
 						})
 						.catch(() => {
 							this.loading = false;
@@ -135,7 +160,7 @@ export default {
 		.wrapper {
 			width: 100%;
 			height: 100%;
-
+			
 			.menu {
 				display: flex;
 				align-items: center;
@@ -143,9 +168,9 @@ export default {
 				padding: 30rpx 20rpx;
 				font-size: 26rpx;
 				position: relative;
-
+				cursor: pointer;
 				&.current {
-					background-color: #ffffff;
+					background-color: #eee;
 				}
 
 				.dot {
@@ -173,8 +198,7 @@ export default {
 		.wrapper {
 			width: 100%;
 			height: 100%;
-			padding: 20rpx;
-
+			padding: 0 20rpx;
 			.ads {
 				height: calc(300 / 550 * 510rpx);
 
