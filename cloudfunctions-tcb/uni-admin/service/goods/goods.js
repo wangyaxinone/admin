@@ -87,7 +87,7 @@ module.exports = class MenuService extends Service {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
-		param.name && (match.name = new RegExp(param.name));
+		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
 		appendTenantParams({
 			match,
 			_this: this,

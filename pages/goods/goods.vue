@@ -310,6 +310,9 @@
 
 			},
 			rowUpdate(row, index, done, loading) {
+				if(!row.goodsAttr.join('')) {
+					row.goodsAttr = [];
+				}
 				update(row)
 					.then(() => {
 						this.loadData();
@@ -327,6 +330,9 @@
 			},
 			rowSave(row, done, loading) {
 				row.tenantId = this.$store.state.app.activeTenant;
+				if(!row.goodsAttr.join('')) {
+					row.goodsAttr = [];
+				}
 				add(row)
 					.then(() => {
 						this.loadData();
