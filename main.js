@@ -4,6 +4,9 @@ import store from './store'
 import plugin from './js_sdk/uni-admin/plugin'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import NP from 'number-precision';
+
+Vue.prototype.$NP = NP;
 Vue.config.productionTip = false
 
 import Avue from '@smallwei/avue';

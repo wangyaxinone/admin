@@ -35,32 +35,8 @@
 								</view>
 								<view class="items">
 									<!-- 商品 begin -->
-									<el-card style="width:95%;" v-for="(good, key) in item.goods_list" :key="key">
-										<view class="good">
-											<image mode="aspectFill" :src="good.goodsSmallImg" class="image" @tap="showGoodDetailModal(item, good)"></image>
-											<view class="right">
-												<text class="name">
-													菜品名称：
-													<text style="font-weight:bold;">【{{ good.goodsName }}】</text>
-												</text>
-												<text class="name">
-													菜品单价：
-													<text style="font-weight:bold;color: #e4393c;">{{ good.goodsPrice }}元</text>
-												</text>
-												<view class="tips" v-if="good.goodsAttr && good.goodsAttr.length">
-													<el-tag style="margin-right:10px" v-for="(item, idx) in good.goodsAttr" :key="idx">{{ item }}</el-tag>
-												</view>
-											</view>
-											<view style="width:160px;">
-												<el-input-number
-													style="width:100px;"
-													@change="changeNum(good)"
-													v-model="good.num"
-													controls-position="right"
-													:min="0"
-												></el-input-number>
-											</view>
-										</view>
+									<el-card style="width:95%;margin-bottom:5px;" v-for="(good, key) in item.goods_list" :key="key">
+										<goodItem :good="good" @changeAttr="changeAttr" @change="changeNum"></goodItem>
 									</el-card>
 									<!-- 商品 end -->
 								</view>
@@ -72,22 +48,39 @@
 				<!-- goods list end -->
 			</view>
 			<span slot="footer" class="dialog-footer">
-				<div style="position: absolute;left:30px;cursor: pointer;">
+				<div style="position: absolute;left:30px;cursor: pointer;" @click="ShowgoodsAttrfalg">
 					<el-avatar size="medium" :src="shopCar"></el-avatar>
-					<span  style="font-size:12px;;position: absolute;left:25px;top:-5px;color:#e4393c;width:20px;height:20px;line-height:20px;border-radius: 10px;text-align: center;background-color: #e4393c;color:#fff;">
-						{{shopGoodsNum}}
+					<span
+						style="font-size:12px;;position: absolute;left:25px;top:-5px;color:#e4393c;width:20px;height:20px;line-height:20px;border-radius: 10px;text-align: center;background-color: #e4393c;color:#fff;"
+					>
+						{{ shopGoodsNum }}
 					</span>
 				</div>
-				<el-button @click="goodsAttrfalg = false">取 消</el-button>
-				<el-button type="primary" @click="goodsAttrfalg = false">确 定</el-button>
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="submit">确 定</el-button>
 			</span>
 		</el-dialog>
-		<el-dialog title="提示" :visible.sync="goodsAttrfalg" width="30%">
-			<span>这是一段信息</span>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="goodsAttrfalg = false">取 消</el-button>
-				<el-button type="primary" @click="goodsAttrfalg = false">确 定</el-button>
-			</span>
+		<el-dialog title="购物车" append-to-body :visible.sync="goodsAttrfalg" width="30%">
+			<div>
+				<el-card style="margin-bottom:5px;" v-for="(item, key) in shopGoods" :key="key">
+					<el-row :gutter="20">
+						<el-col :span="6" style="text-align: center;">
+							{{ item.goodsName }}
+							<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
+						</el-col>
+						<el-col :span="6" style="text-align: center;">
+							<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
+						</el-col>
+						<el-col :span="6" style="text-align: center;">
+							<el-input-number style="width:100px;" size="mini" @change="changeNumCar(item)" v-model="item.num" controls-position="right" :min="0"></el-input-number>
+						</el-col>
+						<el-col :span="6" style="text-align: center;">
+							<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+						</el-col>
+					</el-row>
+				</el-card>
+			</div>
+			<span slot="footer" class="dialog-footer"><el-button @click="goodsAttrfalg = false" type="primary">确 定</el-button></span>
 		</el-dialog>
 	</view>
 </template>
@@ -95,8 +88,17 @@
 <script>
 import { select } from '@/api/goods/goods.js';
 import { select as goodsTypeSelect } from '@/api/goods/goods_type.js';
-import shopCar from "@/static/shopCar.png"
+import shopCar from '@/static/shopCar.png';
+import goodItem from './goodItem.vue';
 export default {
+	components: {
+		goodItem
+	},
+	props: {
+		goodsList: {
+			type: Object
+		}
+	},
 	data() {
 		return {
 			shopCar,
@@ -111,31 +113,42 @@ export default {
 			currentCateId: '',
 			cateScrollTop: 0,
 			shopGoods: {},
-			shopGoodsNum: 0
+			shopGoodsNum: 0,
+			goodsIds: {}
 		};
 	},
-	watch:{
+	watch: {
 		shopGoods: {
 			handler: function() {
-				debugger
 				var _this = this;
 				var num = 0;
-				Object.keys(_this.shopGoods).forEach((key)=>{
+				Object.keys(_this.shopGoods).forEach(key => {
 					var item = _this.shopGoods[key];
 					num += parseFloat(item.num);
-				})
+				});
 				this.shopGoodsNum = num;
 			},
-			deep: true,
+			deep: true
 		}
 	},
 	methods: {
 		show() {
+			this.shopGoods = this.goodsList || {};
 			this.dialogVisible = true;
 			this.getAllgoods();
 		},
 		hide() {
 			this.dialogVisible = false;
+		},
+		ShowgoodsAttrfalg() {
+			if (this.shopGoodsNum) {
+				this.goodsAttrfalg = true;
+			} else {
+				this.$message.warning('未点菜！');
+			}
+		},
+		submit() {
+			this.$emit('submit', this.shopGoods);
 		},
 		onSubmit() {
 			this.getAllgoods();
@@ -146,21 +159,86 @@ export default {
 			};
 			this.getAllgoods();
 		},
-		changeNum(item) {
+		changeNumCar(item) {
+			var _this = this;
 			if (item.goodsAttr && item.goodsAttr.length) {
-				this.goodsAttrfalg = true;
-			}else{
+				var allNum = 0;
+				item.goodsAttr.forEach(attr => {
+					var id = `${item._id}-${attr}`;
+					allNum += parseFloat(_this.shopGoods[id] ? _this.shopGoods[id].num || 0 : 0);
+				});
 				var id = `${item._id}-${item.goodsAttr.join('')}`;
-				var shopGoods = JSON.parse(JSON.stringify(this.shopGoods));
-				if(item.num) {
-					shopGoods[id] = item;
-					
-				}else{
-					delete shopGoods[id];
-				}
-				this.shopGoods = shopGoods;
-				
+				var arr = this.goodsIds[id] || [];
+				arr.forEach(child => {
+					child.num = allNum;
+				});
+			} else {
+				var id = `${item._id}-${item.goodsAttr.join('')}`;
+				var arr = this.goodsIds[id] || [];
+				arr.forEach(child => {
+					child.num = item.num;
+				});
 			}
+			if (!item.num) {
+				var id = `${item._id}-${item.goodsAttr.join('')}`;
+				if (item.goodsAttrValue) {
+					id = `${item._id}-${item.goodsAttrValue}`;
+				}
+				delete this.shopGoods[id];
+			}
+		},
+		changeAttr(item, attrValue) {
+			var item = JSON.parse(JSON.stringify(item));
+			var id = `${item._id}-${attrValue}`;
+			if (this.goodsIds[id] && this.goodsIds[id].length) {
+				this.goodsIds[id].forEach(good => {
+					if (good.num != item.num) {
+						good.num = item.num;
+					}
+				});
+			}
+			var shopGoods = JSON.parse(JSON.stringify(this.shopGoods));
+			if (shopGoods[id]) {
+				shopGoods[id].num++;
+			} else {
+				item.goodsAttrValue = attrValue;
+				item.num = 1;
+				shopGoods[id] = item;
+			}
+			this.shopGoods = shopGoods;
+		},
+		changeNum(item) {
+			var item = JSON.parse(JSON.stringify(item));
+			var id = `${item._id}-${item.goodsAttr.join('')}`;
+			if (this.goodsIds[id] && this.goodsIds[id].length) {
+				this.goodsIds[id].forEach(good => {
+					if (good.num != item.num) {
+						good.num = item.num;
+					}
+				});
+			}
+			var shopGoods = JSON.parse(JSON.stringify(this.shopGoods));
+			if (item.num) {
+				shopGoods[id] = item;
+			} else {
+				delete shopGoods[id];
+			}
+			this.shopGoods = shopGoods;
+		},
+		tongBuNum() {
+			var goodsIds = {};
+			if (this.goods && this.goods.length) {
+				this.goods.forEach(item => {
+					if (item.goods_list && item.goods_list.length) {
+						item.goods_list.forEach(child => {
+							var id = `${child._id}-${child.goodsAttr.join('')}`;
+							goodsIds[id] = goodsIds[id] || [];
+							goodsIds[id].push(child);
+						});
+					}
+				});
+			}
+			this.goodsIds = goodsIds;
 		},
 		handleMenuTap(item) {
 			this.cateScrollTop = item.top + 10;
@@ -181,6 +259,7 @@ export default {
 		},
 		showGoodDetailModal() {},
 		getAllgoods() {
+			var _this = this;
 			var params = {
 				tenantId: this.$store.state.app.activeTenant
 			};
@@ -207,7 +286,23 @@ export default {
 								res.forEach(item => {
 									if (item.goodsType && item.goodsType.length) {
 										item.goodsType.forEach(type => {
-											item.num = item.num || 0;
+											if (item.goodsAttr && item.goodsAttr.length) {
+												var allNum = 0;
+												item.goodsAttr.forEach(attr => {
+													var id = `${item._id}-${attr}`;
+													if (_this.shopGoods[id] && _this.shopGoods[id].num) {
+														allNum += parseFloat(_this.shopGoods[id].num || 0);
+													}
+												});
+												item.num = allNum;
+											} else {
+												var id = `${item._id}-${item.goodsAttr.join('')}`;
+												if (_this.shopGoods[id] && _this.shopGoods[id].num) {
+													item.num = _this.shopGoods[id].num || 0;
+												} else {
+													item.num = item.num || 0;
+												}
+											}
 											goods[typeClass[type]].goods_list.push(item);
 										});
 									}
@@ -223,6 +318,7 @@ export default {
 									goods[idx].bottom = dom.offsetTop + dom.offsetHeight;
 								});
 								this.goods = goods;
+								this.tongBuNum();
 							});
 						})
 						.catch(() => {
@@ -322,97 +418,6 @@ export default {
 					display: flex;
 					flex-direction: column;
 					padding-bottom: -30rpx;
-
-					.good {
-						display: flex;
-						align-items: center;
-						margin-bottom: 30rpx;
-
-						.image {
-							width: 120rpx;
-							height: 120rpx;
-							margin-right: 20rpx;
-							border-radius: 8rpx;
-						}
-
-						.right {
-							flex: 1;
-							overflow: hidden;
-							display: flex;
-							flex-direction: column;
-							align-items: flex-start;
-							justify-content: flex-start;
-							padding-right: 14rpx;
-
-							.name {
-								margin-bottom: 10rpx;
-							}
-
-							.tips {
-								width: 100%;
-								line-height: 40rpx;
-								overflow: hidden;
-								text-overflow: ellipsis;
-								white-space: nowrap;
-								margin-bottom: 10rpx;
-							}
-
-							.price_and_action {
-								width: 100%;
-								display: flex;
-								justify-content: space-between;
-								align-items: center;
-
-								.price {
-									font-weight: 600;
-								}
-
-								.btn-group {
-									display: flex;
-									justify-content: space-between;
-									align-items: center;
-									position: relative;
-
-									.btn {
-										padding: 0 20rpx;
-										box-sizing: border-box;
-										height: 44rpx;
-										line-height: 44rpx;
-
-										&.property_btn {
-											border-radius: 24rpx;
-										}
-
-										&.add_btn,
-										&.reduce_btn {
-											padding: 0;
-											width: 44rpx;
-											border-radius: 44rpx;
-										}
-									}
-
-									.dot {
-										position: absolute;
-										background-color: #ffffff;
-										width: 36rpx;
-										height: 36rpx;
-										line-height: 36rpx;
-										text-align: center;
-										border-radius: 100%;
-										right: -12rpx;
-										top: -10rpx;
-									}
-
-									.number {
-										width: 44rpx;
-										height: 44rpx;
-										line-height: 44rpx;
-										text-align: center;
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		}

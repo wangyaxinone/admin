@@ -23,10 +23,29 @@
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
 			</template>
 			<template slot-scope="scope" slot="numberForm">
-				<el-button type="primary" @click="selectGoods">点菜</el-button>
+				<div>
+					<el-button type="primary" @click="selectGoods">点菜</el-button>
+					<el-card style="margin-top:5px;" v-for="(item,key) in scope.row.goods_list" :key="key">
+						<el-row :gutter="20">
+							<el-col :span="6" style="text-align: center;">
+								{{ item.goodsName }}
+								<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
+							</el-col>
+							<el-col :span="6" style="text-align: center;">
+								<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
+							</el-col>
+							<el-col :span="6" style="text-align: center;">
+								<el-input-number style="width:100px;" size="mini" @change="changeNumCar(item)" v-model="item.num" controls-position="right" :min="0"></el-input-number>
+							</el-col>
+							<el-col :span="6" style="text-align: center;">
+								<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+							</el-col>
+						</el-row>
+					</el-card>
+				</div>
 			</template>
 		</avue-crud>
-		<selectGoods ref="selectGoods"></selectGoods>
+		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
 	</view>
 </template>
 
@@ -141,7 +160,6 @@ export default {
 					{
 						label: '订单总价',
 						prop: 'order_price',
-						addDisplay: false,
 						disabled: true
 					},
 					{
@@ -149,7 +167,6 @@ export default {
 						prop: 'amound_price',
 						type: 'number',
 						precision: 2,
-						addDisplay: false
 					},
 					{
 						label: '备注',
@@ -214,6 +231,35 @@ export default {
 		})
 	},
 	methods: {
+		submit(obj) {
+			var form = JSON.parse(JSON.stringify(this.form))
+			form.goods_list = obj;
+			this.form = form;
+			this.get_order_price();
+			this.$refs.selectGoods.hide();
+		},
+		get_order_price() {
+			var price = 0;
+			var _this = this;
+			if(this.form.goods_list) {
+				Object.keys(this.form.goods_list).forEach((key)=>{
+					var item = this.form.goods_list[key];
+					var currentPrice =parseFloat(_this.$NP.times(item.goodsPrice, item.num));
+					price = _this.$NP.plus(price, currentPrice);
+				})
+			}
+			this.form.order_price = price;
+		},
+		changeNumCar(item) {
+			if(!item.num) {
+				var id = `${item._id}-${item.goodsAttr.join('')}`;
+				if(item.goodsAttrValue) {
+					id = `${item._id}-${item.goodsAttrValue}`;
+				}
+				delete this.form.goods_list[id];
+			}
+			this.get_order_price();
+		},
 		selectGoods() {
 			this.$refs.selectGoods.show();
 		},
