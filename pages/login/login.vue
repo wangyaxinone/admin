@@ -104,18 +104,19 @@
 							token: res.token,
 							tokenExpired: res.tokenExpired
 						})
-						this.mode();
-						return this.init().then(() => {
-							uni.showToast({
-								title: '登录成功',
-								icon: 'none'
-							})
-							uni.redirectTo({
-								url: '/'
+						this.mode().then(()=>{
+							this.init().then(() => {
+								uni.showToast({
+									title: '登录成功',
+									icon: 'none'
+								})
+								uni.redirectTo({
+									url: '/'
+								})
 							})
 						})
 					}).catch(err => {
-
+						this.loading = false
 					}).finally(err => {
 						this.loading = false
 					})

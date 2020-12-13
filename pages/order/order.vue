@@ -22,6 +22,9 @@
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="create_date">
+				<uniDateformate :date="scope.row.create_date"></uniDateformate>
+			</template>
 			<template slot-scope="scope" slot="numberForm">
 				<div>
 					<el-button type="primary" @click="selectGoods">点菜</el-button>
@@ -51,7 +54,7 @@
 
 <script>
 var _this;
-import { getList, add, update, remove } from '@/api/goods/goods_type.js';
+import { getList, add, update, remove } from '@/api/order/order.js';
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import { mapState, mapActions } from 'vuex';
@@ -83,7 +86,9 @@ export default {
 			loading: false,
 			selection: [],
 			form: {},
-			params: {},
+			params: {
+				status: 1
+			},
 			type: {},
 			tabOption: {
 				column: []
@@ -107,7 +112,7 @@ export default {
 						label: '订单编号',
 						prop: 'order_number',
 						search: true,
-						width: 150,
+						width: 180,
 						span: 12,
 						addDisplay: false,
 						editDisplay: false
@@ -222,6 +227,7 @@ export default {
 				}
 			})
 			this.type = this.tabOption.column[0];
+			this.params.status = this.type.prop;
 		})
 		getDictByDictCode({
 			dict_code: 'order_type'
@@ -265,11 +271,13 @@ export default {
 		},
 		handleChange(column) {
 			this.type = column;
+			this.params.status = column.prop;
 			if(column.prop != 1) {
 				this.option.addBtn = false;
 			}else{
 				this.option.addBtn = true;
 			}
+			this.loadData();
 		},
 		rowDel(row) {
 			if (row.children && row.children.length) {
@@ -311,6 +319,22 @@ export default {
 		},
 		rowSave(row, done, loading) {
 			row.tenantId = this.$store.state.app.activeTenant;
+			var newList = [];
+			if(row.goods_list) {
+				Object.keys(row.goods_list).forEach((key)=>{
+					var item = row.goods_list[key];
+					if(item.num>0) {
+						newList.push({
+							goodId: item._id,
+							goodsName: item.goodsName,
+							num: item.num,
+							goodsAttrValue: item.goodsAttrValue
+						})
+					}
+					
+				})	
+			}
+			row.goods_list = newList;
 			add(row)
 				.then(() => {
 					this.loadData();
@@ -351,6 +375,11 @@ export default {
 				getList(this.params)
 					.then(res => {
 						this.loading = false;
+						if(res.data && res.data.length) {
+							res.data.forEach((item)=>{
+								item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+							})
+						}
 						this.data = res.data;
 						this.page.total = res.total;
 					})
