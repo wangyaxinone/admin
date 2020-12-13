@@ -4,6 +4,7 @@ const {
 module.exports = class UserController extends Controller {
 	async add() {
 		const {
+			tenantId,
 			order_type,
 			goods_list,
 			status,
@@ -12,6 +13,7 @@ module.exports = class UserController extends Controller {
 			comment
 		} = this.ctx.data
 		return await this.service.order.order.add({
+			tenantId,
 			order_type,
 			goods_list,
 			status,
@@ -24,8 +26,6 @@ module.exports = class UserController extends Controller {
 		const {
 			_id,
 			order_type,
-			goods_list,
-			status,
 			table,
 			amound_price,
 			comment
@@ -33,8 +33,6 @@ module.exports = class UserController extends Controller {
 		return await this.service.order.order.update({
 			_id,
 			order_type,
-			goods_list,
-			status,
 			table,
 			amound_price,
 			comment

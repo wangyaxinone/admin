@@ -1,8 +1,10 @@
+
 /*
 *	获取服务端时间，在此批量处理阿里云 腾讯云的区别	
 */
 function getServerDate() {
-   return new Date()/1;
+	const db = uniCloud.database();
+   return   new db.serverDate();
 }
 /**
  * @param {Array} list 数据列表
@@ -86,7 +88,66 @@ function appendTenantParams(param) {
 	}
 	console.log(match);
 }
+
+async function getEvertDayCode(cfg){
+	var {collection, tenantId} = cfg;
+	const db = uniCloud.database();
+	const dbCmd = db.command;
+	const $ = db.command.aggregate;
+	
+	var date = new Date();
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var date = date.getDate();
+	
+	var list = await db.collection(collection).aggregate().match(dbCmd.expr(
+			$.and([
+				$.eq(['$tenantId', tenantId]),
+				$.gte(['$create_date', $.dateFromString({
+					dateString: new Date(`${year}-${month}-${date} 00:00:00`).toISOString()
+				})])
+			])
+	
+		))
+		.sort({
+			every_day_code: 1
+		})
+		.group({
+			_id: null,
+			max: $.last('$every_day_code')
+		})
+		.end();
+	if (list.data && list.data.length) {
+		var buWei = {
+			1: '0000',
+			2: '000',
+			3: '00',
+			4: '0',
+		};
+		var every_day_code = list.data[0].max / 1;
+		every_day_code++;
+		every_day_code = String(every_day_code);
+		var buWei = {
+			1: '00',
+			2: '0',
+		};
+		if (every_day_code.length < 3) {
+			every_day_code = buWei[every_day_code.length] + every_day_code;
+		}
+		var orderNumber =
+			`E-${tenantId.slice(0,8)}-${year}${month<=9?'0'+month:month}${date<=9?'0'+date:date}-${every_day_code}`;
+	} else {
+		var every_day_code = '001';
+		var orderNumber =
+			`E-${tenantId.slice(0,8)}-${year}${month<=9?'0'+month:month}${date<=9?'0'+date:date}-${every_day_code}`;
+	}
+	return {
+		every_day_code,
+		orderNumber,
+	}
+}
 module.exports = {
+	getEvertDayCode,
 	getServerDate,
 	getTree,
 	getPageConfig,
