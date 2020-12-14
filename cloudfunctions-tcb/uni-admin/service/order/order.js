@@ -8,6 +8,7 @@ const {
 	appendTenantParams,
 	getEvertDayCode
 } = require('../../utils.js');
+const NP = require('number-precision');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		var _this = this;
@@ -49,7 +50,7 @@ module.exports = class MenuService extends Service {
 				goods.forEach((item)=>{
 					if(numMap[item._id].num){
 						for(var i=0;i<numMap[item._id].num;i++){
-							order_price += parseFloat(item.goodsPrice);
+							order_price = NP.plus(order_price, parseFloat(item.goodsPrice));
 							foods.push({
 								every_day_code,
 								orderNumber,
@@ -58,13 +59,16 @@ module.exports = class MenuService extends Service {
 								goodsPrice:  item.goodsPrice,
 								goodsCost:  item.goodsCost,
 								goodsVipPrice:  item.goodsVipPrice,
-								goodsAttrValue: numMap[item._id].goodsAttrValue,
+								goodsAttrValue: numMap[item._id].goodsAttrValue || '',
+								comment: numMap[item._id].comment || '',
+								order_type: numMap[item._id].order_type,
 								tenantId:  item.tenantId,
 								deptId:  item.deptId,
 								goodsBigImg:  item.goodsBigImg,
 								goodsSmallImg:  item.goodsSmallImg,
 								goodsType: item.goodsType,
 								status: 1,
+								order_status: data.status,
 								create_date: date,
 								update_date: date,
 								operator: _this.ctx.auth.uid,
@@ -81,20 +85,27 @@ module.exports = class MenuService extends Service {
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
 			if(orderRes.id && goods_list && goods_list.length) {
-				foods.forEach(async (item)=>{
+				var falg = true;
+				for(var i=0;i<foods.length;i++){
+					var item = foods[i];
 					item.orderId = orderRes.id;
 					var dishesRes = await transaction.collection('opendb-admin-dishes').add(item);
 					if(!dishesRes.id) {
-						transaction.rollback(-100);
-						return {
-							code: 500,
-							message: `菜品保存失败！`,
-							rollbackCode: -100,
-						}
+						falg = false;
 					}
-				})
-				await transaction.commit();
-				return orderRes;
+				}
+				if(falg) {
+					await transaction.commit();
+					return orderRes;
+				}else{
+					await transaction.rollback(-100)
+					return {
+						code: 500,
+						message: `新增订单失败！`,
+						rollbackCode: -100,
+					}
+				}
+				
 			}else{
 				transaction.rollback(-100);
 				return {
@@ -127,9 +138,39 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-order').doc(_id).update(data);
 	}
 	async remove(_ids) {
-		return await this.db.collection('opendb-admin-order').where({
-			'_id': this.db.command.in(_ids)
-		}).remove();
+		const transaction = await this.db.startTransaction();
+		try {
+			var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[0]).remove();
+			if(!remobeRes.deleted) {
+				await transaction.rollback()
+				return {
+				  code: 500,
+				  message: '删除失败'
+				}
+			}
+			var {data: dishesyes} = await this.db.collection('opendb-admin-dishes').where({
+				'orderId': this.db.command.in(_ids)
+			}).get();
+			for(var i=0;i<dishesyes.length;i++){
+				var item = dishesyes[i];
+				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).remove();
+				if(!remobeRes.deleted) {
+					await transaction.rollback()
+					return {
+					  code: 500,
+					  message: '删除失败'
+					}
+				}
+			}
+			await transaction.commit();
+			return remobeRes;
+		}catch(e) {
+			await transaction.rollback()
+			return {
+			  code: 500,
+			  message: e
+			}
+		}
 	}
 	async list(param) {
 		var dbCmd = this.db.command;
@@ -162,6 +203,12 @@ module.exports = class MenuService extends Service {
 			})
 			.skip((page - 1) * size)
 			.limit(size)
+			.lookup({
+			    from: 'opendb-admin-dishes',
+			    localField: '_id',
+			    foreignField: 'orderId',
+			    as: 'foods',
+			})
 			.lookup({
 				from: 'uni-id-users',
 				let: {

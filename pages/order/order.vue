@@ -9,6 +9,7 @@
 			:data="data"
 			ref="crud"
 			v-model="form"
+			:before-open="beforeOpen"
 			@row-del="rowDel"
 			@row-update="rowUpdate"
 			@row-save="rowSave"
@@ -27,7 +28,7 @@
 			</template>
 			<template slot-scope="scope" slot="numberForm">
 				<div>
-					<el-button type="primary" @click="selectGoods">点菜</el-button>
+					<el-button v-if="dialogType == 'add'" type="primary" @click="selectGoods">点菜</el-button>
 					<el-card style="margin-top:5px;" v-for="(item,key) in scope.row.goods_list" :key="key">
 						<el-row :gutter="20">
 							<el-col :span="6" style="text-align: center;">
@@ -45,6 +46,53 @@
 							</el-col>
 						</el-row>
 					</el-card>
+					<el-tabs v-if="dialogType !== 'add'" v-model="activeName"  type="border-card" style="margin-top:10px;">
+						<el-tab-pane label="支付情况" name="zhiFu">
+							<div v-for="(foodList,key) in scope.row.foodsMapZhiFu" :key="key">
+								<el-alert  style="margin-top:5px;" :title="dishesZhiFuMap[key]" :type="key==1? 'error': 'success'" :closable="false"></el-alert>
+								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
+									<el-row :gutter="20">
+										<el-col :span="6" style="text-align: center;">
+											{{ item.goodsName }}
+											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											x {{item.num}}
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+										</el-col>
+									</el-row>
+								</el-card>
+							</div>
+						</el-tab-pane>
+					    <el-tab-pane label="制作情况" name="zhiZuo">
+							<div v-for="(foodList,key) in scope.row.foodsMapZhiZuo" :key="key">
+								<el-alert  style="margin-top:5px;" :title="dishesZhiZuoMap[key]" :type="key==1? 'error': 'success'" :closable="false"></el-alert>
+								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
+									<el-row :gutter="20">
+										<el-col :span="6" style="text-align: center;">
+											{{ item.goodsName }}
+											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											x {{item.num}}
+										</el-col>
+										<el-col :span="6" style="text-align: center;">
+											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+										</el-col>
+									</el-row>
+								</el-card>
+							</div>
+						</el-tab-pane>
+					</el-tabs>
+					
 				</div>
 			</template>
 		</avue-crud>
@@ -78,12 +126,14 @@ export default {
 	},
 	data() {
 		return {
+			activeName: 'zhiFu',
 			page: {
 				pageSize: config.pages.pageSize,
 				currentPage: config.pages.currentPage,
 				total: 0
 			},
 			loading: false,
+			dialogType: '',
 			selection: [],
 			form: {},
 			params: {
@@ -210,7 +260,9 @@ export default {
 					}
 				]
 			},
-			data: []
+			data: [],
+			dishesZhiZuoMap: {},
+			dishesZhiFuMap: {}
 		};
 	},
 	created() {
@@ -228,6 +280,24 @@ export default {
 			})
 			this.type = this.tabOption.column[0];
 			this.params.status = this.type.prop;
+		})
+		getDictByDictCode({
+			dict_code: 'order_status'
+		}).then((res) => {
+			var dishesZhiFuMap = {};
+			res.forEach((item)=>{
+				dishesZhiFuMap[item.dict_key] = item.dict_name;
+			})
+			this.dishesZhiFuMap = dishesZhiFuMap;
+		})
+		getDictByDictCode({
+			dict_code: 'dishes_status'
+		}).then((res) => {
+			var dishesZhiZuoMap = {};
+			res.forEach((item)=>{
+				dishesZhiZuoMap[item.dict_key] = item.dict_name;
+			})
+			this.dishesZhiZuoMap = dishesZhiZuoMap;
 		})
 		getDictByDictCode({
 			dict_code: 'order_type'
@@ -254,7 +324,7 @@ export default {
 					price = _this.$NP.plus(price, currentPrice);
 				})
 			}
-			this.form.order_price = price;
+			this.form.order_price = _this.$NP.plus(this.form.order_price, price);
 		},
 		changeNumCar(item) {
 			if(!item.num) {
@@ -279,6 +349,10 @@ export default {
 			}
 			this.loadData();
 		},
+		beforeOpen(done,type) {
+			this.dialogType = type;
+			done();
+		},
 		rowDel(row) {
 			if (row.children && row.children.length) {
 				this.$message({
@@ -287,7 +361,7 @@ export default {
 				});
 				return;
 			}
-			this.$confirm('确定将选择数据删除?', {
+			this.$confirm('确定将选择数据删除?  删除后不可恢复！', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
@@ -328,7 +402,9 @@ export default {
 							goodId: item._id,
 							goodsName: item.goodsName,
 							num: item.num,
-							goodsAttrValue: item.goodsAttrValue
+							goodsAttrValue: item.goodsAttrValue,
+							comment: row.comment,
+							order_type: row.order_type
 						})
 					}
 					
@@ -354,6 +430,7 @@ export default {
 		},
 		searchChange(params, done) {
 			this.params = params;
+			this.params.status = this.type.prop;
 			this.loadData();
 			done();
 		},
@@ -378,6 +455,23 @@ export default {
 						if(res.data && res.data.length) {
 							res.data.forEach((item)=>{
 								item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+								var foodsMapZhiZuo = {};
+								var foodsMapZhiFu = {};
+								if(item.foods && item.foods.length) {
+									item.foods.forEach((food)=>{
+										foodsMapZhiZuo[food.status] = foodsMapZhiZuo[food.status] || {};
+										foodsMapZhiZuo[food.status][food.goodsId] = foodsMapZhiZuo[food.status][food.goodsId] || JSON.parse(JSON.stringify(food));
+										foodsMapZhiZuo[food.status][food.goodsId].num = foodsMapZhiZuo[food.status][food.goodsId].num || 0;
+										foodsMapZhiZuo[food.status][food.goodsId].num++;
+										
+										foodsMapZhiFu[food.order_status] = foodsMapZhiFu[food.order_status] || {};
+										foodsMapZhiFu[food.order_status][food.goodsId] = foodsMapZhiFu[food.order_status][food.goodsId] || JSON.parse(JSON.stringify(food));
+										foodsMapZhiFu[food.order_status][food.goodsId].num = foodsMapZhiFu[food.order_status][food.goodsId].num || 0;
+										foodsMapZhiFu[food.order_status][food.goodsId].num++;
+									})
+								}
+								item.foodsMapZhiZuo = foodsMapZhiZuo;
+								item.foodsMapZhiFu = foodsMapZhiFu;
 							})
 						}
 						this.data = res.data;
