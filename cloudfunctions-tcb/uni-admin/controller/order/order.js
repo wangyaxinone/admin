@@ -28,14 +28,16 @@ module.exports = class UserController extends Controller {
 			order_type,
 			table,
 			amound_price,
-			comment
+			comment,
+			foods
 		} = this.ctx.data
 		return await this.service.order.order.update({
 			_id,
 			order_type,
 			table,
 			amound_price,
-			comment
+			comment,
+			foods
 		});
 	}
 	async remove() {

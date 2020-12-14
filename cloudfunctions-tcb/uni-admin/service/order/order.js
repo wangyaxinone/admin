@@ -127,15 +127,47 @@ module.exports = class MenuService extends Service {
 		const {
 			_id
 		} = data;
+		var foods = JSON.parse(JSON.stringify(data.foods));
 		delete data._id;
-		if(data.amound_price) {
+		delete data.foods;
+		if(data.amound_price && data.status == 1) {
 			data.status = 2;
-		}else{
-			data.status = 1;
 		}
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		return await this.db.collection('opendb-admin-order').doc(_id).update(data);
+		const transaction = await this.db.startTransaction();
+		try {
+			var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
+			if(orderRes.updated) {
+				for(var i=0;i<foods.length;i++){
+					var item = foods[i];
+					var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
+						order_status: data.status
+					});
+					if(!dishesRes.updated) {
+						await transaction.rollback()
+						return {
+						  code: 500,
+						  message: '修改失败！'
+						}
+					}
+				}
+				await transaction.commit();
+				return orderRes;
+			}else{
+				await transaction.rollback()
+				return {
+				  code: 500,
+				  message: '修改失败！'
+				}
+			}
+		}catch(e) {
+			await transaction.rollback()
+			return {
+			  code: 500,
+			  message: e
+			}
+		}
 	}
 	async remove(_ids) {
 		const transaction = await this.db.startTransaction();

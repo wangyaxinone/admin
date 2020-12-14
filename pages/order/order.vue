@@ -324,7 +324,7 @@ export default {
 					price = _this.$NP.plus(price, currentPrice);
 				})
 			}
-			this.form.order_price = _this.$NP.plus(this.form.order_price, price);
+			this.form.order_price = price;
 		},
 		changeNumCar(item) {
 			if(!item.num) {
