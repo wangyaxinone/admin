@@ -104,8 +104,8 @@
 							token: res.token,
 							tokenExpired: res.tokenExpired
 						})
-						this.mode().then(()=>{
-							this.init().then(() => {
+						return this.mode().then(()=>{
+							return this.init().then(() => {
 								uni.showToast({
 									title: '登录成功',
 									icon: 'none'

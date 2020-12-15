@@ -60,7 +60,7 @@ module.exports = class MenuService extends Service {
 								goodsCost:  item.goodsCost,
 								goodsVipPrice:  item.goodsVipPrice,
 								goodsAttrValue: numMap[item._id].goodsAttrValue || '',
-								comment: numMap[item._id].comment || '',
+								order_comment: numMap[item._id].comment || '',
 								order_type: numMap[item._id].order_type,
 								tenantId:  item.tenantId,
 								deptId:  item.deptId,
@@ -69,6 +69,7 @@ module.exports = class MenuService extends Service {
 								goodsType: item.goodsType,
 								status: 1,
 								order_status: data.status,
+								table: data.table,
 								create_date: date,
 								update_date: date,
 								operator: _this.ctx.auth.uid,
@@ -127,11 +128,14 @@ module.exports = class MenuService extends Service {
 		const {
 			_id
 		} = data;
+		var _this = this;
 		var foods = JSON.parse(JSON.stringify(data.foods));
 		delete data._id;
 		delete data.foods;
-		if(data.amound_price && data.status == 1) {
+		if(data.amound_price && data.status != 3) {
 			data.status = 2;
+		}else if(!data.amound_price && data.status != 3) {
+			data.status = 1;
 		}
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
@@ -142,13 +146,17 @@ module.exports = class MenuService extends Service {
 				for(var i=0;i<foods.length;i++){
 					var item = foods[i];
 					var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-						order_status: data.status
+						order_status: data.status,
+						order_comment: data.comment,
+						update_date: getServerDate(),
+						operator: _this.ctx.auth.uid
 					});
 					if(!dishesRes.updated) {
 						await transaction.rollback()
 						return {
 						  code: 500,
-						  message: '修改失败！'
+						  data:dishesRes,
+						  message: '修改失败1！'
 						}
 					}
 				}
@@ -158,7 +166,8 @@ module.exports = class MenuService extends Service {
 				await transaction.rollback()
 				return {
 				  code: 500,
-				  message: '修改失败！'
+				  data:orderRes,
+				  message: '修改失败2！'
 				}
 			}
 		}catch(e) {
