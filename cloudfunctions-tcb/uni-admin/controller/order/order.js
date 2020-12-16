@@ -28,14 +28,22 @@ module.exports = class UserController extends Controller {
 			order_type,
 			table,
 			amound_price,
+			status,
+			order_price,
+			no_order_price,
+			no_amound_price,
 			comment,
 			foods
 		} = this.ctx.data
 		return await this.service.order.order.update({
 			_id,
 			order_type,
+			status,
 			table,
+			order_price,
 			amound_price,
+			no_order_price,
+			no_amound_price,
 			comment,
 			foods
 		});

@@ -126,57 +126,82 @@ module.exports = class MenuService extends Service {
 	}
 	async update(data) {
 		const {
-			_id
+			_id,
+			no_order_price,
+			no_amound_price
 		} = data;
 		var _this = this;
 		var foods = JSON.parse(JSON.stringify(data.foods));
 		delete data._id;
 		delete data.foods;
-		if(data.amound_price && data.status != 3) {
-			data.status = 2;
-		}else if(!data.amound_price && data.status != 3) {
-			data.status = 1;
+		delete data.no_order_price;
+		delete data.no_amound_price;
+		var isStartTransaction = false;
+		if(no_order_price) {
+			if(no_order_price == data.order_price && data.amound_price) {
+				isStartTransaction = true;
+				if(data.status != 3) {
+					data.status = 2;
+				}
+			}else if(no_order_price !== data.order_price && data.amound_price && no_amound_price) {
+				isStartTransaction = true;
+				data.amound_price = NP.plus(data.amound_price, no_amound_price);
+				if(data.status != 3) {
+					data.status = 2;
+				}
+			}
+		}else if(!no_order_price && !data.amound_price) {
+			isStartTransaction = true;
+			if(data.status != 3) {
+				data.status = 1;
+			}
 		}
-		data.update_date = getServerDate();
-		data.operator = this.ctx.auth.uid;
-		const transaction = await this.db.startTransaction();
-		try {
-			var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
-			if(orderRes.updated) {
-				for(var i=0;i<foods.length;i++){
-					var item = foods[i];
-					var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-						order_status: data.status,
-						order_comment: data.comment,
-						update_date: getServerDate(),
-						operator: _this.ctx.auth.uid
-					});
-					if(!dishesRes.updated) {
-						await transaction.rollback()
-						return {
-						  code: 500,
-						  data:dishesRes,
-						  message: '修改失败1！'
+		
+		if(isStartTransaction) {
+			data.update_date = getServerDate();
+			data.operator = this.ctx.auth.uid;
+			const transaction = await this.db.startTransaction();
+			try {
+				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
+				if(orderRes.updated) {
+					for(var i=0;i<foods.length;i++){
+						var item = foods[i];
+						var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
+							order_status: data.status,
+							order_comment: data.comment,
+							update_date: getServerDate(),
+							operator: _this.ctx.auth.uid
+						});
+						if(!dishesRes.updated) {
+							await transaction.rollback()
+							return {
+							  code: 500,
+							  data:dishesRes,
+							  message: '修改失败1！'
+							}
 						}
 					}
+					await transaction.commit();
+					return orderRes;
+				}else{
+					await transaction.rollback()
+					return {
+					  code: 500,
+					  data:orderRes,
+					  message: '修改失败2！'
+					}
 				}
-				await transaction.commit();
-				return orderRes;
-			}else{
+			}catch(e) {
 				await transaction.rollback()
 				return {
 				  code: 500,
-				  data:orderRes,
-				  message: '修改失败2！'
+				  message: e
 				}
 			}
-		}catch(e) {
-			await transaction.rollback()
-			return {
-			  code: 500,
-			  message: e
-			}
+		}else{
+			return await this.db.collection('opendb-admin-order').doc(_id).update(data);
 		}
+		
 	}
 	async remove(_ids) {
 		const transaction = await this.db.startTransaction();

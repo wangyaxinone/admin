@@ -220,7 +220,25 @@ export default {
 					{
 						label: '实付金额',
 						prop: 'amound_price',
+						disabled: false,
 						type: 'number',
+						precision: 2,
+					},
+					{
+						label: '未付款金额',
+						prop: 'no_order_price',
+						hide: true,
+						addDisplay: false,
+						display: false,
+						disabled: true
+					},
+					{
+						label: '剩余实付金额',
+						prop: 'no_amound_price',
+						type: 'number',
+						hide: true,
+						display: false,
+						addDisplay: false,
 						precision: 2,
 					},
 					{
@@ -351,6 +369,21 @@ export default {
 		},
 		beforeOpen(done,type) {
 			this.dialogType = type;
+			const column = this.findObject(this.option.column, "amound_price");
+			const no_order_price = this.findObject(this.option.column, "no_order_price");
+			const no_amound_price = this.findObject(this.option.column, "no_amound_price");
+			if(this.form.no_order_price && this.form.amound_price) {
+				column.disabled = true;
+			}else{
+				column.disabled = false;
+			}
+			if(this.form.amound_price) {
+				no_order_price.display = true; 
+				no_amound_price.display = true;
+			}else{
+				no_order_price.display = false;
+				no_amound_price.display = false;
+			}
 			done();
 		},
 		rowDel(row) {
@@ -444,6 +477,7 @@ export default {
 			this.page.pageSize = pageSize;
 		},
 		loadData(clear = true) {
+			var _this = this;
 			this.$nextTick(() => {
 				this.loading = true;
 				this.params.page = this.page.currentPage;
@@ -457,6 +491,7 @@ export default {
 								item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
 								var foodsMapZhiZuo = {};
 								var foodsMapZhiFu = {};
+								var no_order_price = 0;
 								if(item.foods && item.foods.length) {
 									item.foods.forEach((food)=>{
 										foodsMapZhiZuo[food.status] = foodsMapZhiZuo[food.status] || {};
@@ -468,8 +503,13 @@ export default {
 										foodsMapZhiFu[food.order_status][food.goodsId] = foodsMapZhiFu[food.order_status][food.goodsId] || JSON.parse(JSON.stringify(food));
 										foodsMapZhiFu[food.order_status][food.goodsId].num = foodsMapZhiFu[food.order_status][food.goodsId].num || 0;
 										foodsMapZhiFu[food.order_status][food.goodsId].num++;
+										
+										if(food.order_status === 1) {
+											no_order_price = _this.$NP.plus(no_order_price, food.goodsPrice);
+										}
 									})
 								}
+								item.no_order_price = no_order_price;
 								item.foodsMapZhiZuo = foodsMapZhiZuo;
 								item.foodsMapZhiFu = foodsMapZhiFu;
 							})
