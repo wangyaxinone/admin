@@ -378,8 +378,8 @@ export default {
 				column.disabled = false;
 			}
 			if(this.form.amound_price) {
-				no_order_price.display = true; 
-				no_amound_price.display = true;
+				no_order_price.display = false; 
+				no_amound_price.display = false;
 			}else{
 				no_order_price.display = false;
 				no_amound_price.display = false;
