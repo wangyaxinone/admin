@@ -17,3 +17,7 @@ export const update = (params) => {
 export const remove = (params) => {
   return request('order/order/remove', params);
 }
+
+export const invalid = (params) => {
+  return request('order/order/invalid', params);
+}

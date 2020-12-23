@@ -20,6 +20,10 @@
 			@selection-change="selectionChange"
 			@on-load="loadData"
 		>
+			<template slot="menu"  slot-scope="{type,size, row}">
+			    <el-button v-if="row.status!=3" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
+				<el-button v-if="row.status!=3" @click="addFoods(row)" icon="el-icon-delete-solid" :type="type" size="small">加菜</el-button>
+			  </template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
 			</template>
@@ -49,7 +53,7 @@
 					<el-tabs v-if="dialogType !== 'add'" v-model="activeName"  type="border-card" style="margin-top:10px;">
 						<el-tab-pane label="支付情况" name="zhiFu">
 							<div v-for="(foodList,key) in scope.row.foodsMapZhiFu" :key="key">
-								<el-alert  style="margin-top:5px;" :title="dishesZhiFuMap[key]" :type="key==1? 'error': 'success'" :closable="false"></el-alert>
+								<el-alert  style="margin-top:5px;" :title="dishesZhiFuMap[key]" :type="key==1 || key==3? 'error': 'success'" :closable="false"></el-alert>
 								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
 									<el-row :gutter="20">
 										<el-col :span="6" style="text-align: center;">
@@ -71,7 +75,7 @@
 						</el-tab-pane>
 					    <el-tab-pane label="制作情况" name="zhiZuo">
 							<div v-for="(foodList,key) in scope.row.foodsMapZhiZuo" :key="key">
-								<el-alert  style="margin-top:5px;" :title="dishesZhiZuoMap[key]" :type="key==1? 'error': 'success'" :closable="false"></el-alert>
+								<el-alert  style="margin-top:5px;" :title="dishesZhiZuoMap[key]" :type="key==1 ||　key==4? 'error': 'success'" :closable="false"></el-alert>
 								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
 									<el-row :gutter="20">
 										<el-col :span="6" style="text-align: center;">
@@ -97,21 +101,24 @@
 			</template>
 		</avue-crud>
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
+		<addFoods ref="addFoods"></addFoods>
 	</view>
 </template>
 
 <script>
 var _this;
-import { getList, add, update, remove } from '@/api/order/order.js';
+import { getList, add, update, remove, invalid } from '@/api/order/order.js';
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
+import addFoods from '@/components/addFoods/addFoods.vue';
 import { mapState, mapActions } from 'vuex';
 import config from '@/admin.config.js';
 import { getDictByDictCode } from '@/api/system/dict.js';
 export default {
 	components: {
 		uniDateformate,
-		selectGoods
+		selectGoods,
+		addFoods
 	},
 	computed: {
 		...mapState('app', ['navBtn']),
@@ -153,7 +160,7 @@ export default {
 				tree: true,
 				border: true,
 				index: true,
-				selection: true,
+				selection: false,
 				viewBtn: true,
 				addBtn: true,
 				menuWidth: 300,
@@ -194,11 +201,10 @@ export default {
 						disabled: true
 					},
 					{
-						label: '订单	状态',
+						label: '订单状态',
 						prop: 'status',
 						type: 'select',
 						disabled: true,
-						fixed: true,
 						value: 1,
 						dicData: [],
 						props: {
@@ -325,6 +331,26 @@ export default {
 		})
 	},
 	methods: {
+		addFoods(row) {
+			this.$refs.addFoods.show(row);
+		},
+		invalid(row){
+			this.$confirm('确定将选择数据作废? ', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				invalid({
+					_ids: [row._id]
+				}).then(res => {
+					this.$message({
+						message: '作废成功',
+						type: 'success'
+					});
+					this.loadData();
+				});
+			});
+		},
 		submit(obj) {
 			var form = JSON.parse(JSON.stringify(this.form))
 			form.goods_list = obj;
@@ -377,9 +403,9 @@ export default {
 			}else{
 				column.disabled = false;
 			}
-			if(this.form.amound_price) {
-				no_order_price.display = false; 
-				no_amound_price.display = false;
+			if(this.form.no_order_price && this.form.amound_price) {
+				no_order_price.display = true; 
+				no_amound_price.display = true;
 			}else{
 				no_order_price.display = false;
 				no_amound_price.display = false;

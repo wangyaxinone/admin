@@ -57,4 +57,7 @@ module.exports = class UserController extends Controller {
 	async list() {
 		return await this.service.order.order.list(this.ctx.data);
 	}
+	async invalid() {
+		return await this.service.order.order.invalid(this.ctx.data);
+	}
 }
