@@ -21,3 +21,7 @@ export const remove = (params) => {
 export const invalid = (params) => {
   return request('order/order/invalid', params);
 }
+
+export const addFood = (params) => {
+  return request('order/order/addFoods', params);
+}

@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<avue-tabs :option="tabOption" @change="handleChange"></avue-tabs>
+		<avue-tabs ref="tabs" :option="tabOption" @change="handleChange"></avue-tabs>
 		<avue-crud
 			:permission="permissionList"
 			:page="page"
@@ -101,13 +101,13 @@
 			</template>
 		</avue-crud>
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
-		<addFoods ref="addFoods"></addFoods>
+		<addFoods ref="addFoods" @submit="addFoodsSubmit"></addFoods>
 	</view>
 </template>
 
 <script>
 var _this;
-import { getList, add, update, remove, invalid } from '@/api/order/order.js';
+import { getList, add, update, remove, invalid, addFood } from '@/api/order/order.js';
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import addFoods from '@/components/addFoods/addFoods.vue';
@@ -350,6 +350,23 @@ export default {
 					this.loadData();
 				});
 			});
+		},
+		addFoodsSubmit(data){
+			this.$refs.addFoods.loading = true;
+			addFood(data).then((res)=>{
+				this.type = this.tabOption.column[0];
+				this.params.status = this.type.prop;
+				this.$refs.tabs.changeTabs(0);
+				this.$refs.addFoods.loading = false;
+				this.$refs.addFoods.hide();
+				this.loadData();
+				this.$message({
+					message: '加菜成功',
+					type: 'success'
+				});
+			}).catch(()=>{
+				this.$refs.addFoods.loading = false;
+			})
 		},
 		submit(obj) {
 			var form = JSON.parse(JSON.stringify(this.form))

@@ -60,4 +60,7 @@ module.exports = class UserController extends Controller {
 	async invalid() {
 		return await this.service.order.order.invalid(this.ctx.data);
 	}
+	async addFoods() {
+		return await this.service.order.order.addFoods(this.ctx.data);
+	}
 }

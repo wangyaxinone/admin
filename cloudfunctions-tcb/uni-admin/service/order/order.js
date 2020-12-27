@@ -347,4 +347,106 @@ module.exports = class MenuService extends Service {
 			}
 		}
 	}
+	async addFoods(data) {
+		var _this = this;
+		var updateData = {};
+		var date = getServerDate();
+		updateData.update_date = date;
+		updateData.operator = this.ctx.auth.uid;
+		updateData.status = 1;
+		var goods_list = JSON.parse(JSON.stringify(data.goods_list));
+		var goodIds = [];
+		var num = 0;
+		var order_price = 0;
+		var numMap = {};
+		var foods = [];
+		if(goods_list && goods_list.length){
+			goods_list.forEach((item)=>{
+				goodIds.push(item.goodId);
+				numMap[item.goodId] = item;
+				num += parseFloat(item.num || 0);
+			})
+			var {
+				data: goods
+			} = await this.db.collection('opendb-admin-goods').where({
+				'_id': this.db.command.in(goodIds)
+			}).get();
+			if(goods &&　goods.length) {
+				goods.forEach((item)=>{
+					if(numMap[item._id].num){
+						for(var i=0;i<numMap[item._id].num;i++){
+							order_price = NP.plus(order_price, parseFloat(item.goodsPrice));
+							foods.push({
+								every_day_code: data.every_day_code,
+								orderNumber: data.orderNumber,
+								goodsId: item._id,
+								goodsName: item.goodsName,
+								goodsPrice:  item.goodsPrice,
+								goodsCost:  item.goodsCost,
+								goodsVipPrice:  item.goodsVipPrice,
+								goodsAttrValue: numMap[item._id].goodsAttrValue || '',
+								order_comment: numMap[item._id].comment || '',
+								order_type: numMap[item._id].order_type,
+								tenantId:  item.tenantId,
+								deptId:  item.deptId,
+								goodsBigImg:  item.goodsBigImg,
+								goodsSmallImg:  item.goodsSmallImg,
+								goodsType: item.goodsType,
+								status: 1,
+								order_status: 1,
+								table: data.table,
+								create_date: date,
+								update_date: date,
+								operator: _this.ctx.auth.uid,
+								creater: _this.ctx.auth.uid,
+							})
+						}
+					}
+				})
+			}
+		}
+		updateData.number = NP.plus(num, parseFloat(data.number));
+		updateData.order_price = NP.plus(order_price, data.order_price);
+		const transaction = await this.db.startTransaction();
+		try{
+			var orderRes = await transaction.collection('opendb-admin-order').doc(data._id).update(updateData);
+			if(orderRes.updated && goods_list && goods_list.length) {
+				var falg = true;
+				for(var i=0;i<foods.length;i++){
+					var item = foods[i];
+					item.orderId = data._id;
+					var dishesRes = await transaction.collection('opendb-admin-dishes').add(item);
+					if(!dishesRes.id) {
+						falg = false;
+					}
+				}
+				if(falg) {
+					await transaction.commit();
+					return orderRes;
+				}else{
+					await transaction.rollback(-100)
+					return {
+						code: 500,
+						message: `新增订单失败！`,
+						rollbackCode: -100,
+					}
+				}
+				
+			}else{
+				transaction.rollback(-100);
+				return {
+					code: 500,
+					message: `未点菜，新增订单失败！`,
+					rollbackCode: -100,
+				}
+			}
+		}catch(e){
+			await transaction.rollback(-100)
+			return {
+				code: 500,
+				message: `新增订单失败！`,
+				rollbackCode: -100,
+			}
+		}
+	}
 }
