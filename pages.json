@@ -61,6 +61,23 @@
                 "enablePullDownRefresh": false
             }
             
+        },{
+            "path" : "pages/table/tableType",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "餐桌分类",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/table/table",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "餐桌列表",
+                "enablePullDownRefresh": false
+            }
+            
         }
     ],
 	"subPackages": [{
