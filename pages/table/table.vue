@@ -15,6 +15,12 @@
 				<el-button @click="onResert" size="small">重置</el-button>
 			</el-form-item>
 		</el-form>
+		<div style="margin-bottom: 15px;">
+			<el-button-group>
+			  <el-button type="primary" size="small" @click="addTable">新增</el-button>
+			  <el-button type="danger" size="small">删除</el-button>
+			</el-button-group>
+		</div>
 		<el-row :gutter="20">
 			<el-col :span="4">
 				<el-card class="box-card">
@@ -22,7 +28,13 @@
 				</el-card>
 			</el-col>
 		</el-row>
-
+		<el-dialog
+		  :title="title"
+		  :visible.sync="dialogVisible"
+		  width="30%"
+		  >
+		  
+		</el-dialog>
 	</view>
 </template>
 
@@ -30,6 +42,8 @@
 	export default {
 		data() {
 			return {
+				title: '新增',
+				dialogVisible: false,
 				form: {
 					name: '',
 					tableType: ''
@@ -38,6 +52,9 @@
 			};
 		},
 		methods: {
+			addTable() {
+				this.dialogVisible = true;
+			},
 			onSubmit() {
 				
 			},
