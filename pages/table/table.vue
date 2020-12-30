@@ -11,14 +11,14 @@
 				</el-select>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" size="small" @click="onSubmit">查询</el-button>
+				<el-button type="primary" size="small" @click="onSearch">查询</el-button>
 				<el-button @click="onResert" size="small">重置</el-button>
 			</el-form-item>
 		</el-form>
 		<div style="margin-bottom: 15px;">
 			<el-button-group>
-			  <el-button type="primary" size="small" @click="addTable">新增</el-button>
-			  <el-button type="danger" size="small">删除</el-button>
+				<el-button type="primary" size="small" @click="addTable">新增</el-button>
+				<el-button type="danger" size="small">删除</el-button>
 			</el-button-group>
 		</div>
 		<el-row :gutter="20">
@@ -28,17 +28,26 @@
 				</el-card>
 			</el-col>
 		</el-row>
-		<el-dialog
-		  :title="title"
-		  :visible.sync="dialogVisible"
-		  width="30%"
-		  >
-		  
+		<el-dialog :title="title" :visible.sync="dialogVisible" width="60%">
+			<avue-form ref="form" v-model="formData" :option="option" @reset-change="emptytChange" @submit="submit">
+			</avue-form>
 		</el-dialog>
 	</view>
 </template>
 
 <script>
+	import {
+		getDictByDictCode
+	} from "@/api/system/dict.js"
+	import {
+		select,
+	} from "@/api/table/table_type.js"
+	// import {
+	// 	getList,
+	// 	add,
+	// 	update,
+	// 	remove,
+	// } from "@/api/table/table.js"
 	export default {
 		data() {
 			return {
@@ -48,15 +57,67 @@
 					name: '',
 					tableType: ''
 				},
+				formData: {},
+				option:{
+					column: [{
+						label: "餐桌名称",
+						prop: "name",
+					},{
+						label: "餐桌分类",
+						prop: "tableType",
+						type: 'select',
+						typeformat(item, label, value) {
+							return `${item[label]} (${item.info} ${item.comment})`
+						},
+						props: {
+							label: "name",
+							value: "_id",
+							disabled: "disabled"
+						},
+						dicData: [],
+					},{
+						label: "餐桌状态",
+						prop: "status",
+						type: 'select',
+						value: 1,
+						props: {
+							label: "dict_name",
+							value: "dict_key",
+							disabled: "disabled"
+						},
+						dicData: [],
+					},{
+						label: "排序",
+						prop: "sort",
+						type: 'number'
+					},{
+						label: "备注",
+						prop: "commit",
+					}]
+				},
 				tableList: []
 			};
+		},
+		mounted() {
+			getDictByDictCode({
+				dict_code: 'table_status'
+			}).then((res) => {
+				const column = this.findObject(this.option.column, "status");
+				column.dicData = res;
+			})
+			select().then((res)=>{
+				const column = this.findObject(this.option.column, "tableType");
+				column.dicData = res;
+			})
 		},
 		methods: {
 			addTable() {
 				this.dialogVisible = true;
 			},
-			onSubmit() {
-				
+			submit(){},
+			emptytChange(){},
+			onSearch() {
+
 			},
 			onResert() {
 				this.form = {
