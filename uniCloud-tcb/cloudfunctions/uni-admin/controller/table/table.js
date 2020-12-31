@@ -5,9 +5,10 @@ module.exports = class UserController extends Controller {
 	async add() {
 		const {
 			name,
+			tableType,
 			tenantId,
 			sort,
-			info,
+			status,
 			comment
 		} = this.ctx.data
 		return await this.service.table.table.add({

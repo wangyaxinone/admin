@@ -62,6 +62,11 @@
 					column: [{
 						label: "餐桌名称",
 						prop: "name",
+						rules: [{
+							required: true,
+							message: "请输入餐桌名称",
+							trigger: "blur",
+						}, ],
 					},{
 						label: "餐桌分类",
 						prop: "tableType",
@@ -75,6 +80,11 @@
 							disabled: "disabled"
 						},
 						dicData: [],
+						rules: [{
+							required: true,
+							message: "请输入餐桌分类",
+							trigger: "blur",
+						}, ],
 					},{
 						label: "餐桌状态",
 						prop: "status",
@@ -86,6 +96,9 @@
 							disabled: "disabled"
 						},
 						dicData: [],
+					},{
+						label: "负责人",
+						prop: "personLiable",
 					},{
 						label: "排序",
 						prop: "sort",
