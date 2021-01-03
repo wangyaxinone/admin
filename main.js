@@ -5,7 +5,7 @@ import plugin from './js_sdk/uni-admin/plugin'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import NP from 'number-precision';
-
+import selectUser from "@/components/selectUser/selectUser.vue"
 Vue.prototype.$NP = NP;
 Vue.config.productionTip = false
 
@@ -18,7 +18,7 @@ Vue.use(AvueMap);
 Vue.use(plugin)
 
 App.mpType = 'app'
-
+Vue.component('selectUser', selectUser)
 const app = new Vue({
     store,
     ...App

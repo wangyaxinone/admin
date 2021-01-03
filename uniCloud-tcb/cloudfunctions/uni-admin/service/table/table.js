@@ -41,22 +41,13 @@ module.exports = class MenuService extends Service {
 		} = getPageConfig();
 		var page = param.page ? param.page : basePage;
 		var size = param.size ? param.size : baseSize;
-		let {
-			total
-		} = await this.db.collection('opendb-admin-table').where(match).count();
+		
 		let {
 			data
 		} = await this.db.collection('opendb-admin-table')
 			.where(match)
 			.orderBy('sort', "asc")
-			.skip((page - 1) * size)
-			.limit(size)
 			.get();
-		return {
-			total,
-			page,
-			size,
-			data
-		};
+		return data;
 	}
 }

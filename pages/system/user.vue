@@ -101,6 +101,11 @@
 							prop: "nickname",
 							search: true,
 							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入用户昵称",
+								trigger: "blur",
+							}],
 						},
 						{
 							label: "用户性别",

@@ -7,15 +7,18 @@ module.exports = class UserController extends Controller {
 			name,
 			tableType,
 			tenantId,
+			personLiable,
 			sort,
 			status,
 			comment
 		} = this.ctx.data
 		return await this.service.table.table.add({
 			name,
+			tableType,
 			tenantId,
+			personLiable,
 			sort,
-			info,
+			status,
 			comment
 		});
 	}
@@ -23,7 +26,7 @@ module.exports = class UserController extends Controller {
 		const {
 			_id,
 			name,
-			tenantId,
+			personLiable,
 			sort,
 			info,
 			comment
@@ -31,7 +34,7 @@ module.exports = class UserController extends Controller {
 		return await this.service.table.table.update({
 			_id,
 			name,
-			tenantId,
+			personLiable,
 			sort,
 			info,
 			comment
