@@ -1,50 +1,65 @@
 <template>
 	<view>
 		<el-dialog title="点菜" :visible.sync="dialogVisible" width="60%" append-to-body>
-			<avue-form ref="form" v-model="form" :option="option">
-				
+			<avue-form ref="form" v-model="form" :option="option" @reset-change="resetChange">
+				<template slot="menuForm">
+					<el-button type="primary" :loading="loading" @click="handleSubmit">提 交</el-button>
+					<el-button @click="hide" :loading="loading">取 消</el-button>
+				</template>
+				<template slot-scope="scope" slot="number">
+					<div>
+						<el-button type="primary" @click="selectGoods">点菜</el-button>
+						<el-card style="margin-top:5px;" v-for="(item,key) in form.goods_list" :key="key">
+							<el-row :gutter="20">
+								<el-col :span="6" style="text-align: center;">
+									{{ item.goodsName }}
+									<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
+								</el-col>
+								<el-col :span="6" style="text-align: center;">
+									<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
+								</el-col>
+								<el-col :span="6" style="text-align: center;">
+									<el-input-number style="width:100px;" size="mini" @change="changeNumCar(item)" v-model="item.num" controls-position="right" :min="0"></el-input-number>
+								</el-col>
+								<el-col :span="6" style="text-align: center;">
+									<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+								</el-col>
+							</el-row>
+						</el-card>
+					</div>
+				</template>
 			</avue-form>
 		</el-dialog>
+		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
 	</view>
 </template>
 
 <script>
+	import { getDictByDictCode } from '@/api/system/dict.js';
+	import selectGoods from '@/components/selectGoods/selectGoods.vue';
+	import { add } from '@/api/order/order.js';
 	export default {
+		components:{
+			selectGoods
+		},
 		data() {
 			return {
-				dialogVisible: true,
-				form: {},
+				dialogVisible: false,
+				loading: false,
+				form: {
+					goods_list: {}
+				},
 				option: {
-					height: 'auto',
-					calcHeight: 80,
-					searchShow: true,
-					searchMenuSpan: 6,
-					rowKey: '_id',
-					tip: false,
-					tree: true,
-					border: true,
-					index: true,
-					selection: false,
-					viewBtn: true,
-					addBtn: true,
-					menuWidth: 300,
+					emptyBtn:false,
+					submitBtn:false,
 					column: [
-						{
-							label: '订单编号',
-							prop: 'order_number',
-							search: true,
-							width: 180,
-							span: 12,
-							addDisplay: false,
-							editDisplay: false
-						},
 						{
 							label: '下单类型',
 							prop: 'order_type',
 							span: 12,
 							disabled: true,
 							type: 'select',
-							value: 2,
+							value: 1,
 							dicData: [],
 							props: {
 								label: 'dict_name',
@@ -60,8 +75,7 @@
 						},
 						{
 							label: '餐桌',
-							prop: 'table',
-							addDisplay: false,
+							prop: 'tableName',
 							disabled: true
 						},
 						{
@@ -79,7 +93,7 @@
 						{
 							label: '菜品数量',
 							prop: 'number',
-							formslot: true,
+							formslot:true,
 							span: 24
 						},
 						{
@@ -123,39 +137,117 @@
 									trigger: 'change'
 								}
 							]
-						},
-						{
-							label: '创建时间',
-							prop: 'create_date',
-							addDisplay: false,
-							editDisplay: false,
-							width: 130,
-							slot: true
-						},
-						{
-							label: '最后一次操作时间',
-							prop: 'update_date',
-							addDisplay: false,
-							editDisplay: false,
-							width: 130,
-							slot: true
-						},
-						{
-							label: '最后一次操作人',
-							prop: 'operator',
-							addDisplay: false,
-							editDisplay: false
 						}
 					]
 				},
 			};
 		},
+		created() {
+			getDictByDictCode({
+				dict_code: 'order_status'
+			}).then((res) => {
+				const column = this.findObject(this.option.column, "status");
+				column.dicData = res;
+			})
+			getDictByDictCode({
+				dict_code: 'order_status'
+			}).then((res) => {
+				var dishesZhiFuMap = {};
+				res.forEach((item)=>{
+					dishesZhiFuMap[item.dict_key] = item.dict_name;
+				})
+				this.dishesZhiFuMap = dishesZhiFuMap;
+			})
+			getDictByDictCode({
+				dict_code: 'dishes_status'
+			}).then((res) => {
+				var dishesZhiZuoMap = {};
+				res.forEach((item)=>{
+					dishesZhiZuoMap[item.dict_key] = item.dict_name;
+				})
+				this.dishesZhiZuoMap = dishesZhiZuoMap;
+			})
+			getDictByDictCode({
+				dict_code: 'order_type'
+			}).then((res) => {
+				const column = this.findObject(this.option.column, "order_type");
+				column.dicData = res;
+			})
+		},
 		methods:{
-			show(){
+			show(data){
+				this.form.table = data.table;
+				this.form.tableName = data.tableName;
 				this.dialogVisible = true;
 			},
 			hide(){
 				this.dialogVisible = false;
+			},
+			selectGoods() {
+				this.$refs.selectGoods.show();
+			},
+			submit(obj) {
+				var form = JSON.parse(JSON.stringify(this.form))
+				form.goods_list = obj;
+				this.form = form;
+				this.get_order_price();
+				this.$refs.selectGoods.hide();
+			},
+			changeNumCar(item) {
+				if(!item.num) {
+					var id = `${item._id}-${item.goodsAttr.join('')}`;
+					if(item.goodsAttrValue) {
+						id = `${item._id}-${item.goodsAttrValue}`;
+					}
+					delete this.form.goods_list[id];
+				}
+				this.get_order_price();
+			},
+			get_order_price() {
+				var price = 0;
+				var _this = this;
+				if(this.form.goods_list) {
+					Object.keys(this.form.goods_list).forEach((key)=>{
+						var item = this.form.goods_list[key];
+						var currentPrice =parseFloat(_this.$NP.times(item.goodsPrice, item.num));
+						price = _this.$NP.plus(price, currentPrice);
+					})
+				}
+				this.form.order_price = price;
+			},
+			handleSubmit() {
+				var row = JSON.parse(JSON.stringify(this.form));
+				row.tenantId = this.$store.state.app.activeTenant;
+				var newList = [];
+				if(row.goods_list) {
+					Object.keys(row.goods_list).forEach((key)=>{
+						var item = row.goods_list[key];
+						if(item.num>0) {
+							newList.push({
+								goodId: item._id,
+								goodsName: item.goodsName,
+								num: item.num,
+								goodsAttrValue: item.goodsAttrValue,
+								comment: row.comment,
+								order_type: row.order_type
+							})
+						}
+						
+					})	
+				}
+				row.goods_list = newList;
+				add(row)
+					.then(() => {
+						this.loadData();
+						this.$message({
+							message: '新增成功',
+							type: 'success'
+						});
+						done();
+					})
+					.catch(err => {
+						done();
+					});
 			}
 		}
 	}

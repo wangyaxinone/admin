@@ -15,17 +15,17 @@
 				<el-button @click="onResert" size="small">重置</el-button>
 			</el-form-item>
 		</el-form>
-		<div style="margin-bottom: 15px;">
+		<div style="margin-bottom: 15px;" >
 			<el-button-group>
 				<el-button type="primary" @click="addTable">新增</el-button>
 			</el-button-group>
 		</div>
-		<el-row :gutter="10">
+		<el-row :gutter="10" v-loading="loadingLoad">
 			<el-col :span="3" v-for="(item,idx) in tableList" :key="item._id">
 				<el-popover placement="bottom" width="200" trigger="hover">
 					<div style="text-align: center;">
 						<el-button-group>
-							<el-button @click="dianCai" size="mini" type="primary">点菜</el-button>
+							<el-button @click="dianCai(item)" size="mini" type="primary">点菜</el-button>
 							<el-button @click="addFoods" size="mini" type="primary">加菜</el-button>
 							<el-button size="mini" type="primary">离开</el-button>
 							<el-button @click="editTable(item)" size="mini" type="primary">编辑</el-button>
@@ -78,6 +78,7 @@
 				title: '新增',
 				dialogVisible: false,
 				loading: true,
+				loadingLoad: false,
 				form: {
 					name: '',
 					tableType: '',
@@ -154,8 +155,11 @@
 			this.loadData();
 		},
 		methods: {
-			dianCai(){
-				this.$refs.placingOrder.show();
+			dianCai(item){
+				this.$refs.placingOrder.show({
+					table: item._id,
+					tableName:  item.name,
+				});
 			},
 			addFoodsSubmit(data){
 				this.$refs.addFoods.loading = true;
@@ -259,13 +263,13 @@
 			},
 			loadData(clear = true) {
 				this.$nextTick(() => {
-					this.loading = true;
+					this.loadingLoad = true;
 					this.form.tenantId = this.$store.state.app.activeTenant;
 					getList(this.form).then((res) => {
-						this.loading = false;
+						this.loadingLoad = false;
 						this.tableList = res;
 					}).catch(() => {
-						this.loading = false;
+						this.loadingLoad = false;
 					})
 				})
 			}

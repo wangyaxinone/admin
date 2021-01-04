@@ -278,6 +278,12 @@ module.exports = class MenuService extends Service {
 			    as: 'foods',
 			})
 			.lookup({
+			    from: 'opendb-admin-table',
+			    localField: 'table',
+			    foreignField: '_id',
+			    as: 'tables',
+			})
+			.lookup({
 				from: 'uni-id-users',
 				let: {
 					operator: '$operator'

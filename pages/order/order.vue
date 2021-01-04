@@ -196,7 +196,7 @@ export default {
 					},
 					{
 						label: '餐桌',
-						prop: 'table',
+						prop: 'tableName',
 						addDisplay: false,
 						disabled: true
 					},
@@ -535,6 +535,7 @@ export default {
 								var foodsMapZhiZuo = {};
 								var foodsMapZhiFu = {};
 								var no_order_price = 0;
+								var tableName = [];
 								if(item.foods && item.foods.length) {
 									item.foods.forEach((food)=>{
 										foodsMapZhiZuo[food.status] = foodsMapZhiZuo[food.status] || {};
@@ -552,6 +553,12 @@ export default {
 										}
 									})
 								}
+								if(item.tables && item.tables.length){
+									item.tables.forEach((child)=>{
+										tableName.push(child.name);
+									})
+								}
+								item.tableName = tableName.join(',');
 								item.no_order_price = no_order_price;
 								item.foodsMapZhiZuo = foodsMapZhiZuo;
 								item.foodsMapZhiFu = foodsMapZhiFu;
