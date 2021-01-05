@@ -266,6 +266,7 @@
 					this.loadingLoad = true;
 					this.form.tenantId = this.$store.state.app.activeTenant;
 					getList(this.form).then((res) => {
+						debugger
 						this.loadingLoad = false;
 						this.tableList = res;
 					}).catch(() => {

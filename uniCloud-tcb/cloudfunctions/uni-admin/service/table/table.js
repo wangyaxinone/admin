@@ -25,6 +25,8 @@ module.exports = class MenuService extends Service {
 		}).remove();
 	}
 	async list(param) {
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
@@ -44,10 +46,33 @@ module.exports = class MenuService extends Service {
 		
 		let {
 			data
-		} = await this.db.collection('opendb-admin-table')
-			.where(match)
-			.orderBy('sort', "asc")
-			.get();
+		} = await this.db.collection('opendb-admin-table').aggregate()
+			.match(match)
+			.sort({
+				'sort': 1
+			})
+			.lookup({
+				from: 'opendb-admin-order',
+				let: {
+					table: '$_id'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$table', '$$table'])
+					))
+					.project({
+						_id: 1,
+						every_day_code: 1,
+						order_number: 1,
+						order_price: 1,
+						order_type: 1,
+						status: 1,
+						number: 1
+					})
+					.done(),
+				as: 'order',
+			})
+			.end();
 		return data;
 	}
 }
