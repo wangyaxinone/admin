@@ -15,29 +15,37 @@
 				<el-button @click="onResert" size="small">重置</el-button>
 			</el-form-item>
 		</el-form>
-		<div style="margin-bottom: 15px;" >
+		<div style="margin-bottom: 15px;">
 			<el-button-group>
-				<el-button type="primary" @click="addTable">新增</el-button>
+				<el-button type="primary" size="mini" @click="addTable">新增</el-button>
 			</el-button-group>
 		</div>
-		<el-row :gutter="10" v-loading="loadingLoad">
-			<el-col :span="3" v-for="(item,idx) in tableList" :key="item._id">
-				<el-popover placement="bottom" width="200" trigger="hover">
-					<div style="text-align: center;">
-						<el-button-group>
-							<el-button @click="dianCai(item)" size="mini" type="primary">点菜</el-button>
-							<el-button @click="addFoods" size="mini" type="primary">加菜</el-button>
-							<el-button size="mini" type="primary">离开</el-button>
-							<el-button @click="editTable(item)" size="mini" type="primary">编辑</el-button>
-							<el-button @click="delTable(item)" size="mini" type="primary">删除</el-button>
-						</el-button-group>
-					</div>
-					<el-card slot="reference" shadow="hover" :class="[item.status?`color_${item.status}`:'']">
-						<div>{{item.name}}</div>
-					</el-card>
-				</el-popover>
-			</el-col>
-		</el-row>
+
+		<div v-loading="loadingLoad">
+			<div v-for="(arr, key) in tableList">
+				<div style="padding:5px;margin-bottom:10px;">{{key}}</div>
+				<el-row :gutter="10">
+					<el-col :span="3" v-for="(item,idx) in arr" :key="item._id">
+						<el-popover placement="bottom" width="200" trigger="hover">
+							<div style="text-align: center;">
+								<el-button-group>
+									<el-button @click="dianCai(item)" size="mini" type="primary">点菜</el-button>
+									<el-button @click="addFoods" size="mini" type="primary">加菜</el-button>
+									<el-button size="mini" type="primary">离开</el-button>
+									<el-button @click="editTable(item)" size="mini" type="primary">编辑</el-button>
+									<el-button @click="delTable(item)" size="mini" type="primary">删除</el-button>
+								</el-button-group>
+							</div>
+							<el-card slot="reference" shadow="hover" :class="[item.status?`color_${item.status}`:'']">
+								<div>{{item.name}}</div>
+							</el-card>
+						</el-popover>
+					</el-col>
+				</el-row>
+			</div>
+		</div>
+		
+		
 		<el-dialog :title="title" :visible.sync="dialogVisible" width="60%">
 			<avue-form ref="form" v-model="formData" :option="option" @reset-change="emptytChange" @submit="submit">
 				<template slot-scope="scope" slot="personLiable">
@@ -53,7 +61,9 @@
 <script>
 	import addFoods from '@/components/addFoods/addFoods.vue';
 	import placingOrder from '@/components/placingOrder/placingOrder.vue';
-	import {addFood } from '@/api/order/order.js';
+	import {
+		addFood
+	} from '@/api/order/order.js';
 	import {
 		getDictByDictCode
 	} from "@/api/system/dict.js"
@@ -69,7 +79,7 @@
 	var personLiableName = '';
 	var _this = null;
 	export default {
-		components:{
+		components: {
 			addFoods,
 			placingOrder
 		},
@@ -154,16 +164,23 @@
 			_this = this;
 			this.loadData();
 		},
+		watch:{
+			dialogVisible(){
+				if(!this.dialogVisible){
+					this.$refs.form.resetForm();
+				}
+			}
+		},
 		methods: {
-			dianCai(item){
+			dianCai(item) {
 				this.$refs.placingOrder.show({
 					table: item._id,
-					tableName:  item.name,
+					tableName: item.name,
 				});
 			},
-			addFoodsSubmit(data){
+			addFoodsSubmit(data) {
 				this.$refs.addFoods.loading = true;
-				addFood(data).then((res)=>{
+				addFood(data).then((res) => {
 					this.type = this.tabOption.column[0];
 					this.params.status = this.type.prop;
 					this.$refs.tabs.changeTabs(0);
@@ -174,7 +191,7 @@
 						message: '加菜成功',
 						type: 'success'
 					});
-				}).catch(()=>{
+				}).catch(() => {
 					this.$refs.addFoods.loading = false;
 				})
 			},
@@ -205,14 +222,14 @@
 				}).then(() => {
 					remove({
 						_ids: [row._id]
-					}).then(()=>{
+					}).then(() => {
 						this.$message({
 							type: 'success',
 							message: '删除成功!'
 						});
 						this.loadData();
 					})
-					
+
 				}).catch(() => {
 					this.$message({
 						type: 'info',
@@ -221,8 +238,8 @@
 				});
 			},
 			submit(row, done, loading) {
-				if(row._id){
-					update(row).then(()=>{
+				if (row._id) {
+					update(row).then(() => {
 						done();
 						this.dialogVisible = false;
 						this.loadData();
@@ -230,10 +247,10 @@
 							type: 'success',
 							message: '修改成功!'
 						});
-					}).catch(()=>{
+					}).catch(() => {
 						done();
 					})
-				}else{
+				} else {
 					row.tenantId = this.$store.state.app.activeTenant;
 					add(row).then(() => {
 						done();
@@ -247,7 +264,7 @@
 						done();
 					})
 				}
-				
+
 			},
 			emptytChange() {
 				this.dialogVisible = false;
@@ -266,9 +283,17 @@
 					this.loadingLoad = true;
 					this.form.tenantId = this.$store.state.app.activeTenant;
 					getList(this.form).then((res) => {
-						debugger
 						this.loadingLoad = false;
-						this.tableList = res;
+						var classMap = {};
+						if (res && res.length) {
+							res.forEach((item) => {
+								var tableType = item.tableTypeShow[0];
+								var key = `${tableType.name}(${tableType.info} ${tableType.comment})`;
+								classMap[key] = classMap[key] || [];
+								classMap[key].push(item);
+							})
+						}
+						this.tableList = classMap;
 					}).catch(() => {
 						this.loadingLoad = false;
 					})
@@ -281,7 +306,8 @@
 <style lang="scss" scoped>
 	.table {
 		padding: 15px;
-		.color_1{
+
+		.color_1 {
 			background-color: #409EFF;
 			color: #fff;
 			cursor: pointer;

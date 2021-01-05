@@ -72,6 +72,24 @@ module.exports = class MenuService extends Service {
 					.done(),
 				as: 'order',
 			})
+			.lookup({
+				from: 'opendb-admin-tableType',
+				let: {
+					tableType: '$tableType'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id', '$$tableType'])
+					))
+					.project({
+						_id: 1,
+						name: 1,
+						info: 1,
+						comment: 1
+					})
+					.done(),
+				as: 'tableTypeShow',
+			})
 			.end();
 		return data;
 	}
