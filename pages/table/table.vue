@@ -22,10 +22,10 @@
 		</div>
 
 		<div v-loading="loadingLoad">
-			<div v-for="(arr, key) in tableList">
-				<div style="padding:5px;margin-bottom:10px;">{{key}}</div>
+			<div v-for="(value, idx) in tableList" :key="idx">
+				<div style="padding:5px;margin-bottom:10px;">{{value.key}}</div>
 				<el-row :gutter="10">
-					<el-col :span="3" v-for="(item,idx) in arr" :key="item._id">
+					<el-col :span="3" v-for="(item,idx) in value.arr" :key="item._id">
 						<el-popover placement="bottom" width="200" trigger="hover">
 							<div style="text-align: center;">
 								<el-button-group>
@@ -54,7 +54,7 @@
 			</avue-form>
 		</el-dialog>
 		<addFoods ref="addFoods" @submit="addFoodsSubmit"></addFoods>
-		<placingOrder ref="placingOrder"></placingOrder>
+		<placingOrder ref="placingOrder" @submit="placingOrderSubmit"></placingOrder>
 	</view>
 </template>
 
@@ -178,6 +178,9 @@
 					tableName: item.name,
 				});
 			},
+			placingOrderSubmit(){
+				this.loadData();
+			},
 			addFoodsSubmit(data) {
 				this.$refs.addFoods.loading = true;
 				addFood(data).then((res) => {
@@ -288,12 +291,25 @@
 						if (res && res.length) {
 							res.forEach((item) => {
 								var tableType = item.tableTypeShow[0];
+								if(item.personLiableShow && item.personLiableShow[0]){
+									item.personLiableName = item.personLiableShow[0].nickname || item.personLiableShow[0].username;
+								}
 								var key = `${tableType.name}(${tableType.info} ${tableType.comment})`;
 								classMap[key] = classMap[key] || [];
 								classMap[key].push(item);
 							})
 						}
-						this.tableList = classMap;
+						var newclassMap = [];
+						Object.keys(classMap).forEach((key)=>{
+							newclassMap.push({
+								key,
+								arr: classMap[key]
+							})
+						})
+						newclassMap.sort((data1,data2)=>{
+							return data1.key>data2.key?1:-1;
+						})
+						this.tableList = newclassMap;
 					}).catch(() => {
 						this.loadingLoad = false;
 					})

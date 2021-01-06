@@ -26,17 +26,19 @@ module.exports = class UserController extends Controller {
 		const {
 			_id,
 			name,
+			tableType,
 			personLiable,
 			sort,
-			info,
+			status,
 			comment
 		} = this.ctx.data
 		return await this.service.table.table.update({
 			_id,
 			name,
+			tableType,
 			personLiable,
 			sort,
-			info,
+			status,
 			comment
 		});
 	}

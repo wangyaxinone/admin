@@ -219,6 +219,7 @@
 				var row = JSON.parse(JSON.stringify(this.form));
 				row.tenantId = this.$store.state.app.activeTenant;
 				var newList = [];
+				this.loading = true;
 				if(row.goods_list) {
 					Object.keys(row.goods_list).forEach((key)=>{
 						var item = row.goods_list[key];
@@ -238,15 +239,16 @@
 				row.goods_list = newList;
 				add(row)
 					.then(() => {
-						this.loadData();
 						this.$message({
 							message: '新增成功',
 							type: 'success'
 						});
-						done();
+						this.hide();
+						this.$emit('submit')
+						this.loading = false;
 					})
 					.catch(err => {
-						done();
+						this.loading = false;
 					});
 			}
 		}

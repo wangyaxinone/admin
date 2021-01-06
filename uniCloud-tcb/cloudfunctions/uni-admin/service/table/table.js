@@ -90,6 +90,23 @@ module.exports = class MenuService extends Service {
 					.done(),
 				as: 'tableTypeShow',
 			})
+			.lookup({
+				from: 'uni-id-users',
+				let: {
+					operator: '$personLiable'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id', '$$operator'])
+					))
+					.project({
+						_id: 0,
+						username: 1,
+						nickname: 1
+					})
+					.done(),
+				as: 'personLiableShow',
+			})
 			.end();
 		return data;
 	}

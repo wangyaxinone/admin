@@ -387,6 +387,51 @@ module.exports = class MenuService extends Service {
 			}
 		}
 	}
+	async leave(data) {
+		var {_ids} = data;
+		if(!_ids || !_ids.length) {
+			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
+		}
+		const transaction = await this.db.startTransaction();
+		try {
+			for(var i=0;i<_ids.length;i++){
+				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).update({
+					status: 3
+				});
+				if(!remobeRes.updated) {
+					await transaction.rollback()
+					return {
+					  code: 500,
+					  message: '作废失败'
+					}
+				}
+			}
+			var {data: dishesyes} = await this.db.collection('opendb-admin-dishes').where({
+				'orderId': this.db.command.in(_ids)
+			}).get();
+			for(var i=0;i<dishesyes.length;i++){
+				var item = dishesyes[i];
+				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
+					order_status: 3
+				});
+				if(!remobeRes.updated) {
+					await transaction.rollback()
+					return {
+					  code: 500,
+					  message: '作废失败'
+					}
+				}
+			}
+			await transaction.commit();
+			return remobeRes;
+		}catch(e) {
+			await transaction.rollback()
+			return {
+			  code: 500,
+			  message: e
+			}
+		}
+	}
 	async addFoods(data) {
 		var _this = this;
 		var updateData = {};
