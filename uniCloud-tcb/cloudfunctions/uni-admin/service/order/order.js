@@ -85,6 +85,23 @@ module.exports = class MenuService extends Service {
 		const transaction = await this.db.startTransaction();
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
+			if(data.table) {
+				var tableData = {};
+				if(data.status==1) {
+					tableData.status = 2;
+				}else if(data.status==2){
+					tableData.status = 3;
+				}
+				var tableRes = await transaction.collection('opendb-admin-table').doc(data.table).update(tableData);
+				if(!tableRes.updated) {
+					await transaction.rollback(-100)
+					return {
+						code: 500,
+						message: `新增订单失败！`,
+						rollbackCode: -100,
+					}
+				}
+			}
 			if(orderRes.id && goods_list && goods_list.length) {
 				var falg = true;
 				for(var i=0;i<foods.length;i++){
@@ -163,6 +180,23 @@ module.exports = class MenuService extends Service {
 			const transaction = await this.db.startTransaction();
 			try {
 				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
+				if(data.table) {
+					var tableData = {};
+					if(data.status==1) {
+						tableData.status = 2;
+					}else if(data.status==2){
+						tableData.status = 3;
+					}
+					var tableRes = await transaction.collection('opendb-admin-table').doc(data.table).update(tableData);
+					if(!tableRes.updated) {
+						await transaction.rollback(-100)
+						return {
+							code: 500,
+							message: `新增订单失败！`,
+							rollbackCode: -100,
+						}
+					}
+				}
 				if(orderRes.updated) {
 					for(var i=0;i<foods.length;i++){
 						var item = foods[i];
