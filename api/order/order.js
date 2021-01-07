@@ -22,6 +22,10 @@ export const invalid = (params) => {
   return request('order/order/invalid', params);
 }
 
+export const leave = (params) => {
+  return request('order/order/leave', params);
+}
+
 export const addFood = (params) => {
   return request('order/order/addFoods', params);
 }

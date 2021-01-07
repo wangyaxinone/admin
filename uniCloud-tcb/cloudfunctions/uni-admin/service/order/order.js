@@ -82,11 +82,15 @@ module.exports = class MenuService extends Service {
 		}
 		data.number = num;
 		data.order_price = order_price;
+		data.isLeave = 2;
 		const transaction = await this.db.startTransaction();
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
 			if(data.table) {
-				var tableData = {};
+				var tableData = {
+					update_date: date,
+					operator: this.ctx.auth.uid
+				};
 				if(data.status==1) {
 					tableData.status = 2;
 				}else if(data.status==2){
@@ -173,7 +177,7 @@ module.exports = class MenuService extends Service {
 				data.status = 1;
 			}
 		}
-		
+		data.isLeave = 2;
 		if(isStartTransaction) {
 			data.update_date = getServerDate();
 			data.operator = this.ctx.auth.uid;
@@ -181,7 +185,10 @@ module.exports = class MenuService extends Service {
 			try {
 				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
 				if(data.table) {
-					var tableData = {};
+					var tableData = {
+						update_date: getServerDate(),
+						operator: this.ctx.auth.uid
+					};
 					if(data.status==1) {
 						tableData.status = 2;
 					}else if(data.status==2){
@@ -238,8 +245,32 @@ module.exports = class MenuService extends Service {
 		
 	}
 	async remove(_ids) {
+		var _this = this;
 		const transaction = await this.db.startTransaction();
+		var update_date = getServerDate();
+		var operator = this.ctx.auth.uid;
 		try {
+			var {data: orders} = await this.db.collection('opendb-admin-order').where({
+				'_id': this.db.command.in(_ids)
+			}).get();
+			for(var i=0; i<orders.length; i++){
+				var item = orders[i];
+				if(item.table && item.isLeave == 2) {
+					var remobeRes = await transaction.collection('opendb-admin-table').doc(item.table).update({
+						status: 1,
+						update_date,
+						operator
+					});
+					if(!remobeRes.updated) {
+						await transaction.rollback()
+						return {
+						  code: 500,
+						  message: '作废失败'
+						}
+					}
+				}
+			}
+			
 			for(var i=0;i<_ids.length;i++){
 				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).remove();
 				if(!remobeRes.deleted) {
@@ -275,6 +306,7 @@ module.exports = class MenuService extends Service {
 		}
 	}
 	async list(param) {
+		var _this = this;
 		var dbCmd = this.db.command;
 		var $ = this.db.command.aggregate;
 		var match = {
@@ -343,15 +375,42 @@ module.exports = class MenuService extends Service {
 		};
 	}
 	async invalid(data) {
+		var _this = this;
 		var {_ids} = data;
 		if(!_ids || !_ids.length) {
 			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
 		}
+		var update_date = getServerDate();
+		var operator = this.ctx.auth.uid;
 		const transaction = await this.db.startTransaction();
 		try {
+			var {data: orders} = await this.db.collection('opendb-admin-order').where({
+				'_id': this.db.command.in(_ids)
+			}).get();
+			for(var i=0; i<orders.length; i++){
+				var item = orders[i];
+				if(item.table && item.isLeave == 2) {
+					var remobeRes = await transaction.collection('opendb-admin-table').doc(item.table).update({
+						status: 1,
+						update_date,
+						operator
+					});
+					if(!remobeRes.updated) {
+						await transaction.rollback()
+						return {
+						  code: 500,
+						  message: '作废失败'
+						}
+					}
+				}
+			}
+			
 			for(var i=0;i<_ids.length;i++){
 				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).update({
-					status: 3
+					isLeave: 1,
+					status: 3,
+					update_date,
+					operator
 				});
 				if(!remobeRes.updated) {
 					await transaction.rollback()
@@ -361,13 +420,16 @@ module.exports = class MenuService extends Service {
 					}
 				}
 			}
+			
 			var {data: dishesyes} = await this.db.collection('opendb-admin-dishes').where({
 				'orderId': this.db.command.in(_ids)
 			}).get();
 			for(var i=0;i<dishesyes.length;i++){
 				var item = dishesyes[i];
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-					order_status: 3
+					order_status: 3,
+					update_date,
+					operator
 				});
 				if(!remobeRes.updated) {
 					await transaction.rollback()
@@ -388,40 +450,51 @@ module.exports = class MenuService extends Service {
 		}
 	}
 	async leave(data) {
+		var _this = this;
 		var {_ids} = data;
 		if(!_ids || !_ids.length) {
 			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
 		}
 		const transaction = await this.db.startTransaction();
+		var update_date = getServerDate();
+		var operator = this.ctx.auth.uid;
 		try {
+			var {data: orders} = await this.db.collection('opendb-admin-order').where({
+				'_id': this.db.command.in(_ids)
+			}).get();
+			for(var i=0; i<orders.length; i++){
+				var item = orders[i];
+				if(item.table && item.isLeave == 2) {
+					var remobeRes = await transaction.collection('opendb-admin-table').doc(item.table).update({
+						status: 1,
+						update_date,
+						operator
+					});
+					if(!remobeRes.updated) {
+						await transaction.rollback()
+						return {
+						  code: 500,
+						  message: '离开失败'
+						}
+					}
+				}
+			}
+			
 			for(var i=0;i<_ids.length;i++){
 				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).update({
-					status: 3
+					isLeave: 1,
+					update_date,
+					operator
 				});
 				if(!remobeRes.updated) {
 					await transaction.rollback()
 					return {
 					  code: 500,
-					  message: '作废失败'
+					  message: '离开失败'
 					}
 				}
 			}
-			var {data: dishesyes} = await this.db.collection('opendb-admin-dishes').where({
-				'orderId': this.db.command.in(_ids)
-			}).get();
-			for(var i=0;i<dishesyes.length;i++){
-				var item = dishesyes[i];
-				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-					order_status: 3
-				});
-				if(!remobeRes.updated) {
-					await transaction.rollback()
-					return {
-					  code: 500,
-					  message: '作废失败'
-					}
-				}
-			}
+			
 			await transaction.commit();
 			return remobeRes;
 		}catch(e) {
@@ -495,6 +568,22 @@ module.exports = class MenuService extends Service {
 		const transaction = await this.db.startTransaction();
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').doc(data._id).update(updateData);
+			if(data.table) {
+				var tableData = {
+					update_date: date,
+					operator: _this.ctx.auth.uid,
+				};
+				tableData.status = 2;
+				var tableRes = await transaction.collection('opendb-admin-table').doc(data.table).update(tableData);
+				if(!tableRes.updated) {
+					await transaction.rollback(-100)
+					return {
+						code: 500,
+						message: `新增订单失败！1`,
+						rollbackCode: -100,
+					}
+				}
+			}
 			if(orderRes.updated && goods_list && goods_list.length) {
 				var falg = true;
 				for(var i=0;i<foods.length;i++){
@@ -512,7 +601,7 @@ module.exports = class MenuService extends Service {
 					await transaction.rollback(-100)
 					return {
 						code: 500,
-						message: `新增订单失败！`,
+						message: `新增订单失败！2`,
 						rollbackCode: -100,
 					}
 				}
@@ -521,7 +610,7 @@ module.exports = class MenuService extends Service {
 				transaction.rollback(-100);
 				return {
 					code: 500,
-					message: `未点菜，新增订单失败！`,
+					message: `未点菜，新增订单失败！3`,
 					rollbackCode: -100,
 				}
 			}
@@ -529,7 +618,7 @@ module.exports = class MenuService extends Service {
 			await transaction.rollback(-100)
 			return {
 				code: 500,
-				message: `新增订单失败！`,
+				message: `新增订单失败！4`,
 				rollbackCode: -100,
 			}
 		}

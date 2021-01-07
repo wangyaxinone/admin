@@ -11,15 +11,32 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-table').add(data);
 	}
 	async update(data) {
+		var _this = this;
 		const {
 			_id
 		} = data;
 		delete data._id;
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
+		if(data.status == 2 || data.status == 3 || data.status == 4) {
+			_this.ctx.throw('FORBIDDEN', `当前餐桌状态不能操作`)
+		}
 		return await this.db.collection('opendb-admin-table').doc(_id).update(data);
 	}
 	async remove(_ids) {
+		var _this = this;
+		var {
+			data: tables
+		} = await this.db.collection('opendb-admin-table').where({
+			'_id': this.db.command.in(_ids)
+		}).get();
+		if(tables && tables.length) {
+			tables.forEach((table)=>{
+				if(table.status == 2 || table.status == 3 || table.status == 4) {
+					_this.ctx.throw('FORBIDDEN', `当前餐桌状态不能操作`)
+				}
+			})
+		}
 		return await this.db.collection('opendb-admin-table').where({
 			'_id': this.db.command.in(_ids)
 		}).remove();
@@ -58,17 +75,11 @@ module.exports = class MenuService extends Service {
 				},
 				pipeline: $.pipeline()
 					.match(dbCmd.expr(
-						$.eq(['$table', '$$table'])
+						$.and([
+							$.eq(['$table', '$$table']),
+							$.eq(['$isLeave', 2])
+						])
 					))
-					.project({
-						_id: 1,
-						every_day_code: 1,
-						order_number: 1,
-						order_price: 1,
-						order_type: 1,
-						status: 1,
-						number: 1
-					})
 					.done(),
 				as: 'order',
 			})

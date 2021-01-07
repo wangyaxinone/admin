@@ -55,7 +55,7 @@
 						disabled: true
 					},{
 						label: "餐桌",
-						prop: "table",
+						prop: "tableName",
 						disabled: true
 					},{
 						label: '订单状态',
@@ -138,7 +138,6 @@
 			
 			},
 			show(row) {
-				row.goods_list = {};
 				this.form = JSON.parse(JSON.stringify(row));
 				this.dialogVisible = true;
 				getDictByDictCode({
