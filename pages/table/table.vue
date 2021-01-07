@@ -21,7 +21,7 @@
 			<div v-for="(value, idx) in tableList" :key="idx">
 				<div style="padding:5px;margin-bottom:10px;">{{ value.key }}</div>
 				<el-row :gutter="10">
-					<el-col :span="3" v-for="(item, idx) in value.arr" :key="item._id">
+					<el-col :span="3" v-for="(item, idx) in value.arr" :key="item._id" @dblclick.native="odlclickTable(item)">
 						<el-popover placement="bottom" width="200" trigger="hover">
 							<div style="text-align: center;">
 								<el-button-group>
@@ -179,6 +179,14 @@ export default {
 		}
 	},
 	methods: {
+		odlclickTable(item){
+			if(item.order && item.order.order_number){
+				uni.navigateTo({
+				    url: `/pages/order/order?status=${item.order.status}&order_number=${item.order.order_number}`
+				})
+			}
+			
+		},
 		leave(item) {
 			leave({
 				_ids: [item.order._id]
@@ -349,7 +357,7 @@ export default {
 	padding: 15px;
 
 	.color_1 {
-		background-color: #409eff;
+		background-color: #909399;
 		color: #fff;
 		cursor: pointer;
 	}
@@ -369,9 +377,10 @@ export default {
 		cursor: pointer;
 	}
 	.color_5 {
-		background-color: #909399;
+		background-color: #DCDFE6;
 		color: #fff;
 		cursor: pointer;
+		cursor: not-allowed;
 	}
 }
 </style>

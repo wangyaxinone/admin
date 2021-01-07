@@ -82,7 +82,8 @@ module.exports = class MenuService extends Service {
 		}
 		data.number = num;
 		data.order_price = order_price;
-		data.isLeave = 2;
+		data.isLeave = 1;
+		data.table && (data.isLeave = 2);
 		const transaction = await this.db.startTransaction();
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
@@ -177,7 +178,6 @@ module.exports = class MenuService extends Service {
 				data.status = 1;
 			}
 		}
-		data.isLeave = 2;
 		if(isStartTransaction) {
 			data.update_date = getServerDate();
 			data.operator = this.ctx.auth.uid;
@@ -199,7 +199,7 @@ module.exports = class MenuService extends Service {
 						await transaction.rollback(-100)
 						return {
 							code: 500,
-							message: `新增订单失败！`,
+							message: `修改失败！`,
 							rollbackCode: -100,
 						}
 					}
@@ -218,7 +218,7 @@ module.exports = class MenuService extends Service {
 							return {
 							  code: 500,
 							  data:dishesRes,
-							  message: '修改失败1！'
+							  message: '修改失败！'
 							}
 						}
 					}
@@ -229,7 +229,7 @@ module.exports = class MenuService extends Service {
 					return {
 					  code: 500,
 					  data:orderRes,
-					  message: '修改失败2！'
+					  message: '修改失败！'
 					}
 				}
 			}catch(e) {
@@ -265,7 +265,7 @@ module.exports = class MenuService extends Service {
 						await transaction.rollback()
 						return {
 						  code: 500,
-						  message: '作废失败'
+						  message: '删除失败'
 						}
 					}
 				}
@@ -579,7 +579,7 @@ module.exports = class MenuService extends Service {
 					await transaction.rollback(-100)
 					return {
 						code: 500,
-						message: `新增订单失败！1`,
+						message: `新增订单失败！`,
 						rollbackCode: -100,
 					}
 				}
@@ -601,7 +601,7 @@ module.exports = class MenuService extends Service {
 					await transaction.rollback(-100)
 					return {
 						code: 500,
-						message: `新增订单失败！2`,
+						message: `新增订单失败！`,
 						rollbackCode: -100,
 					}
 				}
@@ -610,7 +610,7 @@ module.exports = class MenuService extends Service {
 				transaction.rollback(-100);
 				return {
 					code: 500,
-					message: `未点菜，新增订单失败！3`,
+					message: `未点菜，新增订单失败！`,
 					rollbackCode: -100,
 				}
 			}
@@ -618,7 +618,7 @@ module.exports = class MenuService extends Service {
 			await transaction.rollback(-100)
 			return {
 				code: 500,
-				message: `新增订单失败！4`,
+				message: `新增订单失败！`,
 				rollbackCode: -100,
 			}
 		}

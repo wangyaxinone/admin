@@ -9,6 +9,7 @@
 			:data="data"
 			ref="crud"
 			v-model="form"
+			:search.sync="params"
 			:before-open="beforeOpen"
 			@row-del="rowDel"
 			@row-update="rowUpdate"
@@ -289,6 +290,12 @@ export default {
 			dishesZhiFuMap: {}
 		};
 	},
+	onLoad(e) {
+		var params = JSON.parse(JSON.stringify(this.params));
+		params.order_number = e.order_number;
+		this.params = params;
+		
+	},
 	created() {
 		_this = this;
 		getDictByDictCode({
@@ -501,7 +508,9 @@ export default {
 				});
 		},
 		searchReset() {
-			this.params = {};
+			this.params = {
+				status: this.type.prop
+			};
 			this.loadData();
 		},
 		searchChange(params, done) {
