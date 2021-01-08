@@ -4,9 +4,11 @@
 			<el-form-item label="餐桌名称"><el-input v-model="form.name" size="small" placeholder="餐桌名称"></el-input></el-form-item>
 			<el-form-item label="餐桌分类">
 				<el-select v-model="form.tableType" size="small" placeholder="餐桌分类">
-					<el-option label="区域一" value="shanghai"></el-option>
-					<el-option label="区域二" value="beijing"></el-option>
+					<el-option v-for="(item,idx) in tableTypeList" :key="idx" :label="`${item.name}(${item.info} ${item.comment})`" :value="item._id"></el-option>
 				</el-select>
+			</el-form-item>
+			<el-form-item label="餐桌负责人">
+				<select-user @submit="getFormUser" :label="form.personLiableName" :tenantId="$store.state.app.activeTenant"></select-user>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" size="small" @click="onSearch">查询</el-button>
@@ -21,7 +23,7 @@
 			<div v-for="(value, idx) in tableList" :key="idx">
 				<div style="padding:5px;margin-bottom:10px;">{{ value.key }}</div>
 				<el-row :gutter="10">
-					<el-col :span="3" v-for="(item, idx) in value.arr" :key="item._id" @dblclick.native="odlclickTable(item)">
+					<el-col style="margin-bottom:5px;" :span="3" v-for="(item, idx) in value.arr" :key="item._id" @dblclick.native="odlclickTable(item)">
 						<el-popover placement="bottom" width="200" trigger="hover">
 							<div style="text-align: center;">
 								<el-button-group>
@@ -146,10 +148,12 @@ export default {
 				]
 			},
 			tableList: [],
+			tableTypeList: [],
 			statusMap: {}
 		};
 	},
 	mounted() {
+		_this = this;
 		getDictByDictCode({
 			dict_code: 'table_status'
 		}).then(res => {
@@ -167,8 +171,8 @@ export default {
 		select().then(res => {
 			const column = this.findObject(this.option.column, 'tableType');
 			column.dicData = res;
+			this.tableTypeList = res;
 		});
-		_this = this;
 		this.loadData();
 	},
 	watch: {
@@ -226,6 +230,12 @@ export default {
 		addFoods(row) {
 			row.order.tableName = row.name;
 			this.$refs.addFoods.show(row.order);
+		},
+		getFormUser(row) {
+			var form = JSON.parse(JSON.stringify(this.form));
+			form.personLiable = row._id;
+			form.personLiableName = row.nickname || row.username;
+			this.form = form;
 		},
 		getUser(row) {
 			var formData = JSON.parse(JSON.stringify(this.formData));
@@ -310,6 +320,7 @@ export default {
 				name: '',
 				tableType: ''
 			};
+			this.loadData();
 		},
 		loadData(clear = true) {
 			this.$nextTick(() => {

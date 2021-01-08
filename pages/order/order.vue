@@ -31,6 +31,9 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="tableNameForm">
+				<selectTable :label="form.tableName" @submit="submitTable"></selectTable>
+			</template>
 			<template slot-scope="scope" slot="numberForm">
 				<div>
 					<el-button v-if="dialogType == 'add'" type="primary" @click="selectGoods">点菜</el-button>
@@ -112,6 +115,7 @@ import { getList, add, update, remove, invalid, addFood } from '@/api/order/orde
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import addFoods from '@/components/addFoods/addFoods.vue';
+import selectTable from '@/components/selectTable/selectTable.vue';
 import { mapState, mapActions } from 'vuex';
 import config from '@/admin.config.js';
 import { getDictByDictCode } from '@/api/system/dict.js';
@@ -119,7 +123,8 @@ export default {
 	components: {
 		uniDateformate,
 		selectGoods,
-		addFoods
+		addFoods,
+		selectTable
 	},
 	computed: {
 		...mapState('app', ['navBtn']),
@@ -179,7 +184,7 @@ export default {
 						label: '下单类型',
 						prop: 'order_type',
 						span: 12,
-						disabled: true,
+						addDisabled: true,
 						type: 'select',
 						value: 2,
 						dicData: [],
@@ -198,8 +203,10 @@ export default {
 					{
 						label: '餐桌',
 						prop: 'tableName',
+						formslot: true,
+						display: false,
 						addDisplay: false,
-						disabled: true
+						addDisabled: true,
 					},
 					{
 						label: '订单状态',
@@ -292,25 +299,39 @@ export default {
 	},
 	onLoad(e) {
 		var params = JSON.parse(JSON.stringify(this.params));
-		params.order_number = e.order_number;
+		e.order_number && (params.order_number = e.order_number);
+		e.status && (params.status = parseFloat(e.status));
 		this.params = params;
-		
+	},
+	watch: {
+		'form.order_type':(newValue, oldValue)=>{
+			const column = _this.findObject(_this.option.column, "tableName");
+			if(newValue == 1) {
+				column.display = true;
+			}else{
+				column.display = false;
+			} 
+			
+		}
 	},
 	created() {
 		_this = this;
 		getDictByDictCode({
 			dict_code: 'order_status'
 		}).then((res) => {
-			const column = this.findObject(this.option.column, "status");
+			const column = _this.findObject(_this.option.column, "status");
 			column.dicData = res;
-			this.tabOption.column = res.map((item)=>{
+			_this.tabOption.column = res.map((item)=>{
 				return {
 					label: item.dict_name,
 					prop: item.dict_key,
 				}
 			})
-			this.type = this.tabOption.column[0];
-			this.params.status = this.type.prop;
+			_this.type = _this.tabOption.column[0];
+			_this.params.status = _this.params.status || parseFloat(_this.type.prop);
+			_this.$nextTick(() => {
+				_this.$refs.tabs.changeTabs(_this.params.status-1);
+			})
 		})
 		getDictByDictCode({
 			dict_code: 'order_status'
@@ -338,6 +359,12 @@ export default {
 		})
 	},
 	methods: {
+		submitTable(data) {
+			var form = JSON.parse(JSON.stringify(this.form))
+			form.table = data._id;
+			form.tableName = data.name;
+			this.form = form;
+		},
 		addFoods(row) {
 			this.$refs.addFoods.show(row);
 		},
@@ -461,6 +488,9 @@ export default {
 			});
 		},
 		rowUpdate(row, index, done, loading) {
+			if(row.order_type != 1) {
+				row.table = '';
+			}
 			update(row)
 				.then(() => {
 					this.loadData();

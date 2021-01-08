@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-input v-model="label" placeholder="请输入内容" @focus="focus"></el-input>
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="60%" append-to-body>
+		<el-dialog title="选择用户" :visible.sync="dialogVisible" width="60%" append-to-body>
 			<avue-crud :permission="permissionList" :option="option" :page="page" :table-loading="loading" :data="data" ref="crud"
 			 v-model="form" @search-change="searchChange" @search-reset="searchReset" @current-change="currentChange"
 			 @size-change="sizeChange" @on-load="loadData" @cell-click="cellClick">

@@ -158,6 +158,9 @@ module.exports = class MenuService extends Service {
 		delete data.foods;
 		delete data.no_order_price;
 		delete data.no_amound_price;
+		if(data.order_type == 1 && !data.table) {
+			_this.ctx.throw('ORDERERR', `堂食餐桌不能为空！`)
+		}
 		var isStartTransaction = false;
 		if(no_order_price) {
 			if(no_order_price == data.order_price && data.amound_price) {
@@ -178,9 +181,10 @@ module.exports = class MenuService extends Service {
 				data.status = 1;
 			}
 		}
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
 		if(isStartTransaction) {
-			data.update_date = getServerDate();
-			data.operator = this.ctx.auth.uid;
+			
 			const transaction = await this.db.startTransaction();
 			try {
 				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
@@ -209,6 +213,7 @@ module.exports = class MenuService extends Service {
 						var item = foods[i];
 						var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
 							order_status: data.status,
+							table: data.table,
 							order_comment: data.comment,
 							update_date: getServerDate(),
 							operator: _this.ctx.auth.uid
@@ -240,6 +245,14 @@ module.exports = class MenuService extends Service {
 				}
 			}
 		}else{
+			var res = await this.db.collection('opendb-admin-dishes').where({
+				orderId: _id
+			}).update({
+				table: data.table,
+				order_comment: data.comment,
+				update_date: getServerDate(),
+				operator: _this.ctx.auth.uid
+			})
 			return await this.db.collection('opendb-admin-order').doc(_id).update(data);
 		}
 		
@@ -319,6 +332,7 @@ module.exports = class MenuService extends Service {
 		});
 		param.tenantId && (match.tenantId = param.tenantId);
 		param.status && (match.status = param.status);
+		param.order_number && (match.order_number = param.order_number);
 		let {
 			basePage,
 			baseSize
