@@ -136,6 +136,11 @@
 							if (res && res.length) {
 								res.forEach(item => {
 									item.order = item.order[0] || {};
+									if(item.order && item.order.status){
+										item.status = parseFloat(item.order.status) + 1;
+									}else{
+										item.status = item.status || 1;
+									}
 									var tableType = item.tableTypeShow[0];
 									if (item.personLiableShow && item.personLiableShow[0]) {
 										item.personLiableName = item.personLiableShow[0].nickname || item.personLiableShow[0].username;

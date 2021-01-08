@@ -488,6 +488,14 @@ export default {
 			});
 		},
 		rowUpdate(row, index, done, loading) {
+			if(row.isLeave == 1){
+				this.$message({
+					message: '顾客已经离店，不能修改!',
+					type: 'error'
+				});
+				done();
+				return;
+			}
 			if(row.order_type != 1) {
 				row.table = '';
 			}

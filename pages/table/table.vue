@@ -159,7 +159,7 @@ export default {
 		}).then(res => {
 			const column = this.findObject(this.option.column, 'status');
 			column.dicData = res;
-			var statusMap = JSON.parse(JSON.stringify(this.statusMap));
+			var statusMap = JSON.parse(JSON.stringify(_this.statusMap));
 			if (res && res.length) {
 				res.forEach(item => {
 					statusMap[item.dict_key] = item.dict_name;
@@ -333,6 +333,11 @@ export default {
 						if (res && res.length) {
 							res.forEach(item => {
 								item.order = item.order[0] || {};
+								if(item.order && item.order.status){
+									item.status = parseFloat(item.order.status) + 1;
+								}else{
+									item.status = item.status || 1;
+								}
 								var tableType = item.tableTypeShow[0];
 								if (item.personLiableShow && item.personLiableShow[0]) {
 									item.personLiableName = item.personLiableShow[0].nickname || item.personLiableShow[0].username;
