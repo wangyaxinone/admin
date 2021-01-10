@@ -386,6 +386,13 @@ export default {
 			});
 		},
 		addFoodsSubmit(data){
+			if(data.isLeave == 1){
+				this.$message({
+					message: '顾客已经离店，不能加菜!',
+					type: 'error'
+				});
+				return;
+			}
 			this.$refs.addFoods.loading = true;
 			addFood(data).then((res)=>{
 				this.type = this.tabOption.column[0];

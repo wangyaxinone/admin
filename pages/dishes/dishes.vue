@@ -7,21 +7,29 @@
         </view>
         <view>
             <text style="font-size: 18px;color: #999;">
-                {{errMsg}}
+                {{isTenantAdminOrAdmin}}
             </text>
         </view>
     </view>
 </template>
 
 <script>
+	import { mapState, mapActions } from 'vuex';
     export default {
         data() {
             return {
-
+				deptlist:[]
             }
         },
-        onLoad(query) {
-            this.errMsg = query.errMsg || ''
+		computed:{
+			...mapState('app', ['isTenantAdminOrAdmin']),
+		},
+        onLoad(e) {
+            if(this.isTenantAdminOrAdmin){
+				
+			}else{
+				this.deptlist = []
+			}
         },
         methods: {
 

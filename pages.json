@@ -10,11 +10,9 @@
 				"navigationBarTitleText": "登录"
 			}
 		}, {
-			"path": "pages/error/404",
+			"path": "pages/dishes/dishes",
 			"style": {
-				"topWindow": false,
-				"leftWindow": false,
-				"navigationBarTitleText": "Not Found"
+				"navigationBarTitleText": "菜品制作"
 			}
 		}, {
 			"path": "pages/changepwd/changepwd",

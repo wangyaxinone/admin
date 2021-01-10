@@ -82,8 +82,7 @@ module.exports = class MenuService extends Service {
 		}
 		data.number = num;
 		data.order_price = order_price;
-		data.isLeave = 1;
-		data.table && (data.isLeave = 2);
+		data.isLeave = 2;
 		const transaction = await this.db.startTransaction();
 		try{
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
@@ -158,6 +157,7 @@ module.exports = class MenuService extends Service {
 			}
 		}else if(!no_order_price && !data.amound_price) {
 			isStartTransaction = true;
+			data.amound_price = 0;
 			if(data.status != 3) {
 				data.status = 1;
 			}

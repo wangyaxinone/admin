@@ -35,6 +35,7 @@ module.exports = class MenuService extends Service {
 			_id: 'tenantId'
 		});
 		param.tenantId && (match.tenantId = param.tenantId);
+		param.isCook && (match.isCook = param.isCook);
 		let {
 			data
 		} = await this.db.collection('opendb-admin-dept').where(match).orderBy('sort', "asc").get();
