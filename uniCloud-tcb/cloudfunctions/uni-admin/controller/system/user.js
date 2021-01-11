@@ -68,4 +68,7 @@ module.exports = class UserController extends Controller {
 	async list() {
 		return await this.service.system.user.list(this.ctx.data);
 	}
+	async getDeptByUser() {
+		return await this.service.system.user.getDeptByUser(this.ctx.data);
+	}
 }

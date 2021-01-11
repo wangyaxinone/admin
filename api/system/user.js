@@ -18,3 +18,7 @@ export const remove = (params) => {
   return request('system/user/remove', params);
 }
 
+export const getDeptByUser = (params) => {
+  return request('system/user/getDeptByUser', params);
+}
+

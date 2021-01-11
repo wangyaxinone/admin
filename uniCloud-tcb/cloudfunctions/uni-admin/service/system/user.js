@@ -112,4 +112,25 @@ module.exports = class MenuService extends Service {
 		}
 		return modeData;
 	}
+	async getDeptByUser(param) {
+		let {userId} = param;
+		var depts = [];
+		if(userId){
+			var {data: users} = await this.db.collection('uni-id-users').aggregate()
+			.match({
+				_id: userId
+			})
+				.lookup({
+				from: 'opendb-admin-dept',
+				localField: 'dept',
+				foreignField: '_id',
+				as: 'depts',
+			})
+			.end();
+			if(users && users[0]){
+				depts = users[0].depts || []
+			}
+		}
+		return depts;
+	}
 }
