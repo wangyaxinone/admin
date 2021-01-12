@@ -77,6 +77,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/dishes/dishesByDept",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "菜品制作",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/system",
