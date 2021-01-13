@@ -34,6 +34,7 @@ module.exports = class MenuService extends Service {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
 		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
+		param.deptId && (match.deptId = param.deptId);
 		appendTenantParams({
 			match,
 			_this: this,
