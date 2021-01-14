@@ -35,6 +35,7 @@ module.exports = class MenuService extends Service {
 		};
 		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
 		param.deptId && (match.deptId = param.deptId);
+		param.status && (match.status = param.status);
 		appendTenantParams({
 			match,
 			_this: this,
@@ -55,10 +56,22 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-dishes').aggregate()
 			.match(match)
 			.sort({
-				'sort': 1
+				'create_date': 1
 			})
 			.skip((page - 1) * size)
 			.limit(size)
+			.lookup({
+			    from: 'opendb-admin-dept',
+			    localField: 'deptId',
+			    foreignField: '_id',
+			    as: 'depts',
+			})
+			.lookup({
+			    from: 'opendb-admin-table',
+			    localField: 'table',
+			    foreignField: '_id',
+			    as: 'tables',
+			})
 			.lookup({
 				from: 'uni-id-users',
 				let: {

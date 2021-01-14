@@ -22,8 +22,6 @@
 			@on-load="loadData"
 		>
 			<template slot="menu"  slot-scope="{type,size, row}">
-			    <el-button v-if="row.status!=3" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
-				<el-button v-if="row.status!=3" @click="addFoods(row)" icon="el-icon-delete-solid" :type="type" size="small">加菜</el-button>
 			  </template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
@@ -33,75 +31,6 @@
 			</template>
 			<template slot-scope="scope" slot="tableNameForm">
 				<selectTable :label="form.tableName" @submit="submitTable"></selectTable>
-			</template>
-			<template slot-scope="scope" slot="numberForm">
-				<div>
-					<el-button v-if="dialogType == 'add'" type="primary" @click="selectGoods">点菜</el-button>
-					<el-card style="margin-top:5px;" v-for="(item,key) in scope.row.goods_list" :key="key">
-						<el-row :gutter="20">
-							<el-col :span="6" style="text-align: center;">
-								{{ item.goodsName }}
-								<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
-							</el-col>
-							<el-col :span="6" style="text-align: center;">
-								<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
-							</el-col>
-							<el-col :span="6" style="text-align: center;">
-								<el-input-number style="width:100px;" size="mini" @change="changeNumCar(item)" v-model="item.num" controls-position="right" :min="0"></el-input-number>
-							</el-col>
-							<el-col :span="6" style="text-align: center;">
-								<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
-							</el-col>
-						</el-row>
-					</el-card>
-					<el-tabs v-if="dialogType !== 'add'" v-model="activeName"  type="border-card" style="margin-top:10px;">
-						<el-tab-pane label="支付情况" name="zhiFu">
-							<div v-for="(foodList,key) in scope.row.foodsMapZhiFu" :key="key">
-								<el-alert  style="margin-top:5px;" :title="dishesZhiFuMap[key]" :type="key==1 || key==3? 'error': 'success'" :closable="false"></el-alert>
-								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
-									<el-row :gutter="20">
-										<el-col :span="6" style="text-align: center;">
-											{{ item.goodsName }}
-											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											x {{item.num}}
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
-										</el-col>
-									</el-row>
-								</el-card>
-							</div>
-						</el-tab-pane>
-					    <el-tab-pane label="制作情况" name="zhiZuo">
-							<div v-for="(foodList,key) in scope.row.foodsMapZhiZuo" :key="key">
-								<el-alert  style="margin-top:5px;" :title="dishesZhiZuoMap[key]" :type="key==1 ||　key==4? 'error': 'success'" :closable="false"></el-alert>
-								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
-									<el-row :gutter="20">
-										<el-col :span="6" style="text-align: center;">
-											{{ item.goodsName }}
-											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											x {{item.num}}
-										</el-col>
-										<el-col :span="6" style="text-align: center;">
-											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
-										</el-col>
-									</el-row>
-								</el-card>
-							</div>
-						</el-tab-pane>
-					</el-tabs>
-					
-				</div>
 			</template>
 		</avue-crud>
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
@@ -130,10 +59,10 @@ export default {
 		...mapState('app', ['navBtn']),
 		permissionList() {
 			return {
-				addBtn: this.navBtn.goods_type_add || false,
-				viewBtn: this.navBtn.goods_type_list || false,
+				addBtn: false,
+				viewBtn: false,
 				delBtn: this.navBtn.goods_type_remove || false,
-				editBtn: this.navBtn.goods_type_update || false
+				editBtn: false
 			};
 		}
 	},
@@ -172,6 +101,35 @@ export default {
 				menuWidth: 300,
 				column: [
 					{
+						label: '菜品名称',
+						prop: 'goodsName',
+						width: 120,
+						search: true,
+						span: 12,
+						addDisplay: false,
+						editDisplay: false
+					},
+					{
+						label: '菜品属性',
+						prop: 'goodsAttrValue',
+						span: 12,
+						addDisplay: false,
+						editDisplay: false
+					},
+					{
+						label: '备注',
+						prop: 'order_comment',
+						span: 12,
+						width: 150,
+						rules: [
+							{
+								required: false,
+								message: '请输入备注',
+								trigger: 'change'
+							}
+						]
+					},
+					{
 						label: '订单编号',
 						prop: 'orderNumber',
 						search: true,
@@ -209,7 +167,7 @@ export default {
 						addDisabled: true,
 					},
 					{
-						label: '订单状态',
+						label: '菜品状态',
 						prop: 'status',
 						type: 'select',
 						disabled: true,
@@ -221,18 +179,18 @@ export default {
 						},
 					},
 					{
-						label: '备注',
-						prop: 'comment',
-						span: 12,
-						width: 150,
-						rules: [
-							{
-								required: false,
-								message: '请输入备注',
-								trigger: 'change'
-							}
-						]
+						label: '订单状态',
+						prop: 'order_status',
+						type: 'select',
+						disabled: true,
+						value: 1,
+						dicData: [],
+						props: {
+							label: 'dict_name',
+							value: 'dict_key'
+						},
 					},
+					
 					{
 						label: '创建时间',
 						prop: 'create_date',
@@ -264,8 +222,7 @@ export default {
 	},
 	onLoad(e) {
 		var params = JSON.parse(JSON.stringify(this.params));
-		e.order_number && (params.order_number = e.order_number);
-		e.status && (params.status = parseFloat(e.status));
+		e.dept && (params.deptId = e.dept);
 		this.params = params;
 	},
 	watch: {
@@ -282,7 +239,7 @@ export default {
 	created() {
 		_this = this;
 		getDictByDictCode({
-			dict_code: 'order_status'
+			dict_code: 'dishes_status'
 		}).then((res) => {
 			const column = _this.findObject(_this.option.column, "status");
 			column.dicData = res;
@@ -301,21 +258,10 @@ export default {
 		getDictByDictCode({
 			dict_code: 'order_status'
 		}).then((res) => {
-			var dishesZhiFuMap = {};
-			res.forEach((item)=>{
-				dishesZhiFuMap[item.dict_key] = item.dict_name;
-			})
-			this.dishesZhiFuMap = dishesZhiFuMap;
+			const column = _this.findObject(_this.option.column, "order_status");
+			column.dicData = res;
 		})
-		getDictByDictCode({
-			dict_code: 'dishes_status'
-		}).then((res) => {
-			var dishesZhiZuoMap = {};
-			res.forEach((item)=>{
-				dishesZhiZuoMap[item.dict_key] = item.dict_name;
-			})
-			this.dishesZhiZuoMap = dishesZhiZuoMap;
-		})
+		
 		getDictByDictCode({
 			dict_code: 'order_type'
 		}).then((res) => {
