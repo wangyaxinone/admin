@@ -1,5 +1,9 @@
 <template>
 	<view class="uni-container">
+		<el-breadcrumb separator-class="el-icon-arrow-right" style="padding:10px 0 30px">
+		  <el-breadcrumb-item :to="{ path: '/pages/dishes/dishes' }">菜品制作</el-breadcrumb-item>
+		  <el-breadcrumb-item>{{dept_name}}</el-breadcrumb-item>
+		</el-breadcrumb>
 		<avue-tabs ref="tabs" :option="tabOption" @change="handleChange"></avue-tabs>
 		<avue-crud
 			:permission="permissionList"
@@ -22,6 +26,8 @@
 			@on-load="loadData"
 		>
 			<template slot="menu"  slot-scope="{type,size, row}">
+				<el-button v-if="row.status==1 && navBtn.dishes_cook" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">制作</el-button>
+				<el-button v-if="row.status!=4 && navBtn.dishes_invalid" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
 			  </template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
@@ -61,7 +67,7 @@ export default {
 			return {
 				addBtn: false,
 				viewBtn: false,
-				delBtn: this.navBtn.goods_type_remove || false,
+				delBtn: false,
 				editBtn: false
 			};
 		}
@@ -69,6 +75,7 @@ export default {
 	data() {
 		return {
 			activeName: 'zhiFu',
+			dept_name: '',
 			page: {
 				pageSize: config.pages.pageSize,
 				currentPage: config.pages.currentPage,
@@ -98,7 +105,7 @@ export default {
 				selection: false,
 				viewBtn: true,
 				addBtn: true,
-				menuWidth: 300,
+				menuWidth: 150,
 				column: [
 					{
 						label: '菜品名称',
@@ -223,6 +230,7 @@ export default {
 	onLoad(e) {
 		var params = JSON.parse(JSON.stringify(this.params));
 		e.dept && (params.deptId = e.dept);
+		this.dept_name = e.name;
 		this.params = params;
 	},
 	watch: {
@@ -247,6 +255,10 @@ export default {
 				return {
 					label: item.dict_name,
 					prop: item.dict_key,
+				}
+			}).filter((item)=>{
+				if(item.prop != 2){
+					return true;
 				}
 			})
 			_this.type = _this.tabOption.column[0];
