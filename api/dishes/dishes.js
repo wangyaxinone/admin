@@ -10,8 +10,8 @@ export const add = (params) => {
   return request('dishes/dishes/add', params);
 }
 
-export const update = (params) => {
-  return request('dishes/dishes/update', params);
+export const cook = (params) => {
+  return request('dishes/dishes/cook', params);
 }
 
 export const invalid = (params) => {

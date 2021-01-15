@@ -26,7 +26,7 @@
 			@on-load="loadData"
 		>
 			<template slot="menu"  slot-scope="{type,size, row}">
-				<el-button v-if="row.status==1 && navBtn.dishes_cook" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">制作</el-button>
+				<el-button v-if="row.status==1 && navBtn.dishes_cook" @click="cook(row)" icon="el-icon-delete-solid" :type="type" size="small">制作</el-button>
 				<el-button v-if="row.status!=4 && navBtn.dishes_invalid" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
 			  </template>
 			<template slot-scope="scope" slot="update_date">
@@ -46,7 +46,7 @@
 
 <script>
 var _this;
-import { getList, add, update, remove, invalid, addFood } from '@/api/dishes/dishes.js';
+import { getList, add, cook, invalid } from '@/api/dishes/dishes.js';
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import addFoods from '@/components/addFoods/addFoods.vue';
@@ -178,6 +178,7 @@ export default {
 						prop: 'status',
 						type: 'select',
 						disabled: true,
+						fixed: true,
 						value: 1,
 						dicData: [],
 						props: {
@@ -290,6 +291,9 @@ export default {
 		},
 		addFoods(row) {
 			this.$refs.addFoods.show(row);
+		},
+		cook(row) {
+			
 		},
 		invalid(row){
 			this.$confirm('确定将选择数据作废? ', {

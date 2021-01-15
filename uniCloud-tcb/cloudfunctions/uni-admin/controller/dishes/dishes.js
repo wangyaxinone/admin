@@ -22,31 +22,8 @@ module.exports = class UserController extends Controller {
 			comment
 		});
 	}
-	async update() {
-		const {
-			_id,
-			order_type,
-			table,
-			amound_price,
-			status,
-			order_price,
-			no_order_price,
-			no_amound_price,
-			comment,
-			foods
-		} = this.ctx.data
-		return await this.service.dishes.dishes.update({
-			_id,
-			order_type,
-			status,
-			table,
-			order_price,
-			amound_price,
-			no_order_price,
-			no_amound_price,
-			comment,
-			foods
-		});
+	async cook() {
+		return await this.service.dishes.dishes.cook(this.ctx.data);
 	}
 	async list() {
 		return await this.service.dishes.dishes.list(this.ctx.data);

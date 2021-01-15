@@ -174,8 +174,9 @@ module.exports = class MenuService extends Service {
 					for(var i=0;i<foods.length;i++){
 						var item = foods[i];
 						var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-							order_status: data.status,
+							order_status: item.order_status == 3 ? item.order_status : data.status,
 							table: data.table,
+							order_type: data.order_type,
 							order_comment: data.comment,
 							update_date: getServerDate(),
 							operator: _this.ctx.auth.uid
@@ -211,6 +212,7 @@ module.exports = class MenuService extends Service {
 				orderId: _id
 			}).update({
 				table: data.table,
+				order_type: data.order_type,
 				order_comment: data.comment,
 				update_date: getServerDate(),
 				operator: _this.ctx.auth.uid
@@ -363,6 +365,7 @@ module.exports = class MenuService extends Service {
 				var item = dishesyes[i];
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
 					order_status: 3,
+					status: 4,
 					update_date,
 					operator
 				});
