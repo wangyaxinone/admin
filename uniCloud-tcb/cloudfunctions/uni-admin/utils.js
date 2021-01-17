@@ -146,10 +146,15 @@ async function getEvertDayCode(cfg){
 		orderNumber,
 	}
 }
+const goeasyConfig = {
+	path: 'https://rest-hangzhou.goeasy.io/publish',
+	appkey: 'BC-28371c5513814c3dbad7fbd510235716'
+}
 module.exports = {
 	getEvertDayCode,
 	getServerDate,
 	getTree,
 	getPageConfig,
-	appendTenantParams
+	appendTenantParams,
+	goeasyConfig
 }

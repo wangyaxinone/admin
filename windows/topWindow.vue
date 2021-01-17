@@ -14,6 +14,8 @@
 					<text style="font-size:16px;font-weight:bold;color:#333;">{{activeTenant ? activeTenantInfo.name : appName}}</text>
 				</navigator>
 				<uni-icons @click="toggleSidebar" type="bars" class="menu-icon" size="30" color="#999"></uni-icons>
+				<audio ref="media" :src="active" controls="controls" autobuffer="autobuffer" width="0" heigt="0" style="position:absolute;left:-1000px;">
+				</audio>
 			</view>
 			<view class="navbar-middle">
 				<text class="title-text">{{navigationBarTitleText}}</text>
@@ -28,22 +30,22 @@
 						<uni-badge class="debug-badge" :text="logs.length" type="error"></uni-badge>
 					</view> -->
 					<!-- #endif -->
-					
+
 					<template v-if="userInfo.username">
-						
-						<view  v-if="mode == 2 && isTenantAdminOrAdmin" class="menu-item" @click="clearTenantInfo">
+
+						<view v-if="mode == 2 && isTenantAdminOrAdmin" class="menu-item" @click="clearTenantInfo">
 							<el-tooltip content="返回管理端" placement="bottom">
-							  <el-button icon="el-icon-s-fold" circle></el-button>
+								<el-button icon="el-icon-s-fold" circle></el-button>
 							</el-tooltip>
 						</view>
-						<el-dropdown  v-if="userInfo.username">
-						  <span class="el-dropdown-link">
-						    <text style="line-height: 50px;">{{userInfo.username}}</text>️<i class="el-icon-arrow-down el-icon--right"></i>
-						  </span>
-						  <el-dropdown-menu slot="dropdown">
-						    <el-dropdown-item @click.native="chagePassword">修改密码</el-dropdown-item>
-						    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
-						  </el-dropdown-menu>
+						<el-dropdown v-if="userInfo.username">
+							<span class="el-dropdown-link">
+								<text style="line-height: 50px;">{{userInfo.username}}</text>️<i class="el-icon-arrow-down el-icon--right"></i>
+							</span>
+							<el-dropdown-menu slot="dropdown">
+								<el-dropdown-item @click.native="chagePassword">修改密码</el-dropdown-item>
+								<el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+							</el-dropdown-menu>
 						</el-dropdown>
 					</template>
 					<view class="popup-menu__arrow"></view>
@@ -74,7 +76,11 @@
 	import errorLog from '@/windows/components/error-log.vue'
 	import updatePassword from '@/windows/components/update-password.vue'
 	import config from '@/admin.config.js'
-
+	import {
+		order,
+		food,
+		foodSuccess
+	} from "@/util/audio.js"
 	export default {
 		components: {
 			errorLog,
@@ -94,13 +100,88 @@
 		data() {
 			return {
 				...config.navBar,
-				popupMenuOpened: false
+				popupMenuOpened: false,
+				order,
+				food,
+				foodSuccess,
+				openAudio: false,
+				active: foodSuccess,
+				paddingAudioArr: [],
+				innerAudioContext: null
 			}
 		},
 		computed: {
-			...mapState('app', ['appName','mode','isTenantAdminOrAdmin','activeTenant','activeTenantInfo']),
+			...mapState('app', ['appName', 'mode', 'isTenantAdminOrAdmin', 'activeTenant', 'activeTenantInfo']),
 			...mapState('user', ['userInfo']),
 			...mapState('error', ['logs'])
+		},
+		mounted() {
+			var _this = this;
+			_this.innerAudioContext = uni.createInnerAudioContext();
+			_this.innerAudioContext.autoplay = false;
+			_this.innerAudioContext.src = _this.order;
+			_this.innerAudioContext.onEnded(()=>{
+				_this.playAudio();
+			})
+		},
+		watch: {
+			openAudio() {
+				if (this.openAudio && this.paddingAudioArr.length) {
+					this.$nextTick(() => {
+						this.playAudio();
+					})
+				}
+			},
+			'$store.state.app.activeTenant': {
+				handler: function(newValue, oldvalue) {
+					var _this = this;
+					if (newValue) {
+						this.$goeasy.subscribe({
+							channel: `${newValue}-orderChange`,
+							onMessage: function(message) {
+								if (message.content.indexOf('addOrder') > -1) {
+									_this.paddingAudioArr.push({
+										type: 'order',
+										audio: _this.order
+									})
+									_this.openAudio = true;
+									var notification = _this.$notify.info({
+										title: '消息',
+										duration: 0,
+										message: '您有新的订单，请注意查收！',
+										onClick: function() {
+											notification.close();
+											uni.navigateTo({
+												url: '/pages/order/order'
+											});
+										}
+									});
+								}
+							},
+							onSuccess: function() {
+								console.log("Subscribe successfully.")
+							},
+							onFailed: function() {
+								console.log("Subscribe successfully.")
+							}
+
+						});
+					} else {
+						this.$goeasy.unsubscribe({
+							channel: `${oldvalue}-orderChange`,
+							onSuccess: function() {
+								console.log("订阅取消成功。");
+							},
+							onFailed: function(error) {
+								console.log("取消订阅失败，错误编码：" + error.code + " 错误信息：" + error.content)
+							}
+						});
+					}
+
+				},
+				deep: true,
+				immediate: true
+			}
 		},
 		methods: {
 			...mapMutations({
@@ -108,12 +189,24 @@
 					commit('user/REMOVE_TOKEN')
 				}
 			}),
+			playAudio() {
+				if (this.openAudio && this.paddingAudioArr.length) {
+					var obj = this.paddingAudioArr.shift();
+					this.innerAudioContext.src = obj.audio;
+					this.$nextTick(() => {
+						this.innerAudioContext.play();
+					})
+				}else{
+					this.openAudio = false;
+				}
+				
+			},
 			clearTenantInfo() {
-				this.$store.commit('app/SET_MODE',1)
-				this.$store.commit('app/set_ACTIVETENANTINFO',{})
+				this.$store.commit('app/SET_MODE', 1)
+				this.$store.commit('app/set_ACTIVETENANTINFO', {})
 				this.$store.commit('app/SET_ACTIVETENANT', '')
 				uni.reLaunch({
-				    url: '/pages/tenant/tenant'
+					url: '/pages/tenant/tenant'
 				});
 			},
 			showErrorLogs() {
@@ -129,7 +222,7 @@
 				this.$refs.passwordPopup.open()
 			},
 			logout() {
-				this.$store.commit('app/set_ACTIVETENANTINFO',{})
+				this.$store.commit('app/set_ACTIVETENANTINFO', {})
 				this.$store.commit('app/SET_NAV_MENU', [])
 				this.$store.commit('app/SET_MODE', 1)
 				this.$store.commit('app/SET_ACTIVETENANT', '')
@@ -139,6 +232,7 @@
 				})
 			},
 			toggleSidebar() {
+				debugger
 				if (!this.showLeftWindow) {
 					uni.showLeftWindow()
 				} else {
@@ -207,6 +301,7 @@
 	.navbar-middle,
 	.navbar-right {
 		flex: 1;
+		flex-direction: row;
 	}
 
 	.navbar-middle,
@@ -235,7 +330,7 @@
 
 	.menu-item {
 		padding: 5px;
-		margin-right:10px;
+		margin-right: 10px;
 	}
 
 	.debug {

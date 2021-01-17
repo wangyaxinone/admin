@@ -34,7 +34,8 @@
 					})
 				},
 				deep: true,
-			}
+			},
+			
 		},
 		methods: {
 			...mapActions({
@@ -47,7 +48,7 @@
 				url: config.error.url
 			})
 		},
-		onLaunch: function() {
+		onLaunch: async function() {
 			console.log('App Launch')
 			if (!this.isTokenValid) {
 				uni.navigateTo({
@@ -55,12 +56,13 @@
 				})
 			} else {
 				if(this.mode !=2){
-					this.getMode().then(()=>{
-						this.init()
+					await this.getMode().then(()=>{
+						return this.init()
 					})
 				}else{
-					this.init()
+					await this.init()
 				}
+				
 			}
 		},
 		onShow: function() {

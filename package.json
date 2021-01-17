@@ -21,6 +21,7 @@
     "@smallwei/avue": "^2.7.0",
     "avue-plugin-map": "^1.0.1",
     "element-ui": "^2.14.0",
+    "goeasy": "^1.2.1",
     "number-precision": "^1.5.0"
   }
 }

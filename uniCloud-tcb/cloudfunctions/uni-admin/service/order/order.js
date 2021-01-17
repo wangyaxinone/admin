@@ -6,12 +6,14 @@ const {
 	getServerDate,
 	getTree,
 	appendTenantParams,
-	getEvertDayCode
+	getEvertDayCode,
+	goeasyConfig
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		var _this = this;
+		var {tenantId} = data;
 		var date = getServerDate();
 		data.create_date = date
 		data.update_date = date;
@@ -98,6 +100,18 @@ module.exports = class MenuService extends Service {
 					}
 				}
 				if(falg) {
+					var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+					    method: 'POST',
+					    data: {
+					      appkey: goeasyConfig.appkey,
+						  channel: `${tenantId}-orderChange`,
+						  content: `{
+							  type: 'addOrder',
+							  tenantId: ${tenantId}
+						  }`
+					    },
+					    dataType: 'json'
+					})
 					await transaction.commit();
 					return orderRes;
 				}else{
@@ -130,11 +144,13 @@ module.exports = class MenuService extends Service {
 		const {
 			_id,
 			no_order_price,
-			no_amound_price
+			no_amound_price,
+			tenantId
 		} = data;
 		var _this = this;
 		var foods = JSON.parse(JSON.stringify(data.foods));
 		delete data._id;
+		delete data.tenantId;
 		delete data.foods;
 		delete data.no_order_price;
 		delete data.no_amound_price;
@@ -190,6 +206,18 @@ module.exports = class MenuService extends Service {
 							}
 						}
 					}
+					var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+					    method: 'POST',
+					    data: {
+					      appkey: goeasyConfig.appkey,
+						  channel: `${tenantId}-orderChange`,
+						  content: `{
+							  type: 'updateOrder',
+							  tenantId: ${tenantId}
+						  }`
+					    },
+					    dataType: 'json'
+					})
 					await transaction.commit();
 					return orderRes;
 				}else{
@@ -216,6 +244,18 @@ module.exports = class MenuService extends Service {
 				order_comment: data.comment,
 				update_date: getServerDate(),
 				operator: _this.ctx.auth.uid
+			})
+			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+			    method: 'POST',
+			    data: {
+			      appkey: goeasyConfig.appkey,
+				  channel: `${tenantId}-orderChange`,
+				  content: `{
+					  type: 'updateOrder',
+					  tenantId: ${tenantId}
+				  }`
+			    },
+			    dataType: 'json'
 			})
 			return await this.db.collection('opendb-admin-order').doc(_id).update(data);
 		}
@@ -252,6 +292,19 @@ module.exports = class MenuService extends Service {
 					}
 				}
 			}
+			var {tenantId} = dishesyes[0];
+			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+			    method: 'POST',
+			    data: {
+			      appkey: goeasyConfig.appkey,
+				  channel: `${tenantId}-orderChange`,
+				  content: `{
+					  type: 'removeOrder',
+					  tenantId: ${tenantId}
+				  }`
+			    },
+			    dataType: 'json'
+			})
 			await transaction.commit();
 			return remobeRes;
 		}catch(e) {
@@ -377,6 +430,19 @@ module.exports = class MenuService extends Service {
 					}
 				}
 			}
+			var {tenantId} = dishesyes[0];
+			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+			    method: 'POST',
+			    data: {
+			      appkey: goeasyConfig.appkey,
+				  channel: `${tenantId}-orderChange`,
+				  content: `{
+					  type: 'invalidOrder',
+					  tenantId: ${tenantId}
+				  }`
+			    },
+			    dataType: 'json'
+			})
 			await transaction.commit();
 			return remobeRes;
 		}catch(e) {
@@ -396,6 +462,7 @@ module.exports = class MenuService extends Service {
 		const transaction = await this.db.startTransaction();
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
+		var {data: order} = await this.db.collection('opendb-admin-order').doc(_ids[0]).get();
 		try {
 			for(var i=0;i<_ids.length;i++){
 				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).update({
@@ -411,6 +478,19 @@ module.exports = class MenuService extends Service {
 					}
 				}
 			}
+			var {tenantId} = order[0];
+			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+			    method: 'POST',
+			    data: {
+			      appkey: goeasyConfig.appkey,
+				  channel: `${tenantId}-orderChange`,
+				  content: `{
+					  type: 'leaveOrder',
+					  tenantId: ${tenantId}
+				  }`
+			    },
+			    dataType: 'json'
+			})
 			await transaction.commit();
 			return remobeRes;
 		}catch(e) {
@@ -445,6 +525,7 @@ module.exports = class MenuService extends Service {
 			} = await this.db.collection('opendb-admin-goods').where({
 				'_id': this.db.command.in(goodIds)
 			}).get();
+			var {tenantId} = goods[0];
 			if(goods &&　goods.length) {
 				goods.forEach((item)=>{
 					if(numMap[item._id].num){
@@ -496,6 +577,18 @@ module.exports = class MenuService extends Service {
 					}
 				}
 				if(falg) {
+					var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+					    method: 'POST',
+					    data: {
+					      appkey: goeasyConfig.appkey,
+						  channel: `${tenantId}-orderChange`,
+						  content: `{
+							  type: 'addFoodsOrder',
+							  tenantId: ${tenantId}
+						  }`
+					    },
+					    dataType: 'json'
+					})
 					await transaction.commit();
 					return orderRes;
 				}else{
