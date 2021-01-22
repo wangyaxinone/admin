@@ -25,6 +25,9 @@ module.exports = class UserController extends Controller {
 	async cook() {
 		return await this.service.dishes.dishes.cook(this.ctx.data);
 	}
+	async updateStatus() {
+		return await this.service.dishes.dishes.updateStatus(this.ctx.data);
+	}
 	async list() {
 		return await this.service.dishes.dishes.list(this.ctx.data);
 	}

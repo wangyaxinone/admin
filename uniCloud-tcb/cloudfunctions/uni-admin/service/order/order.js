@@ -74,7 +74,7 @@ module.exports = class MenuService extends Service {
 								table: data.table,
 								create_date: date,
 								update_date: date,
-								operator: _this.ctx.auth.uid,
+								operator: '',
 								creater: _this.ctx.auth.uid,
 							})
 						}
@@ -195,7 +195,6 @@ module.exports = class MenuService extends Service {
 							order_type: data.order_type,
 							order_comment: data.comment,
 							update_date: getServerDate(),
-							operator: _this.ctx.auth.uid
 						});
 						if(!dishesRes.updated) {
 							await transaction.rollback()
@@ -242,8 +241,7 @@ module.exports = class MenuService extends Service {
 				table: data.table,
 				order_type: data.order_type,
 				order_comment: data.comment,
-				update_date: getServerDate(),
-				operator: _this.ctx.auth.uid
+				update_date: getServerDate()
 			})
 			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 			    method: 'POST',
@@ -419,8 +417,7 @@ module.exports = class MenuService extends Service {
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
 					order_status: 3,
 					status: 4,
-					update_date,
-					operator
+					update_date
 				});
 				if(!remobeRes.updated) {
 					await transaction.rollback()
@@ -552,7 +549,6 @@ module.exports = class MenuService extends Service {
 								table: data.table,
 								create_date: date,
 								update_date: date,
-								operator: _this.ctx.auth.uid,
 								creater: _this.ctx.auth.uid,
 							})
 						}

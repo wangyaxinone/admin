@@ -23,10 +23,29 @@ module.exports = class MenuService extends Service {
 		var {
 			_ids
 		} = data;
+		var update_date = getServerDate();
+		var operator = this.ctx.auth.uid;
 		return await this.db.collection('opendb-admin-dishes').where({
 			'_id': this.db.command.in(_ids)
 		}).update({
-			status: 2
+			status: 2,
+			update_date,
+			operator
+		});
+	}
+	async updateStatus(data) {
+		var {
+			_ids,
+			status
+		} = data;
+		var update_date = getServerDate();
+		var operator = this.ctx.auth.uid;
+		return await this.db.collection('opendb-admin-dishes').where({
+			'_id': this.db.command.in(_ids)
+		}).update({
+			status: status,
+			update_date,
+			operator
 		});
 	}
 	async invalid(data) {
@@ -106,10 +125,8 @@ module.exports = class MenuService extends Service {
 		};
 		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
 		param.deptId && (match.deptId = param.deptId);
-		param.status && (match.status = param.status);
-		if (match.status == 1) {
-			match.status = this.db.command.in([1, 2])
-		}
+		param.operator && (match.operator = param.operator);
+		param.status && (match.status = this.db.command.in(param.status));
 		appendTenantParams({
 			match,
 			_this: this,

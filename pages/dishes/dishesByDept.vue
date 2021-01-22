@@ -35,12 +35,16 @@
 			<template slot-scope="scope" slot="create_date">
 				<uniDateformate :date="scope.row.create_date"></uniDateformate>
 			</template>
+			<template slot-scope="scope" slot="status">
+				<el-tag :type="scope.row.status==1 || scope.row.status==3?'info':'danger'">{{dishesZhiZuoMap[scope.row.status]}}</el-tag>
+			</template>
 			<template slot-scope="scope" slot="tableNameForm">
 				<selectTable :label="form.tableName" @submit="submitTable"></selectTable>
 			</template>
 		</avue-crud>
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
 		<addFoods ref="addFoods" @submit="addFoodsSubmit"></addFoods>
+		<cookFoods ref="cookFoods" @load="loadData"></cookFoods>
 	</view>
 </template>
 
@@ -51,6 +55,7 @@ import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import addFoods from '@/components/addFoods/addFoods.vue';
 import selectTable from '@/components/selectTable/selectTable.vue';
+import cookFoods from '@/components/cookFoods/cookFoods.vue';
 import { mapState, mapActions } from 'vuex';
 import config from '@/admin.config.js';
 import { getDictByDictCode } from '@/api/system/dict.js';
@@ -59,7 +64,8 @@ export default {
 		uniDateformate,
 		selectGoods,
 		addFoods,
-		selectTable
+		selectTable,
+		cookFoods
 	},
 	computed: {
 		...mapState('app', ['navBtn']),
@@ -179,6 +185,7 @@ export default {
 						type: 'select',
 						disabled: true,
 						fixed: true,
+						slot: true,
 						value: 1,
 						dicData: [],
 						props: {
@@ -253,6 +260,7 @@ export default {
 			const column = _this.findObject(_this.option.column, "status");
 			column.dicData = res;
 			_this.tabOption.column = res.map((item)=>{
+				_this.dishesZhiZuoMap[item.dict_key] = item.dict_name;
 				return {
 					label: item.dict_name,
 					prop: item.dict_key,
@@ -282,6 +290,9 @@ export default {
 			column.dicData = res;
 		})
 	},
+	mounted() {
+		this.$refs.cookFoods.show();
+	},
 	methods: {
 		submitTable(data) {
 			var form = JSON.parse(JSON.stringify(this.form))
@@ -293,7 +304,27 @@ export default {
 			this.$refs.addFoods.show(row);
 		},
 		cook(row) {
-			
+			this.$confirm('确定开始制作? ', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				getList({
+					page:1,
+					size:5,
+					goodsName: row.goodsName,
+					status: [1]
+				}).then((res)=>{
+					var foods = res.data || [];
+					var _ids = foods.map((item)=>{
+						return item._id;
+					})
+					cook({_ids}).then(()=>{
+						this.$refs.cookFoods.show();
+						this.loadData();
+					})
+				})
+			});
 		},
 		invalid(row){
 			this.$confirm('确定将选择数据作废? ', {
@@ -507,12 +538,16 @@ export default {
 				this.params.page = this.page.currentPage;
 				this.params.size = this.page.pageSize;
 				this.params.tenantId = this.$store.state.app.activeTenant;
-				getList(this.params)
+				var params = JSON.parse(JSON.stringify(this.params));
+				params.status = params.status == 1?[1,2]:[params.status];
+				getList(params)
 					.then(res => {
 						this.loading = false;
 						if(res.data && res.data.length) {
 							res.data.forEach((item)=>{
-								item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+								if(item.operatorShow && item.operatorShow.length) {
+									item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+								}
 								var foodsMapZhiZuo = {};
 								var foodsMapZhiFu = {};
 								var no_order_price = 0;
