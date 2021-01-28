@@ -1,868 +1,2089 @@
 {
-	"opendb-admin-table":{
-		"data":[]
+	"opendb-admin-table": {
+		"data": []
 	},
-	"opendb-admin-tableType":{
-		"data":[]
+	"opendb-admin-tableType": {
+		"data": []
 	},
-	"opendb-admin-dishes":{
-		"data":[]
+	"opendb-admin-dishes": {
+		"data": []
 	},
-	"opendb-admin-order":{
-		"data":[]
+	"opendb-admin-order": {
+		"data": []
 	},
-	"opendb-admin-file":{
-		"data":[]
+	"opendb-admin-file": {
+		"data": []
 	},
-    "opendb-admin-dept": {
-        "data": []
-    },
-    "opendb-admin-dict": {
-        "data": []
-    },
-    "opendb-admin-folder": {
-        "data": []
-    },
+	"opendb-admin-dept": {
+		"data": []
+	},
+	"opendb-admin-dict": {
+		"data": [{
+				"_id": "0bcbdde05fbdb30e0046cbdf690c81d7",
+				"dict_name": "性别",
+				"dict_key": -1,
+				"dict_code": "gender",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1606267662491,
+				"update_date": 1606267662491,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "e62469b25fbdb31f005a7c6f026bd975",
+				"dict_name": "用户状态",
+				"dict_key": -1,
+				"dict_code": "user_status",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1606267679476,
+				"update_date": 1606267679476,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "0bcbdde05fbdb3320046ccc255ebb0eb",
+				"dict_name": "未知",
+				"dict_key": 0,
+				"dict_code": "gender",
+				"parent_id": "0bcbdde05fbdb30e0046cbdf690c81d7",
+				"disabled": false,
+				"sort": 0,
+				"comment": "",
+				"create_date": 1606267698831,
+				"update_date": 1606267698831,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "0a4429175fbdb33e004ee66c4c67d6ae",
+				"dict_name": "男",
+				"dict_key": 1,
+				"dict_code": "gender",
+				"parent_id": "0bcbdde05fbdb30e0046cbdf690c81d7",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1606267710279,
+				"update_date": 1606267710279,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "0a4429175fbdb346004ee69b138c7aa4",
+				"dict_name": "女",
+				"dict_key": 2,
+				"dict_code": "gender",
+				"parent_id": "0bcbdde05fbdb30e0046cbdf690c81d7",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1606267718729,
+				"update_date": 1606267718729,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "c89bd61c5fbdb35c0049827e07695540",
+				"dict_name": "正常",
+				"dict_key": 0,
+				"dict_code": "user_status",
+				"parent_id": "e62469b25fbdb31f005a7c6f026bd975",
+				"disabled": false,
+				"sort": 0,
+				"comment": "",
+				"create_date": 1606267740736,
+				"update_date": 1606267740736,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "e62469b25fbdb365005a7e8b6d6ff424",
+				"dict_name": "禁用",
+				"dict_key": 1,
+				"dict_code": "user_status",
+				"parent_id": "e62469b25fbdb31f005a7c6f026bd975",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1606267749604,
+				"update_date": 1606267749604,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "0288fce75fbdb373004ad08c43d98950",
+				"dict_name": "审核中",
+				"dict_key": 2,
+				"dict_code": "user_status",
+				"parent_id": "e62469b25fbdb31f005a7c6f026bd975",
+				"disabled": true,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1606267763486,
+				"update_date": 1606267763486,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "e62469b25fbdb37c005a7f344f1bcb77",
+				"dict_name": "审核拒绝",
+				"dict_key": 3,
+				"dict_code": "user_status",
+				"parent_id": "e62469b25fbdb31f005a7c6f026bd975",
+				"disabled": true,
+				"sort": 3,
+				"comment": "",
+				"create_date": 1606267772554,
+				"update_date": 1606267772554,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "cc9f30fe5fce3d90000974a146ba136c",
+				"dict_name": "商品状态",
+				"dict_key": -1,
+				"dict_code": "goods_status",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 3,
+				"comment": "",
+				"create_date": 1607351696939,
+				"update_date": 1607351696939,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "cc9f30fe5fce4095000977e94b9f6aca",
+				"dict_name": "上架",
+				"dict_key": 1,
+				"dict_code": "goods_status",
+				"parent_id": "cc9f30fe5fce3d90000974a146ba136c",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1607352469397,
+				"update_date": 1607352469397,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "cc9f30fe5fce409e000977f47ccf6d62",
+				"dict_name": "下架",
+				"dict_key": 2,
+				"dict_code": "goods_status",
+				"parent_id": "cc9f30fe5fce3d90000974a146ba136c",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1607352478589,
+				"update_date": 1607352478589,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "846bf2595fd073c0000d38d874e6ce9c",
+				"dict_name": "订单状态",
+				"dict_key": -1,
+				"dict_code": "order_status",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 4,
+				"comment": "",
+				"create_date": 1607496640323,
+				"update_date": 1607496640323,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "846bf2595fd073d0000d38e6393268f5",
+				"dict_name": "未付款",
+				"dict_key": 1,
+				"dict_code": "order_status",
+				"parent_id": "846bf2595fd073c0000d38d874e6ce9c",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1607496656917,
+				"update_date": 1607496656917,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "8ac0e22b5fd073db000cf0ad63dbf7bb",
+				"dict_name": "已付款",
+				"dict_key": 2,
+				"dict_code": "order_status",
+				"parent_id": "846bf2595fd073c0000d38d874e6ce9c",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1607496667876,
+				"update_date": 1607496667876,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "92d9b75b5fd073e5000c97dd6a8d1a77",
+				"dict_name": "已作废",
+				"dict_key": 3,
+				"dict_code": "order_status",
+				"parent_id": "846bf2595fd073c0000d38d874e6ce9c",
+				"disabled": false,
+				"sort": 3,
+				"comment": "",
+				"create_date": 1607496677747,
+				"update_date": 1607496677747,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "53176a855fd079b5000fa9955699527f",
+				"dict_name": "下单类型",
+				"dict_key": -1,
+				"dict_code": "order_type",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 5,
+				"comment": "",
+				"create_date": 1607498165353,
+				"update_date": 1607498165353,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "846bf2595fd079f8000d40db248834c9",
+				"dict_name": "堂食",
+				"dict_key": 1,
+				"dict_code": "order_type",
+				"parent_id": "53176a855fd079b5000fa9955699527f",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1607498232514,
+				"update_date": 1607498232514,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "92d9b75b5fd07a0b000ca0851b719594",
+				"dict_name": "打包",
+				"dict_key": 2,
+				"dict_code": "order_type",
+				"parent_id": "53176a855fd079b5000fa9955699527f",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1607498251002,
+				"update_date": 1607498251002,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "cc9f30fe5fd71665001b3486094bcedb",
+				"dict_name": "菜品状态",
+				"dict_key": -1,
+				"dict_code": "dishes_status",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 6,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-14T07:38:13.47Z"
+				},
+				"update_date": {
+					"$date": "2020-12-14T07:38:13.47Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "8ac0e22b5fd716760014503a1048ae09",
+				"dict_name": "未制作",
+				"dict_key": 1,
+				"dict_code": "dishes_status",
+				"parent_id": "cc9f30fe5fd71665001b3486094bcedb",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-14T07:38:30.56Z"
+				},
+				"update_date": {
+					"$date": "2020-12-14T07:38:30.56Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "846bf2595fd71684001625931c7f6ade",
+				"dict_name": "制作中",
+				"dict_key": 2,
+				"dict_code": "dishes_status",
+				"parent_id": "cc9f30fe5fd71665001b3486094bcedb",
+				"disabled": false,
+				"sort": 2,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-14T07:38:44.497Z"
+				},
+				"update_date": {
+					"$date": "2020-12-14T09:25:01.103Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "53176a855fd7169a0019c754482a8ceb",
+				"dict_name": "已制作",
+				"dict_key": 3,
+				"dict_code": "dishes_status",
+				"parent_id": "cc9f30fe5fd71665001b3486094bcedb",
+				"disabled": false,
+				"sort": 3,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-14T07:39:06.518Z"
+				},
+				"update_date": {
+					"$date": "2020-12-14T09:25:12.166Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "8ac0e22b5fd72f8600146d9401ef8c4f",
+				"dict_name": "已作废",
+				"dict_key": 4,
+				"dict_code": "dishes_status",
+				"parent_id": "cc9f30fe5fd71665001b3486094bcedb",
+				"disabled": false,
+				"sort": 4,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-14T09:25:26.883Z"
+				},
+				"update_date": {
+					"$date": "2020-12-14T09:25:26.883Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "023ce9555fdcb7ae000320c850241df0",
+				"dict_name": "外卖",
+				"dict_key": 3,
+				"dict_code": "order_type",
+				"parent_id": "53176a855fd079b5000fa9955699527f",
+				"disabled": true,
+				"sort": 3,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-18T14:07:42.425Z"
+				},
+				"update_date": {
+					"$date": "2021-01-08T03:51:56.572Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "9f2a34705fec7d170102bab01a430b30",
+				"dict_name": "餐桌状态",
+				"dict_key": -1,
+				"dict_code": "table_status",
+				"parent_id": "",
+				"disabled": false,
+				"sort": 7,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-30T13:13:59.694Z"
+				},
+				"update_date": {
+					"$date": "2020-12-30T13:13:59.694Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "85ff8afa5fec813300ff7f856dcc56fb",
+				"dict_name": "已预订",
+				"dict_key": 4,
+				"dict_code": "table_status",
+				"parent_id": "9f2a34705fec7d170102bab01a430b30",
+				"disabled": true,
+				"sort": 4,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-30T13:31:31.818Z"
+				},
+				"update_date": {
+					"$date": "2020-12-31T01:19:49.527Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "73f70d5c5fec814d00d5e42650be49b2",
+				"dict_name": "禁用",
+				"dict_key": 5,
+				"dict_code": "table_status",
+				"parent_id": "9f2a34705fec7d170102bab01a430b30",
+				"disabled": false,
+				"sort": 5,
+				"comment": "",
+				"create_date": {
+					"$date": "2020-12-30T13:31:57.038Z"
+				},
+				"update_date": {
+					"$date": "2020-12-30T13:31:57.038Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "be7fb3985ff876410339b7a15c47c9de",
+				"dict_name": "无人",
+				"dict_key": 1,
+				"dict_code": "table_status",
+				"parent_id": "9f2a34705fec7d170102bab01a430b30",
+				"disabled": false,
+				"sort": 1,
+				"comment": "",
+				"create_date": {
+					"$date": "2021-01-08T15:12:01.48Z"
+				},
+				"update_date": {
+					"$date": "2021-01-08T15:12:01.48Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "023ce9555ff8764f03d7f1142eccba4b",
+				"dict_name": "未付款",
+				"dict_key": 2,
+				"dict_code": "table_status",
+				"parent_id": "9f2a34705fec7d170102bab01a430b30",
+				"disabled": true,
+				"sort": 2,
+				"comment": "",
+				"create_date": {
+					"$date": "2021-01-08T15:12:15.963Z"
+				},
+				"update_date": {
+					"$date": "2021-01-08T15:37:00.925Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "ce805e785ff8765c03bebb594a77ea68",
+				"dict_name": "已付款",
+				"dict_key": 3,
+				"dict_code": "table_status",
+				"parent_id": "9f2a34705fec7d170102bab01a430b30",
+				"disabled": true,
+				"sort": 3,
+				"comment": "",
+				"create_date": {
+					"$date": "2021-01-08T15:12:28.096Z"
+				},
+				"update_date": {
+					"$date": "2021-01-08T15:37:11.179Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			}
+		]
+	},
+	"opendb-admin-folder": {
+		"data": []
+	},
 	"opendb-admin-goodsUnit": {
-	    "data": []
+		"data": []
 	},
-    "opendb-admin-goods": {
-        "data": []
-    },
-    "opendb-admin-goodsType": {
-        "data": []
-    },
-    "opendb-admin-menus": {
-        "data": [
-            {
-                "create_date": 1602662469396,
-                "enable": true,
-                "icon": "uni-icons-gear",
-                "menu_id": "system_management",
-                "name": "系统管理",
-                "parent_id": "",
-                "permission": [],
-                "sort": 1000,
-                "url": "/pages/system",
-                "type": 1,
-                "menu_type": 1
-            },
-            {
-                "menu_id": "system_user",
-                "name": "用户管理",
-                "icon": "iconfont iconicon_boss",
-                "url": "/pages/system/user",
-                "sort": 1,
-                "parent_id": "system_management",
-                "permission": [],
-                "enable": true,
-                "create_date": 1602662469396,
-                "type": 1,
-                "menu_type": 1,
-                "api": "system/user/list"
-            },
-            {
-                "menu_id": "system_menu",
-                "name": "系统菜单",
-                "icon": "iconfont iconicon_work",
-                "url": "/pages/system/menus",
-                "sort": 1020,
-                "parent_id": "system_management",
-                "permission": [],
-                "enable": true,
-                "create_date": 1602662469396,
-                "type": 1,
-                "menu_type": 1,
-                "api": "system/menus/tree"
-            },
-            {
-                "name": "字典管理",
-                "menu_id": "system_dict",
-                "parent_id": "system_management",
-                "url": "/pages/system/dict",
-                "type": 1,
-                "sort": 10000,
-                "enable": true,
-                "create_date": 1604207086961,
-                "icon": "iconfont iconicon_compile",
-                "menu_type": 1,
-                "api": "system/dict/tree"
-            },
-            {
-                "name": "门店管理",
-                "menu_id": "tenant_management",
-                "parent_id": "",
-                "url": "/pages/tenant",
-                "type": 1,
-                "sort": 1,
-                "enable": true,
-                "icon": "iconfont iconicon_subordinate",
-                "create_date": 1604234823164,
-                "menu_type": 1
-            },
-            {
-                "name": "门店列表",
-                "menu_id": "tenant_tenant",
-                "parent_id": "tenant_management",
-                "url": "/pages/tenant/tenant",
-                "type": 1,
-                "sort": 1,
-                "enable": true,
-                "icon": "iconfont iconicon_work",
-                "create_date": 1604235091068,
-                "menu_type": 1,
-                "api": "system/tenant/tree"
-            },
-            {
-                "name": "角色管理",
-                "menu_id": "system_role",
-                "parent_id": "system_management",
-                "url": "/pages/system/role",
-                "type": 1,
-                "sort": 2,
-                "enable": true,
-                "icon": "iconfont iconicon_scan_namecard",
-                "create_date": 1604239509007,
-                "menu_type": 1,
-                "api": "system/role/tree"
-            },
-            {
-                "name": "部门管理",
-                "menu_id": "system_dept",
-                "parent_id": "system_management",
-                "icon": "iconfont iconicon_subordinate",
-                "url": "/pages/system/dept",
-                "type": 1,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1,
-                "api": "system/dept/tree"
-            },
-            {
-                "name": "门店菜单",
-                "menu_id": "system_tenant_menu",
-                "parent_id": "system_management",
-                "icon": "iconfont icon-biaodan",
-                "url": "/pages/system/tenant_menu",
-                "type": 1,
-                "sort": 4,
-                "enable": true,
-                "menu_type": 1,
-                "api": "system/menus/tree"
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_user_list",
-                "parent_id": "system_user",
-                "parent_name": "用户管理",
-                "icon": "",
-                "url": "system/user/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_user_remove",
-                "parent_id": "system_user",
-                "parent_name": "用户管理",
-                "icon": "",
-                "url": "system/user/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_user_add",
-                "parent_id": "system_user",
-                "parent_name": "用户管理",
-                "icon": "",
-                "url": "system/user/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_user_update",
-                "parent_id": "system_user",
-                "parent_name": "用户管理",
-                "icon": "",
-                "url": "system/user/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_role_update",
-                "parent_id": "system_role",
-                "parent_name": "角色管理",
-                "icon": "",
-                "url": "system/role/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_role_remove",
-                "parent_id": "system_role",
-                "parent_name": "角色管理",
-                "icon": "",
-                "url": "system/role/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_role_add",
-                "parent_id": "system_role",
-                "parent_name": "角色管理",
-                "icon": "",
-                "url": "system/role/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_role_list",
-                "parent_id": "system_role",
-                "parent_name": "角色管理",
-                "icon": "",
-                "url": "system/role/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_dept_list",
-                "parent_id": "system_dept",
-                "parent_name": "部门管理",
-                "icon": "",
-                "url": "system/dept/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_dept_add",
-                "parent_id": "system_dept",
-                "parent_name": "部门管理",
-                "icon": "",
-                "url": "system/dept/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_dept_update",
-                "parent_id": "system_dept",
-                "parent_name": "部门管理",
-                "icon": "",
-                "url": "system/dept/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_dept_remove",
-                "parent_id": "system_dept",
-                "parent_name": "部门管理",
-                "icon": "",
-                "url": "system/dept/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_tenant_menu_remove",
-                "parent_id": "system_tenant_menu",
-                "parent_name": "门店菜单",
-                "icon": "",
-                "url": "system/tenant_menu/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_tenant_menu_add",
-                "parent_id": "system_tenant_menu",
-                "parent_name": "门店菜单",
-                "icon": "",
-                "url": "system/tenant_menu/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_tenant_menu_update",
-                "parent_id": "system_tenant_menu",
-                "parent_name": "门店菜单",
-                "icon": "",
-                "url": "system/tenant_menu/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_tenant_menu_list",
-                "parent_id": "system_tenant_menu",
-                "parent_name": "门店菜单",
-                "icon": "",
-                "url": "system/tenant_menu/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_menu_add",
-                "parent_id": "system_menu",
-                "parent_name": "系统菜单",
-                "icon": "",
-                "url": "system/menus/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_menu_list",
-                "parent_id": "system_menu",
-                "parent_name": "系统菜单",
-                "icon": "",
-                "url": "system/menus/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_menu_update",
-                "parent_id": "system_menu",
-                "parent_name": "系统菜单",
-                "icon": "",
-                "url": "system/menus/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_menu_remove",
-                "parent_id": "system_menu",
-                "parent_name": "系统菜单",
-                "icon": "",
-                "url": "system/menus/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_dict_add",
-                "parent_id": "system_dict",
-                "parent_name": "字典管理",
-                "icon": "",
-                "url": "system/dict/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_dict_update",
-                "parent_id": "system_dict",
-                "parent_name": "字典管理",
-                "icon": "",
-                "url": "system/dict/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_dict_list",
-                "parent_id": "system_dict",
-                "parent_name": "字典管理",
-                "icon": "",
-                "url": "system/dict/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_dict_remove",
-                "parent_id": "system_dict",
-                "parent_name": "字典管理",
-                "icon": "",
-                "url": "system/dict/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "tenant_tenant_update",
-                "parent_id": "tenant_tenant",
-                "parent_name": "门店列表",
-                "icon": "",
-                "url": "system/tenant/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "tenant_tenant_add",
-                "parent_id": "tenant_tenant",
-                "parent_name": "门店列表",
-                "icon": "",
-                "url": "system/tenant/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "删除",
-                "menu_id": "tenant_tenant_remove",
-                "parent_id": "tenant_tenant",
-                "parent_name": "门店列表",
-                "icon": "",
-                "url": "system/tenant/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "tenant_tenant_list",
-                "parent_id": "tenant_tenant",
-                "parent_name": "门店列表",
-                "icon": "",
-                "url": "system/tenant/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "商品管理",
-                "menu_id": "goods_management",
-                "menu_type": 2,
-                "parent_id": "",
-                "icon": "iconfont iconicon_work",
-                "url": "/pages/goods",
-                "type": 1,
-                "sort": 1,
-                "enable": true
-            },
-            {
-                "name": "商品分类",
-                "menu_id": "goods_type",
-                "menu_type": 2,
-                "parent_id": "goods_management",
-                "icon": "iconfont iconicon_subordinate",
-                "url": "/pages/goods/goodsType",
-                "type": 1,
-                "sort": 1,
-                "enable": true,
-                "api": "goods/goodsType/list",
-                "operator": {
-                    "$oid": "5f9b6fb063ec2c0001b70ff8"
-                },
-                "update_date": 1605864860009
-            },
-            {
-                "name": "删除",
-                "menu_id": "goods_type_remove",
-                "parent_id": "goods_type",
-                "parent_name": "商品分类",
-                "icon": "",
-                "url": "goods/goods_type/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "查看",
-                "menu_id": "goods_type_list",
-                "parent_id": "goods_type",
-                "parent_name": "商品分类",
-                "icon": "",
-                "url": "goods/goods_type/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "修改",
-                "menu_id": "goods_type_update",
-                "parent_id": "goods_type",
-                "parent_name": "商品分类",
-                "icon": "",
-                "url": "goods/goods_type/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "新增",
-                "menu_id": "goods_type_add",
-                "parent_id": "goods_type",
-                "parent_name": "商品分类",
-                "icon": "",
-                "url": "goods/goods_type/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "商品列表",
-                "menu_id": "goods_list",
-                "menu_type": 2,
-                "parent_id": "goods_management",
-                "icon": "iconfont iconicon_subordinate",
-                "url": "/pages/goods/goods",
-                "type": 1,
-                "sort": 2,
-                "enable": true,
-                "api": "",
-                "operator": {
-                    "$oid": "5f9b6fb063ec2c0001b70ff8"
-                },
-                "update_date": 1605864870225
-            },
-            {
-                "name": "修改",
-                "menu_id": "goods_list_update",
-                "parent_id": "goods_list",
-                "parent_name": "商品列表",
-                "icon": "",
-                "url": "goods/goods_list/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "新增",
-                "menu_id": "goods_list_add",
-                "parent_id": "goods_list",
-                "parent_name": "商品列表",
-                "icon": "",
-                "url": "goods/goods_list/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "查看",
-                "menu_id": "goods_list_list",
-                "parent_id": "goods_list",
-                "parent_name": "商品列表",
-                "icon": "",
-                "url": "goods/goods_list/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "删除",
-                "menu_id": "goods_list_remove",
-                "parent_id": "goods_list",
-                "parent_name": "商品列表",
-                "icon": "",
-                "url": "goods/goods_list/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "订单管理",
-                "menu_id": "order_management",
-                "menu_type": 2,
-                "parent_id": "",
-                "icon": "iconfont iconicon_send",
-                "url": "/pages/order",
-                "type": 1,
-                "sort": 2,
-                "enable": true
-            },
-            {
-                "name": "订单列表",
-                "menu_id": "order_list",
-                "menu_type": 2,
-                "parent_id": "order_management",
-                "icon": "iconfont iconicon_subordinate",
-                "url": "/pages/order/order_list",
-                "type": 1,
-                "sort": 1,
-                "enable": true
-            },
-            {
-                "name": "新增",
-                "menu_id": "order_list_add",
-                "parent_id": "order_list",
-                "parent_name": "订单列表",
-                "icon": "",
-                "url": "order/order_list/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "修改",
-                "menu_id": "order_list_update",
-                "parent_id": "order_list",
-                "parent_name": "订单列表",
-                "icon": "",
-                "url": "order/order_list/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "删除",
-                "menu_id": "order_list_remove",
-                "parent_id": "order_list",
-                "parent_name": "订单列表",
-                "icon": "",
-                "url": "order/order_list/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "查看",
-                "menu_id": "order_list_list",
-                "parent_id": "order_list",
-                "parent_name": "订单列表",
-                "icon": "",
-                "url": "order/order_list/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 2
-            },
-            {
-                "name": "权限模板",
-                "menu_id": "system_permissionTemplate",
-                "menu_type": 1,
-                "parent_id": "system_management",
-                "icon": "iconfont iconicon_coinpurse_line",
-                "url": "/pages/system/permissionTemplate",
-                "type": 1,
-                "sort": 5,
-                "enable": true,
-                "api": "system/permissionTemplate/list"
-            },
-            {
-                "name": "删除",
-                "menu_id": "system_permissionTemplate_remove",
-                "parent_id": "system_permissionTemplate",
-                "parent_name": "权限模板",
-                "icon": "",
-                "url": "system/permissionTemplate/remove",
-                "type": 2,
-                "sort": 2,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "修改",
-                "menu_id": "system_permissionTemplate_update",
-                "parent_id": "system_permissionTemplate",
-                "parent_name": "权限模板",
-                "icon": "",
-                "url": "system/permissionTemplate/update",
-                "type": 2,
-                "sort": 1,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "查看",
-                "menu_id": "system_permissionTemplate_list",
-                "parent_id": "system_permissionTemplate",
-                "parent_name": "权限模板",
-                "icon": "",
-                "url": "system/permissionTemplate/list",
-                "type": 2,
-                "sort": 3,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "新增",
-                "menu_id": "system_permissionTemplate_add",
-                "parent_id": "system_permissionTemplate",
-                "parent_name": "权限模板",
-                "icon": "",
-                "url": "system/permissionTemplate/add",
-                "type": 2,
-                "sort": 0,
-                "enable": true,
-                "menu_type": 1
-            },
-            {
-                "name": "权限",
-                "menu_id": "system_role_permission",
-                "menu_type": 1,
-                "parent_id": "system_role",
-                "icon": "iconfont iconicon_setting",
-                "url": "",
-                "api": "",
-                "type": 2,
-                "sort": 5,
-                "enable": true
-            },
-            {
-                "name": "权限",
-                "menu_id": "system_permissionTemplate_permission",
-                "menu_type": 1,
-                "parent_id": "system_permissionTemplate",
-                "icon": "iconfont iconicon_setting",
-                "url": "",
-                "api": "",
-                "type": 2,
-                "sort": 5,
-                "enable": true
-            },
-            {
-                "name": "资源管理",
-                "menu_id": "file_management",
-                "menu_type": 2,
-                "parent_id": "0",
-                "icon": "iconfont iconicon_coinpurse_line",
-                "url": "/pages/file/file",
-                "api": "",
-                "type": 1,
-                "sort": 3,
-                "enable": true,
-                "create_date": 1606094740577,
-                "update_date": 1606188142149,
-                "operator": {
-                    "$oid": "5f9b6fb063ec2c0001b70ff8"
-                },
-                "creater": {
-                    "$oid": "5f9b6fb063ec2c0001b70ff8"
-                }
-            }
-        ]
-    },
-    "opendb-admin-permissionTemplate": {
-        "data": []
-    },
-    "uni-id-users": {
-        "data": [
-            {
-                "username": "admin",
-                "password": "03caebb36670995fc261a275d212cad65e4bbebd",
-                "role": [
-                    "admin"
-                ],
-                "register_date": 1604022192917,
-                "register_ip": "117.136.91.130",
-                "token": [
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3Mjg1LCJleHAiOjE2MDYyNzM2ODV9.0fsZ-op3gG9AmQTuTgnLoEHU8j_9Xo0K0SCTtHwJ6vk",
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3MzA1LCJleHAiOjE2MDYyNzM3MDV9.-mgwQumsnJ6rCmBaRGFFYQuSJoW_j9uhRWpCdcolw3I",
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg3Mzk5LCJleHAiOjE2MDYyNzM3OTl9.QaLioQfEqr89wsw8DSOxGARQQkx56PDkxxtFDjueMIU",
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTg4MTIyLCJleHAiOjE2MDYyNzQ1MjJ9.pX1oUP_OPLFZVsT8enHoqIQ4MiJ8VqBxO6-bazU7hds",
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MTkyMDI1LCJleHAiOjE2MDYyNzg0MjV9.FriT0JoHj0Dn1mRcw-USWhYKJ0bzx0uGmq2y1TY0vZY",
-                    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZjliNmZiMDYzZWMyYzAwMDFiNzBmZjgiLCJuZWVkUGVybWlzc2lvbiI6dHJ1ZSwiaWF0IjoxNjA2MjEyMzAyLCJleHAiOjE2MDYyOTg3MDJ9.CWRfaOOAN45fVTZ-Giu5Gol1qRE0cBzhRWNO_zZvidI"
-                ],
-                "last_login_date": 1606212302830,
-                "last_login_ip": "1.68.60.252",
-                "login_ip_limit": []
-            }
-        ]
-    },
-    "uni-verify": {
-        "data": [],
-        "index": [
-            {
-                "IndexName": "mobile",
-                "MgoKeySchema": {
-                    "MgoIndexKeys": [
-                        {
-                            "Name": "mobile",
-                            "Direction": "1"
-                        },
-                        {
-                            "Name": "code",
-                            "Direction": "1"
-                        }
-                    ],
-                    "MgoIsUnique": false
-                }
-            },
-            {
-                "IndexName": "email",
-                "MgoKeySchema": {
-                    "MgoIndexKeys": [
-                        {
-                            "Name": "email",
-                            "Direction": "1"
-                        },
-                        {
-                            "Name": "code",
-                            "Direction": "1"
-                        }
-                    ],
-                    "MgoIsUnique": false
-                }
-            }
-        ]
-    }
+	"opendb-admin-goods": {
+		"data": []
+	},
+	"opendb-admin-goodsType": {
+		"data": []
+	},
+	"uni-id-permissions": {
+		"data": []
+	},
+	"uni-id-roles": {
+		"data": [{
+				"_id": "6127fe145fbdb1bc00597721583f29d1",
+				"role_name": "体验门店_管理员",
+				"parent_id": "",
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"type": 1,
+				"sort": 999,
+				"comment": "门店管理员",
+				"create_date": 1606267324573,
+				"update_date": 1606267509798,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc",
+				"role_id": "6127fe145fbdb1bc00597721583f29d1",
+				"dataPermission": 1,
+				"permission": [
+					"b1a52c595fbcdc5c00608681564c2b70",
+					"b1a52c595fbcdc5c00608682094e2db1",
+					"b1a52c595fbcdc5c0060869f5f008d2d",
+					"b1a52c595fbcdc5c0060869e5a82cfe8",
+					"b1a52c595fbcdc5c006086a022928723",
+					"b1a52c595fbcdc5c006086a175631573",
+					"b1a52c595fbcdc5c0060867d17a36227",
+					"b1a52c595fbcdc5c0060867e67b32468",
+					"b1a52c595fbcdc5c006086884616c62e",
+					"b1a52c595fbcdc5c006086892dd289f6",
+					"b1a52c595fbcdc5c00608687270c7a7e",
+					"b1a52c595fbcdc5c006086866a075458",
+					"b1a52c595fbcdc5c006086831e481f93",
+					"b1a52c595fbcdc5c0060868c1a5079e1",
+					"b1a52c595fbcdc5c0060868a059d16a5",
+					"b1a52c595fbcdc5c0060868b275d2831",
+					"b1a52c595fbcdc5c0060868d52144eac",
+					"b1a52c595fbcdc5c006086b979470bd5",
+					"b1a52c595fbcdc5c00608684329ea6a8",
+					"b1a52c595fbcdc5c0060868f70f9bb81",
+					"b1a52c595fbcdc5c0060869025403f48",
+					"b1a52c595fbcdc5c006086915884b129",
+					"b1a52c595fbcdc5c0060868e62680215",
+					"b1a52c595fbcdc5c0060868565349e62",
+					"b1a52c595fbcdc5c00608695091d7cfc",
+					"b1a52c595fbcdc5c006086b448793647",
+					"b1a52c595fbcdc5c006086b82ebee13b",
+					"b1a52c595fbcdc5c006086b60f52fe4d",
+					"b1a52c595fbcdc5c006086b57248fd82",
+					"b1a52c595fbcdc5c006086b75a98ff0e",
+					"b1a52c595fbcdc5c006086ba0b7863bd",
+					"b1a52c595fbcdc5c006086807a88b101",
+					"b1a52c595fbcdc5c0060869c70db3670"
+				],
+				"template": "0bcbdde05fbdb1dd0046c5012e8ac2f4"
+			},
+			{
+				"_id": "6127fe145fbdb25b00597c2e3987c204",
+				"role_name": "店长",
+				"parent_id": "6127fe145fbdb1bc00597721583f29d1",
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"type": 1,
+				"sort": 1,
+				"comment": "",
+				"create_date": 1606267483216,
+				"update_date": 1606268033385,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc",
+				"role_id": "6127fe145fbdb25b00597c2e3987c204",
+				"dataPermission": 2,
+				"permission": [
+					"b1a52c595fbcdc5c00608681564c2b70",
+					"b1a52c595fbcdc5c00608682094e2db1",
+					"b1a52c595fbcdc5c006086a175631573",
+					"b1a52c595fbcdc5c0060867d17a36227",
+					"b1a52c595fbcdc5c0060867e67b32468",
+					"b1a52c595fbcdc5c006086892dd289f6",
+					"b1a52c595fbcdc5c006086866a075458",
+					"b1a52c595fbcdc5c006086831e481f93",
+					"b1a52c595fbcdc5c0060868a059d16a5",
+					"b1a52c595fbcdc5c0060868d52144eac",
+					"b1a52c595fbcdc5c00608684329ea6a8",
+					"b1a52c595fbcdc5c0060869025403f48",
+					"b1a52c595fbcdc5c0060868e62680215",
+					"b1a52c595fbcdc5c0060868565349e62",
+					"b1a52c595fbcdc5c00608695091d7cfc",
+					"b1a52c595fbcdc5c006086b448793647",
+					"b1a52c595fbcdc5c006086b60f52fe4d",
+					"b1a52c595fbcdc5c006086b75a98ff0e",
+					"b1a52c595fbcdc5c006086807a88b101",
+					"b1a52c595fbcdc5c0060869c70db3670"
+				],
+				"template": "e62469b25fbdb41e005a86085c27d5bc"
+			},
+			{
+				"_id": "b1a52c595fbdb26a006790303a62c97f",
+				"role_name": "厨师",
+				"parent_id": "6127fe145fbdb1bc00597721583f29d1",
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"type": 2,
+				"sort": 2,
+				"comment": "",
+				"create_date": 1606267498711,
+				"update_date": 1606268039560,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc",
+				"role_id": "b1a52c595fbdb26a006790303a62c97f",
+				"dataPermission": 2,
+				"permission": [
+					"b1a52c595fbcdc5c006086a258eb1ab0",
+					"b1a52c595fbcdc5c006086a853aa3b03",
+					"b1a52c595fbcdc5c006086ab1a9c886f",
+					"b1a52c595fbcdc5c006086a33fad724e",
+					"b1a52c595fbcdc5c006086a5101ff53a",
+					"b1a52c595fbcdc5c006086ad3496f49b",
+					"b1a52c595fbcdc5c006086ae472f7447",
+					"b1a52c595fbcdc5c006086b23c025500",
+					"cc9f30fe5fd07f7800104a3a5f033fed",
+					"92d9b75b5fd07ff1000ca9b25d53485d",
+					"53176a855fd080bf000fb39f011ff781",
+					"846bf2595fd0801f000d47ee2c1f3b20",
+					"cc9f30fe5fd080d700104bfc74aa5337",
+					"023ce9555ffa72de03f6edbe023bae8e",
+					"be7fb3985ffa73090352ac9b2c41df8d",
+					"be7fb3985ffa73090352ac9c7b3e2ca8",
+					"be7fb3985ffa73090352ac9e3c2565a9",
+					"b1a52c595fbcdc5c006086bb639ab560"
+				],
+				"template": "0288fce75fbdb428004ad5ea0987b8bb"
+			}
+		]
+	},
+	"opendb-admin-tenant": {
+		"data": [{
+			"_id": "0bcbdde05fbdb1bc0046c41d052b31f2",
+			"name": "体验门店",
+			"parent_id": "",
+			"type": 1,
+			"enable": true,
+			"address": "山西省太原市迎泽区迎泽街道文源巷77号",
+			"longitude": 112.55467142612,
+			"latitude": 37.856681516924,
+			"create_date": 1606267324459,
+			"update_date": 1606267324459,
+			"operator": "e62469b25fbcdc610054453153b7f8dc",
+			"creater": "e62469b25fbcdc610054453153b7f8dc",
+			"point": {
+				"type": "Point",
+				"coordinates": [
+					112.55467142612,
+					37.856681516924
+				]
+			},
+			"parentTenants": []
+		}],
+		"index": [{
+			"IndexName": "opendb-admin-tenant_openid_index_",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "_openid",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}],
+		"schema": {
+			"bsonType": "object",
+			"permission": {
+				"create": false,
+				"delete": false,
+				"read": false,
+				"update": false
+			},
+			"properties": {
+				"_id": {
+					"description": "ID，系统自动生成"
+				}
+			},
+			"required": []
+		}
+	},
+	"opendb-admin-tenant-menus": {
+		"data": [],
+		"index": [{
+			"IndexName": "opendb-admin-tenant-menus_openid_index_",
+			"MgoKeySchema": {
+				"MgoIndexKeys": [{
+					"Name": "_openid",
+					"Direction": "1"
+				}],
+				"MgoIsUnique": false
+			}
+		}]
+	},
+	"opendb-admin-menus": {
+		"data": [{
+				"_id": "b1a52c595fbcdc5c0060867d17a36227",
+				"enable": true,
+				"icon": "uni-icons-gear",
+				"sort": 1000,
+				"type": 1,
+				"parent_id": "",
+				"permission": [],
+				"url": "/pages/system",
+				"create_date": 1602662469396,
+				"menu_id": "system_management",
+				"menu_type": 1,
+				"name": "系统管理"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060867e67b32468",
+				"url": "/pages/system/user",
+				"api": "system/user/list",
+				"menu_id": "system_user",
+				"name": "用户管理",
+				"sort": 1,
+				"type": 1,
+				"permission": [],
+				"create_date": 1602662469396,
+				"enable": true,
+				"icon": "iconfont iconicon_boss",
+				"menu_type": 1,
+				"parent_id": "system_management"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060867f725c0c10",
+				"type": 1,
+				"url": "/pages/system/menus",
+				"api": "system/menus/tree",
+				"enable": true,
+				"icon": "iconfont iconicon_work",
+				"menu_type": 1,
+				"parent_id": "system_management",
+				"sort": 1020,
+				"create_date": 1602662469396,
+				"menu_id": "system_menu",
+				"name": "系统菜单",
+				"permission": []
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608681564c2b70",
+				"create_date": 1604234823164,
+				"name": "门店管理",
+				"parent_id": "",
+				"sort": 1,
+				"type": 1,
+				"enable": true,
+				"icon": "iconfont iconicon_subordinate",
+				"menu_id": "tenant_management",
+				"menu_type": 1,
+				"url": "/pages/tenant"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086807a88b101",
+				"enable": true,
+				"type": 1,
+				"url": "/pages/system/dict",
+				"sort": 10000,
+				"api": "system/dict/tree",
+				"create_date": 1604207086961,
+				"icon": "iconfont iconicon_compile",
+				"menu_id": "system_dict",
+				"menu_type": 1,
+				"name": "字典管理",
+				"parent_id": "system_management"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608682094e2db1",
+				"create_date": 1604235091068,
+				"menu_id": "tenant_tenant",
+				"menu_type": 1,
+				"name": "门店列表",
+				"parent_id": "tenant_management",
+				"sort": 1,
+				"type": 1,
+				"api": "system/tenant/tree",
+				"icon": "iconfont iconicon_work",
+				"url": "/pages/tenant/tenant",
+				"enable": true
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086831e481f93",
+				"api": "system/role/tree",
+				"type": 1,
+				"name": "角色管理",
+				"parent_id": "system_management",
+				"sort": 2,
+				"create_date": 1604239509007,
+				"enable": true,
+				"icon": "iconfont iconicon_scan_namecard",
+				"menu_id": "system_role",
+				"menu_type": 1,
+				"url": "/pages/system/role"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086866a075458",
+				"icon": "",
+				"menu_type": 1,
+				"name": "查看",
+				"parent_name": "用户管理",
+				"enable": true,
+				"menu_id": "system_user_list",
+				"parent_id": "system_user",
+				"sort": 3,
+				"type": 2,
+				"url": "system/user/list"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868565349e62",
+				"api": "system/menus/tree",
+				"menu_id": "system_tenant_menu",
+				"menu_type": 1,
+				"parent_id": "system_management",
+				"sort": 4,
+				"enable": true,
+				"icon": "iconfont icon-biaodan",
+				"name": "门店菜单",
+				"type": 1,
+				"url": "/pages/system/tenant_menu"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608684329ea6a8",
+				"icon": "iconfont iconicon_subordinate",
+				"menu_id": "system_dept",
+				"menu_type": 1,
+				"name": "部门管理",
+				"parent_id": "system_management",
+				"type": 1,
+				"api": "system/dept/tree",
+				"enable": true,
+				"sort": 3,
+				"url": "/pages/system/dept"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608687270c7a7e",
+				"name": "删除",
+				"type": 2,
+				"url": "system/user/remove",
+				"menu_type": 1,
+				"parent_id": "system_user",
+				"parent_name": "用户管理",
+				"sort": 2,
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_user_remove"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086892dd289f6",
+				"icon": "",
+				"menu_id": "system_user_update",
+				"menu_type": 1,
+				"sort": 1,
+				"type": 2,
+				"enable": true,
+				"name": "修改",
+				"parent_id": "system_user",
+				"parent_name": "用户管理",
+				"url": "system/user/update"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086884616c62e",
+				"menu_type": 1,
+				"parent_id": "system_user",
+				"parent_name": "用户管理",
+				"sort": 0,
+				"type": 2,
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_user_add",
+				"name": "新增",
+				"url": "system/user/add"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868a059d16a5",
+				"enable": true,
+				"icon": "",
+				"parent_id": "system_role",
+				"parent_name": "角色管理",
+				"sort": 1,
+				"type": 2,
+				"url": "system/role/update",
+				"menu_id": "system_role_update",
+				"menu_type": 1,
+				"name": "修改"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868b275d2831",
+				"parent_name": "角色管理",
+				"icon": "",
+				"menu_id": "system_role_remove",
+				"menu_type": 1,
+				"name": "删除",
+				"parent_id": "system_role",
+				"sort": 2,
+				"type": 2,
+				"url": "system/role/remove",
+				"enable": true
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868c1a5079e1",
+				"url": "system/role/add",
+				"icon": "",
+				"menu_id": "system_role_add",
+				"name": "新增",
+				"parent_name": "角色管理",
+				"sort": 0,
+				"type": 2,
+				"enable": true,
+				"menu_type": 1,
+				"parent_id": "system_role"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868d52144eac",
+				"url": "system/role/list",
+				"enable": true,
+				"menu_type": 1,
+				"name": "查看",
+				"parent_id": "system_role",
+				"type": 2,
+				"icon": "",
+				"menu_id": "system_role_list",
+				"parent_name": "角色管理",
+				"sort": 3
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868e62680215",
+				"icon": "",
+				"sort": 3,
+				"type": 2,
+				"url": "system/dept/list",
+				"parent_name": "部门管理",
+				"enable": true,
+				"menu_id": "system_dept_list",
+				"menu_type": 1,
+				"name": "查看",
+				"parent_id": "system_dept"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086926e9a1b7b",
+				"name": "删除",
+				"parent_name": "门店菜单",
+				"url": "system/tenant_menu/remove",
+				"menu_type": 1,
+				"parent_id": "system_tenant_menu",
+				"sort": 2,
+				"type": 2,
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_tenant_menu_remove"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869025403f48",
+				"sort": 1,
+				"type": 2,
+				"url": "system/dept/update",
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_dept_update",
+				"menu_type": 1,
+				"name": "修改",
+				"parent_id": "system_dept",
+				"parent_name": "部门管理"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060868f70f9bb81",
+				"url": "system/dept/add",
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_dept_add",
+				"menu_type": 1,
+				"sort": 0,
+				"type": 2,
+				"name": "新增",
+				"parent_id": "system_dept",
+				"parent_name": "部门管理"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086915884b129",
+				"icon": "",
+				"name": "删除",
+				"parent_id": "system_dept",
+				"type": 2,
+				"url": "system/dept/remove",
+				"enable": true,
+				"menu_id": "system_dept_remove",
+				"menu_type": 1,
+				"parent_name": "部门管理",
+				"sort": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869311083f14",
+				"parent_name": "门店菜单",
+				"url": "system/tenant_menu/add",
+				"menu_id": "system_tenant_menu_add",
+				"menu_type": 1,
+				"name": "新增",
+				"sort": 0,
+				"type": 2,
+				"enable": true,
+				"icon": "",
+				"parent_id": "system_tenant_menu"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608695091d7cfc",
+				"menu_type": 1,
+				"parent_name": "门店菜单",
+				"type": 2,
+				"parent_id": "system_tenant_menu",
+				"sort": 3,
+				"url": "system/tenant_menu/list",
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_tenant_menu_list",
+				"name": "查看"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086940a21a31c",
+				"name": "修改",
+				"parent_id": "system_tenant_menu",
+				"parent_name": "门店菜单",
+				"enable": true,
+				"menu_type": 1,
+				"sort": 1,
+				"type": 2,
+				"url": "system/tenant_menu/update",
+				"icon": "",
+				"menu_id": "system_tenant_menu_update"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c00608696595b2882",
+				"enable": true,
+				"menu_id": "system_menu_add",
+				"menu_type": 1,
+				"parent_id": "system_menu",
+				"parent_name": "系统菜单",
+				"sort": 0,
+				"url": "system/menus/add",
+				"icon": "",
+				"name": "新增",
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086976bc67cc1",
+				"name": "查看",
+				"parent_id": "system_menu",
+				"parent_name": "系统菜单",
+				"type": 2,
+				"url": "system/menus/list",
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_menu_list",
+				"menu_type": 1,
+				"sort": 3
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869862a7ee7d",
+				"icon": "",
+				"menu_type": 1,
+				"name": "修改",
+				"parent_id": "system_menu",
+				"url": "system/menus/update",
+				"enable": true,
+				"menu_id": "system_menu_update",
+				"parent_name": "系统菜单",
+				"sort": 1,
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869a05f36268",
+				"enable": true,
+				"icon": "",
+				"name": "新增",
+				"sort": 0,
+				"type": 2,
+				"url": "system/dict/add",
+				"menu_id": "system_dict_add",
+				"menu_type": 1,
+				"parent_id": "system_dict",
+				"parent_name": "字典管理"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869b0b4aa765",
+				"menu_id": "system_dict_update",
+				"name": "修改",
+				"parent_id": "system_dict",
+				"parent_name": "字典管理",
+				"type": 2,
+				"url": "system/dict/update",
+				"enable": true,
+				"menu_type": 1,
+				"sort": 1,
+				"icon": ""
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086997949a579",
+				"type": 2,
+				"url": "system/menus/remove",
+				"icon": "",
+				"menu_id": "system_menu_remove",
+				"menu_type": 1,
+				"parent_id": "system_menu",
+				"parent_name": "系统菜单",
+				"enable": true,
+				"name": "删除",
+				"sort": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869c70db3670",
+				"enable": true,
+				"icon": "",
+				"parent_id": "system_dict",
+				"sort": 3,
+				"menu_id": "system_dict_list",
+				"menu_type": 1,
+				"name": "查看",
+				"parent_name": "字典管理",
+				"type": 2,
+				"url": "system/dict/list"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869d698c1443",
+				"enable": true,
+				"icon": "",
+				"menu_id": "system_dict_remove",
+				"parent_id": "system_dict",
+				"sort": 2,
+				"url": "system/dict/remove",
+				"menu_type": 1,
+				"name": "删除",
+				"parent_name": "字典管理",
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869e5a82cfe8",
+				"parent_id": "tenant_tenant",
+				"sort": 1,
+				"url": "system/tenant/update",
+				"enable": true,
+				"menu_type": 1,
+				"name": "修改",
+				"type": 2,
+				"icon": "",
+				"menu_id": "tenant_tenant_update",
+				"parent_name": "门店列表"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c0060869f5f008d2d",
+				"icon": "",
+				"menu_id": "tenant_tenant_add",
+				"parent_name": "门店列表",
+				"sort": 0,
+				"url": "system/tenant/add",
+				"enable": true,
+				"menu_type": 1,
+				"name": "新增",
+				"parent_id": "tenant_tenant",
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a022928723",
+				"enable": true,
+				"name": "删除",
+				"parent_id": "tenant_tenant",
+				"type": 2,
+				"icon": "",
+				"menu_id": "tenant_tenant_remove",
+				"menu_type": 1,
+				"parent_name": "门店列表",
+				"sort": 2,
+				"url": "system/tenant/remove"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a258eb1ab0",
+				"enable": true,
+				"icon": "iconfont iconicon_work",
+				"menu_type": 2,
+				"name": "商品管理",
+				"sort": 1,
+				"menu_id": "goods_management",
+				"parent_id": "",
+				"type": 1,
+				"url": "/pages/goods"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a175631573",
+				"parent_id": "tenant_tenant",
+				"parent_name": "门店列表",
+				"sort": 3,
+				"type": 2,
+				"enable": true,
+				"icon": "",
+				"menu_type": 1,
+				"menu_id": "tenant_tenant_list",
+				"name": "查看",
+				"url": "system/tenant/list"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a33fad724e",
+				"type": 1,
+				"update_date": 1605864860009,
+				"api": "goods/goodsType/list",
+				"menu_type": 2,
+				"name": "商品分类",
+				"operator": {
+					"$oid": "5f9b6fb063ec2c0001b70ff8"
+				},
+				"parent_id": "goods_management",
+				"sort": 1,
+				"enable": true,
+				"icon": "iconfont iconicon_subordinate",
+				"menu_id": "goods_type",
+				"url": "/pages/goods/goodsType"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a474af1df7",
+				"icon": "",
+				"menu_type": 2,
+				"parent_id": "goods_type",
+				"sort": 2,
+				"type": 2,
+				"url": "goods/goods_type/remove",
+				"enable": true,
+				"menu_id": "goods_type_remove",
+				"name": "删除",
+				"parent_name": "商品分类"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a5101ff53a",
+				"menu_id": "goods_type_list",
+				"menu_type": 2,
+				"name": "查看",
+				"parent_id": "goods_type",
+				"sort": 3,
+				"icon": "",
+				"parent_name": "商品分类",
+				"type": 2,
+				"url": "goods/goods_type/list",
+				"enable": true
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a853aa3b03",
+				"parent_id": "goods_management",
+				"update_date": 1607418970604,
+				"url": "/pages/goods/goods",
+				"api": "",
+				"enable": true,
+				"menu_id": "goods_list",
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"type": 1,
+				"icon": "iconfont iconicon_subordinate",
+				"menu_type": 2,
+				"name": "商品列表",
+				"sort": 0
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a63c25c7d0",
+				"type": 2,
+				"url": "goods/goods_type/update",
+				"enable": true,
+				"menu_type": 2,
+				"sort": 1,
+				"parent_id": "goods_type",
+				"parent_name": "商品分类",
+				"icon": "",
+				"menu_id": "goods_type_update",
+				"name": "修改"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a70bdf0fd5",
+				"parent_id": "goods_type",
+				"sort": 0,
+				"type": 2,
+				"enable": true,
+				"icon": "",
+				"menu_id": "goods_type_add",
+				"menu_type": 2,
+				"name": "新增",
+				"parent_name": "商品分类",
+				"url": "goods/goods_type/add"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086ac0180205a",
+				"enable": true,
+				"icon": "",
+				"parent_name": "商品列表",
+				"type": 2,
+				"menu_id": "goods_list_remove",
+				"menu_type": 2,
+				"name": "删除",
+				"parent_id": "goods_list",
+				"sort": 2,
+				"url": "goods/goods_list/remove"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086a939fbedc8",
+				"icon": "",
+				"menu_id": "goods_list_update",
+				"menu_type": 2,
+				"name": "修改",
+				"parent_id": "goods_list",
+				"parent_name": "商品列表",
+				"sort": 1,
+				"type": 2,
+				"enable": true,
+				"url": "goods/goods_list/update"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086aa7916bcd9",
+				"parent_name": "商品列表",
+				"sort": 0,
+				"url": "goods/goods_list/add",
+				"enable": true,
+				"menu_id": "goods_list_add",
+				"name": "新增",
+				"type": 2,
+				"icon": "",
+				"menu_type": 2,
+				"parent_id": "goods_list"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086ad3496f49b",
+				"enable": true,
+				"menu_type": 2,
+				"sort": 2,
+				"parent_id": "",
+				"type": 1,
+				"url": "/pages/order",
+				"icon": "iconfont iconicon_send",
+				"menu_id": "order_management",
+				"name": "订单管理"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086ab1a9c886f",
+				"enable": true,
+				"menu_type": 2,
+				"parent_id": "goods_list",
+				"parent_name": "商品列表",
+				"type": 2,
+				"url": "goods/goods_list/list",
+				"icon": "",
+				"menu_id": "goods_list_list",
+				"name": "查看",
+				"sort": 3
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086ae472f7447",
+				"icon": "iconfont iconicon_subordinate",
+				"enable": true,
+				"menu_id": "order_list",
+				"menu_type": 2,
+				"name": "订单列表",
+				"parent_id": "order_management",
+				"sort": 1,
+				"type": 1,
+				"url": "/pages/order/order",
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"update_date": 1607484293768
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086af30787dc5",
+				"icon": "",
+				"menu_type": 2,
+				"parent_id": "order_list",
+				"type": 2,
+				"url": "order/order_list/add",
+				"enable": true,
+				"name": "新增",
+				"parent_name": "订单列表",
+				"sort": 0,
+				"menu_id": "order_list_add"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b00e36d1ee",
+				"sort": 1,
+				"type": 2,
+				"url": "order/order_list/update",
+				"enable": true,
+				"menu_id": "order_list_update",
+				"name": "修改",
+				"parent_id": "order_list",
+				"icon": "",
+				"menu_type": 2,
+				"parent_name": "订单列表"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b23c025500",
+				"menu_id": "order_list_list",
+				"name": "查看",
+				"parent_name": "订单列表",
+				"type": 2,
+				"url": "order/order_list/list",
+				"enable": true,
+				"icon": "",
+				"menu_type": 2,
+				"parent_id": "order_list",
+				"sort": 3
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b1417fcab8",
+				"icon": "",
+				"menu_id": "order_list_remove",
+				"menu_type": 2,
+				"parent_id": "order_list",
+				"url": "order/order_list/remove",
+				"enable": true,
+				"name": "删除",
+				"parent_name": "订单列表",
+				"sort": 2,
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b57248fd82",
+				"icon": "",
+				"menu_id": "system_permissionTemplate_remove",
+				"parent_name": "权限模板",
+				"enable": true,
+				"menu_type": 1,
+				"name": "删除",
+				"parent_id": "system_permissionTemplate",
+				"sort": 2,
+				"type": 2,
+				"url": "system/permissionTemplate/remove"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b448793647",
+				"api": "system/permissionTemplate/list",
+				"menu_id": "system_permissionTemplate",
+				"menu_type": 1,
+				"name": "权限模板",
+				"parent_id": "system_management",
+				"sort": 5,
+				"type": 1,
+				"url": "/pages/system/permissionTemplate",
+				"enable": true,
+				"icon": "iconfont iconicon_coinpurse_line"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b75a98ff0e",
+				"parent_name": "权限模板",
+				"sort": 3,
+				"type": 2,
+				"url": "system/permissionTemplate/list",
+				"enable": true,
+				"icon": "",
+				"menu_type": 1,
+				"menu_id": "system_permissionTemplate_list",
+				"name": "查看",
+				"parent_id": "system_permissionTemplate"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b60f52fe4d",
+				"enable": true,
+				"menu_id": "system_permissionTemplate_update",
+				"menu_type": 1,
+				"name": "修改",
+				"url": "system/permissionTemplate/update",
+				"icon": "",
+				"parent_id": "system_permissionTemplate",
+				"parent_name": "权限模板",
+				"sort": 1,
+				"type": 2
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b82ebee13b",
+				"type": 2,
+				"url": "system/permissionTemplate/add",
+				"enable": true,
+				"icon": "",
+				"menu_type": 1,
+				"name": "新增",
+				"parent_id": "system_permissionTemplate",
+				"sort": 0,
+				"menu_id": "system_permissionTemplate_add",
+				"parent_name": "权限模板"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086b979470bd5",
+				"parent_id": "system_role",
+				"sort": 5,
+				"type": 2,
+				"menu_id": "system_role_permission",
+				"menu_type": 1,
+				"icon": "iconfont iconicon_setting",
+				"name": "权限",
+				"url": "",
+				"api": "",
+				"enable": true
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086ba0b7863bd",
+				"sort": 5,
+				"type": 2,
+				"menu_id": "system_permissionTemplate_permission",
+				"menu_type": 1,
+				"name": "权限",
+				"parent_id": "system_permissionTemplate",
+				"url": "",
+				"api": "",
+				"enable": true,
+				"icon": "iconfont iconicon_setting"
+			},
+			{
+				"_id": "b1a52c595fbcdc5c006086bb639ab560",
+				"url": "/pages/file/file",
+				"creater": {
+					"$oid": "5f9b6fb063ec2c0001b70ff8"
+				},
+				"enable": true,
+				"update_date": 1607499648266,
+				"parent_id": "0",
+				"create_date": 1606094740577,
+				"icon": "iconfont iconicon_coinpurse_line",
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"api": "",
+				"menu_id": "file_management",
+				"type": 1,
+				"menu_type": 2,
+				"name": "资源管理",
+				"sort": 5
+			},
+			{
+				"_id": "846bf2595fcf41d2000994d9327a5c11",
+				"name": "商品单位",
+				"menu_id": "goods_unit",
+				"menu_type": 2,
+				"parent_id": "goods_management",
+				"icon": "iconfont iconicon_affiliations_li",
+				"url": "/pages/goods/goodsUnit",
+				"type": 1,
+				"sort": 3,
+				"enable": true,
+				"create_date": 1607418322063,
+				"update_date": 1607418322063,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "92d9b75b5fcf42080009512068c7a2a2",
+				"enable": true,
+				"icon": "",
+				"menu_id": "goods_unit_remove",
+				"menu_type": 2,
+				"name": "删除",
+				"parent_id": "goods_unit",
+				"parent_name": "商品单位",
+				"sort": 2,
+				"type": 2,
+				"url": "goods/goodsUnit/remove"
+			},
+			{
+				"_id": "92d9b75b5fcf4208000951212f3caa1e",
+				"enable": true,
+				"icon": "",
+				"menu_id": "goods_unit_list",
+				"menu_type": 2,
+				"name": "查看",
+				"parent_id": "goods_unit",
+				"parent_name": "商品单位",
+				"sort": 3,
+				"type": 2,
+				"url": "goods/goodsUnit/list"
+			},
+			{
+				"_id": "92d9b75b5fcf42080009511f3e2f15a3",
+				"enable": true,
+				"icon": "",
+				"menu_id": "goods_unit_update",
+				"menu_type": 2,
+				"name": "修改",
+				"parent_id": "goods_unit",
+				"parent_name": "商品单位",
+				"sort": 1,
+				"type": 2,
+				"url": "goods/goodsUnit/update"
+			},
+			{
+				"_id": "92d9b75b5fcf42080009511e2b04d167",
+				"enable": true,
+				"icon": "",
+				"menu_id": "goods_unit_add",
+				"menu_type": 2,
+				"name": "新增",
+				"parent_id": "goods_unit",
+				"parent_name": "商品单位",
+				"sort": 0,
+				"type": 2,
+				"url": "goods/goodsUnit/add"
+			},
+			{
+				"_id": "cc9f30fe5fd07f7800104a3a5f033fed",
+				"name": "餐桌管理",
+				"menu_id": "table_management",
+				"menu_type": 2,
+				"parent_id": "",
+				"icon": "iconfont iconicon_sms",
+				"url": "/pages/table",
+				"type": 1,
+				"sort": 3,
+				"enable": true,
+				"create_date": 1607499640093,
+				"update_date": 1607499640093,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "92d9b75b5fd07ff1000ca9b25d53485d",
+				"name": "餐桌列表",
+				"menu_id": "table_list",
+				"menu_type": 2,
+				"parent_id": "table_management",
+				"icon": "iconfont iconicon_secret",
+				"url": "/pages/table/table",
+				"type": 1,
+				"sort": 1,
+				"enable": true,
+				"create_date": 1607499761371,
+				"update_date": 1607499761371,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "846bf2595fd0801f000d47ee2c1f3b20",
+				"name": "餐桌分类",
+				"menu_id": "table_type",
+				"menu_type": 2,
+				"parent_id": "table_management",
+				"icon": "iconfont iconicon_work",
+				"url": "/pages/table/tableType",
+				"type": 1,
+				"sort": 2,
+				"enable": true,
+				"create_date": 1607499807193,
+				"update_date": 1607499807193,
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "53176a855fd080bf000fb39d79bc4198",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_list_update",
+				"menu_type": 2,
+				"name": "修改",
+				"parent_id": "table_list",
+				"parent_name": "餐桌列表",
+				"sort": 1,
+				"type": 2,
+				"url": "table/table/update"
+			},
+			{
+				"_id": "53176a855fd080bf000fb39e4a95b7f7",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_list_remove",
+				"menu_type": 2,
+				"name": "删除",
+				"parent_id": "table_list",
+				"parent_name": "餐桌列表",
+				"sort": 2,
+				"type": 2,
+				"url": "table/table/remove"
+			},
+			{
+				"_id": "53176a855fd080bf000fb39c77f72212",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_list_add",
+				"menu_type": 2,
+				"name": "新增",
+				"parent_id": "table_list",
+				"parent_name": "餐桌列表",
+				"sort": 0,
+				"type": 2,
+				"url": "table/table/add"
+			},
+			{
+				"_id": "53176a855fd080bf000fb39f011ff781",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_list_list",
+				"menu_type": 2,
+				"name": "查看",
+				"parent_id": "table_list",
+				"parent_name": "餐桌列表",
+				"sort": 3,
+				"type": 2,
+				"url": "table/table/list"
+			},
+			{
+				"_id": "cc9f30fe5fd080d700104bfb0b1e2e92",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_type_remove",
+				"menu_type": 2,
+				"name": "删除",
+				"parent_id": "table_type",
+				"parent_name": "餐桌分类",
+				"sort": 2,
+				"type": 2,
+				"url": "table/tableType/remove"
+			},
+			{
+				"_id": "cc9f30fe5fd080d700104bf95466cc23",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_type_add",
+				"menu_type": 2,
+				"name": "新增",
+				"parent_id": "table_type",
+				"parent_name": "餐桌分类",
+				"sort": 0,
+				"type": 2,
+				"url": "table/tableType/add"
+			},
+			{
+				"_id": "cc9f30fe5fd080d700104bfc74aa5337",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_type_list",
+				"menu_type": 2,
+				"name": "查看",
+				"parent_id": "table_type",
+				"parent_name": "餐桌分类",
+				"sort": 3,
+				"type": 2,
+				"url": "table/tableType/list"
+			},
+			{
+				"_id": "cc9f30fe5fd080d700104bfa53c821c6",
+				"enable": true,
+				"icon": "",
+				"menu_id": "table_type_update",
+				"menu_type": 2,
+				"name": "修改",
+				"parent_id": "table_type",
+				"parent_name": "餐桌分类",
+				"sort": 1,
+				"type": 2,
+				"url": "table/tableType/update"
+			},
+			{
+				"_id": "023ce9555ffa72de03f6edbe023bae8e",
+				"name": "菜品制作",
+				"menu_id": "dishes",
+				"menu_type": 2,
+				"parent_id": "0",
+				"icon": "iconfont iconicon_compile",
+				"url": "/pages/dishes/dishes",
+				"type": 1,
+				"sort": 4,
+				"enable": true,
+				"create_date": {
+					"$date": "2021-01-10T03:22:06.973Z"
+				},
+				"update_date": {
+					"$date": "2021-01-10T04:11:59.173Z"
+				},
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"creater": "e62469b25fbcdc610054453153b7f8dc"
+			},
+			{
+				"_id": "be7fb3985ffa73090352ac9c7b3e2ca8",
+				"enable": true,
+				"icon": "",
+				"menu_id": "dishes_invalid",
+				"menu_type": 2,
+				"name": "作废",
+				"parent_id": "dishes",
+				"parent_name": "菜品制作",
+				"sort": 1,
+				"type": 2,
+				"url": "dishes/invalid",
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"update_date": {
+					"$date": "2021-01-14T14:22:20.255Z"
+				}
+			},
+			{
+				"_id": "be7fb3985ffa73090352ac9d5a7f92a4",
+				"enable": true,
+				"icon": "",
+				"menu_id": "dishes_cook",
+				"menu_type": 2,
+				"name": "制作",
+				"parent_id": "dishes",
+				"parent_name": "菜品制作",
+				"sort": 0,
+				"type": 2,
+				"url": "dishes/cook",
+				"operator": "e62469b25fbcdc610054453153b7f8dc",
+				"update_date": {
+					"$date": "2021-01-14T14:28:04.85Z"
+				}
+			}
+		]
+	},
+	"opendb-admin-permissionTemplate": {
+		"data": []
+	},
+	"uni-id-users": {
+		"data": [{
+				"_id": "e62469b25fbcdc610054453153b7f8dc",
+				"token": [
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzE1M2I3ZjhkYyIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MTE3NTAwNzcsImV4cCI6MTYxMTgzNjQ3N30.1W3OaXhM_dDrtRCTopzB7CaBsALdwoseCfqJnrDSt2M"
+				],
+				"last_login_ip": "223.11.192.239",
+				"password": "03caebb36670995fc261a275d212cad65e4bbebd",
+				"register_date": 1604022192917,
+				"register_ip": "117.136.91.130",
+				"role": [
+					"admin"
+				],
+				"username": "admin",
+				"last_login_date": 1611750077698,
+				"login_ip_limit": []
+			},
+			{
+				"_id": "e62469b25fbcdc610054453236f7e055",
+				"nickname": "王亚鑫",
+				"register_ip": "1.68.100.76",
+				"token": [
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzIzNmY3ZTA1NSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MTE3MzI3NDIsImV4cCI6MTYxMTgxOTE0Mn0.GXU_U_4HCjkZq9b1Gt89A_cTDnHOYhiTKgZzU9HjmlI"
+				],
+				"update_date": 1606267583153,
+				"gender": 1,
+				"isTenantAdminOrAdmin": true,
+				"operator": {
+					"$oid": "5f9b6fb063ec2c0001b70ff8"
+				},
+				"register_date": 1605778129732,
+				"status": 0,
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"tenantList": [
+					"0bcbdde05fbdb1bc0046c41d052b31f2"
+				],
+				"creater": {
+					"$oid": "5f9b6fb063ec2c0001b70ff8"
+				},
+				"dataPermission": 1,
+				"dept": [
+					"c89bd61c5fbdb1bc004978ae61d7024b"
+				],
+				"last_login_date": 1611732742043,
+				"permission": {
+					"system_management": true,
+					"system_menu_list": true,
+					"tenant_tenant": true,
+					"tenant_tenant_list": true,
+					"tenant_tenant_update": true,
+					"system_dept_list": true,
+					"system_dept_remove": true,
+					"system_user_list": true,
+					"system_user_update": true,
+					"system_permissionTemplate_update": true,
+					"system_role_remove": true,
+					"system_permissionTemplate_add": true,
+					"system_role_update": true,
+					"system_dept": true,
+					"system_permissionTemplate": true,
+					"system_menu": true,
+					"system_permissionTemplate_permission": true,
+					"system_role_add": true,
+					"system_role_permission": true,
+					"system_dict": true,
+					"system_dict_list": true,
+					"system_role_list": true,
+					"tenant_management": true,
+					"tenant_tenant_remove": true,
+					"system_dept_add": true,
+					"system_role": true,
+					"system_permissionTemplate_list": true,
+					"system_user": true,
+					"tenant_tenant_add": true,
+					"system_tenant_menu": true,
+					"system_tenant_menu_list": true,
+					"system_user_add": true,
+					"system_user_remove": true,
+					"system_dept_update": true,
+					"system_permissionTemplate_remove": true
+				},
+				"username": "wyx",
+				"last_login_ip": "202.99.203.37",
+				"login_ip_limit": [],
+				"mobile": "13980239227",
+				"password": "03caebb36670995fc261a275d212cad65e4bbebd",
+				"role": [
+					"6127fe145fbdb1bc00597721583f29d1"
+				]
+			},
+			{
+				"_id": "e62469b25fbcdc61005445337d2777d5",
+				"dept": [
+					"c89bd61c5fbdb1bc004978ae61d7024b"
+				],
+				"login_ip_limit": [],
+				"role": [
+					"6127fe145fbdb25b00597c2e3987c204"
+				],
+				"token": [
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MDk5MjYzOTksImV4cCI6MTYxMDAxMjc5OX0._ip3YveMxA3VEDaFUsDp2GuIh5gVa1fNhV1jGcK5HhU",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MDk5MjY0MDAsImV4cCI6MTYxMDAxMjgwMH0.BidTVckHG16qUPgD4QCfrMEu2seekBNehayHHyXPDDU",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MDk5MjY0MDAsImV4cCI6MTYxMDAxMjgwMH0.BidTVckHG16qUPgD4QCfrMEu2seekBNehayHHyXPDDU",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MDk5MjY1NDIsImV4cCI6MTYxMDAxMjk0Mn0.YmcpbzU5USb7gU2V4tGP4E3PrthMfDJarEMPVgo_C40",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MDk5MjY1NDQsImV4cCI6MTYxMDAxMjk0NH0.V0F_pIgJ_9sdM3OhpKhx3wyV-pGEUS_Y_9Y4821B0ZQ",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzM3ZDI3NzdkNSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MTAwMTIzNDUsImV4cCI6MTYxMDA5ODc0NX0.dI3Sg7CSH1GvW8oNEZuKtE2Ang2hh7QfegBPq1VuxiA"
+				],
+				"username": "yxr",
+				"creater": {
+					"$oid": "5fb63ad1de65bb0001f1312b"
+				},
+				"dataPermission": 2,
+				"last_login_ip": "202.99.203.37",
+				"password": "03caebb36670995fc261a275d212cad65e4bbebd",
+				"register_date": 1605778474860,
+				"gender": 2,
+				"isTenantAdminOrAdmin": true,
+				"last_login_date": 1609840548943,
+				"mobile": "13753131055",
+				"nickname": "闫学荣",
+				"operator": {
+					"$oid": "5fb63ad1de65bb0001f1312b"
+				},
+				"update_date": 1606267608997,
+				"permission": {
+					"system_dept": true,
+					"system_role_add": true,
+					"system_user_list": true,
+					"tenant_tenant": true,
+					"system_dept_add": true,
+					"system_dept_list": true,
+					"system_role_remove": true,
+					"system_role": true,
+					"system_role_permission": true,
+					"system_user_remove": true,
+					"system_dept_remove": true,
+					"system_permissionTemplate_permission": true,
+					"system_permissionTemplate_update": true,
+					"system_user_add": true,
+					"system_permissionTemplate_add": true,
+					"system_dept_update": true,
+					"system_permissionTemplate": true,
+					"system_role_update": true,
+					"tenant_management": true,
+					"tenant_tenant_update": true,
+					"system_management": true,
+					"system_permissionTemplate_remove": true,
+					"system_permissionTemplate_list": true,
+					"system_role_list": true,
+					"system_user": true,
+					"system_user_update": true,
+					"tenant_tenant_list": true,
+					"system_dict": true,
+					"system_dict_list": true,
+					"system_tenant_menu": true,
+					"system_tenant_menu_list": true
+				},
+				"register_ip": "1.68.100.76",
+				"status": 0,
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"tenantList": [
+					"0bcbdde05fbdb1bc0046c41d052b31f2"
+				]
+			},
+			{
+				"_id": "e62469b25fbcdc61005445345b985dc1",
+				"register_ip": "117.136.4.138",
+				"tenantId": "0bcbdde05fbdb1bc0046c41d052b31f2",
+				"token": [
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzQ1Yjk4NWRjMSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MTA0NjEwODcsImV4cCI6MTYxMDU0NzQ4N30.65UyUyDhvwRGCMH-7pIus-EUlkS1VLXVmImHK5WJ7hE",
+					"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJlNjI0NjliMjVmYmNkYzYxMDA1NDQ1MzQ1Yjk4NWRjMSIsIm5lZWRQZXJtaXNzaW9uIjp0cnVlLCJpYXQiOjE2MTA1NDY5NzksImV4cCI6MTYxMDYzMzM3OX0.pTvfwFHFXjPmfrJ1iQfExM5fmXZNO15Hr8gs2XEpIow"
+				],
+				"dataPermission": 2,
+				"gender": 1,
+				"isTenantAdminOrAdmin": false,
+				"permission": {
+					"goods_list_list": true,
+					"system_dept": true,
+					"system_dept_update": true,
+					"system_user_update": true,
+					"tenant_management": true,
+					"system_user_add": true,
+					"goods_list": true,
+					"goods_management": true,
+					"goods_type": true,
+					"goods_type_list": true,
+					"system_role": true,
+					"system_role_list": true,
+					"system_role_update": true,
+					"tenant_tenant": true,
+					"tenant_tenant_list": true,
+					"tenant_tenant_update": true,
+					"order_list_list": true,
+					"system_dept_list": true,
+					"system_user_list": true,
+					"order_management": true,
+					"system_management": true,
+					"system_role_permission": true,
+					"system_user": true,
+					"file_management": true,
+					"order_list": true,
+					"dishes": true,
+					"dishes_add": true,
+					"dishes_list": true,
+					"dishes_update": true,
+					"table_list": true,
+					"table_list_list": true,
+					"table_management": true,
+					"table_type": true,
+					"table_type_list": true
+				},
+				"register_date": 1605842246615,
+				"status": 0,
+				"tenantList": [
+					"0bcbdde05fbdb1bc0046c41d052b31f2"
+				],
+				"update_date": 1610461075198,
+				"username": "wzh",
+				"dept": [
+					"b1a52c595fbdb39700679a0238eea817",
+					"92d9b75b5fd0868c000cb21e7ae72d88"
+				],
+				"last_login_date": 1610461087185,
+				"last_login_ip": "223.11.196.98",
+				"login_ip_limit": [],
+				"mobile": "1895263963",
+				"nickname": "王志宏",
+				"operator": {
+					"$oid": "5fb63ad1de65bb0001f1312b"
+				},
+				"password": "03caebb36670995fc261a275d212cad65e4bbebd",
+				"creater": {
+					"$oid": "5fb63ad1de65bb0001f1312b"
+				},
+				"role": [
+					"b1a52c595fbdb26a006790303a62c97f"
+				]
+			}
+		]
+	},
+	"uni-verify": {
+		"data": [],
+		"index": [{
+				"IndexName": "mobile",
+				"MgoKeySchema": {
+					"MgoIndexKeys": [{
+							"Name": "mobile",
+							"Direction": "1"
+						},
+						{
+							"Name": "code",
+							"Direction": "1"
+						}
+					],
+					"MgoIsUnique": false
+				}
+			},
+			{
+				"IndexName": "email",
+				"MgoKeySchema": {
+					"MgoIndexKeys": [{
+							"Name": "email",
+							"Direction": "1"
+						},
+						{
+							"Name": "code",
+							"Direction": "1"
+						}
+					],
+					"MgoIsUnique": false
+				}
+			}
+		]
+	}
 }

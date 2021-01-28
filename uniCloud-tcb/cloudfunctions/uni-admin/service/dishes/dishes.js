@@ -88,8 +88,8 @@ module.exports = class MenuService extends Service {
 					var {data: order} = await this.db.collection('opendb-admin-order').doc(orderId).get();
 					var {order_price} = order[0];
 					var orderRes = await transaction.collection('opendb-admin-order').doc(orderId).update({
-						order_price: NP.minus(order_price, parseFloat(goodsPrice)),
-						number: dbCmd.inc(-1),
+						// order_price: NP.minus(order_price, parseFloat(goodsPrice)),
+						// number: dbCmd.inc(-1),
 						update_date,
 						operator
 					});
