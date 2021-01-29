@@ -70,9 +70,9 @@
 <script>
 	import {
 		mapMutations,
-		mapState
+		mapState,
+		mapActions
 	} from 'vuex'
-
 	import errorLog from '@/windows/components/error-log.vue'
 	import updatePassword from '@/windows/components/update-password.vue'
 	import config from '@/admin.config.js'
@@ -81,6 +81,7 @@
 		food,
 		foodSuccess
 	} from "@/util/audio.js"
+	
 	export default {
 		components: {
 			errorLog,
@@ -107,7 +108,8 @@
 				openAudio: false,
 				active: foodSuccess,
 				paddingAudioArr: [],
-				innerAudioContext: null
+				innerAudioContext: null,
+				deptList: []
 			}
 		},
 		computed: {
@@ -136,7 +138,11 @@
 				handler: function(newValue, oldvalue) {
 					var _this = this;
 					if (newValue) {
-						this.$goeasy.subscribe({
+						_this.getCurrentDepts().then((res)=>{
+							_this.deptList = res;
+							_this.subscribe();
+						})
+						_this.$goeasy.subscribe({
 							channel: `${newValue}-orderChange`,
 							onMessage: function(message) {
 								if (message.content.indexOf('addOrder') > -1) {
@@ -159,15 +165,16 @@
 								}
 							},
 							onSuccess: function() {
-								console.log("Subscribe successfully.")
+								console.log("订阅成功")
 							},
 							onFailed: function() {
-								console.log("Subscribe successfully.")
+								console.log("订阅失败")
 							}
 
 						});
 					} else {
-						this.$goeasy.unsubscribe({
+						_this.unsubscribe();
+						_this.$goeasy.unsubscribe({
 							channel: `${oldvalue}-orderChange`,
 							onSuccess: function() {
 								console.log("订阅取消成功。");
@@ -189,6 +196,63 @@
 					commit('user/REMOVE_TOKEN')
 				}
 			}),
+			...mapActions({
+				getCurrentDepts: 'app/getCurrentDepts',
+			}),
+			unsubscribe() {
+				var _this = this;
+				if(this.deptList && this.deptList.length) {
+					this.deptList.forEach((item)=>{
+						_this.$goeasy.unsubscribe({
+							channel: `${item._id}-foodChange`,
+							onSuccess: function() {
+								console.log(`${item.dept_name} 订阅取消成功。`);
+							},
+							onFailed: function(error) {
+								console.log(`${item.dept_name} 订阅取消失败。`);
+							}
+						});
+					})
+				}
+			},
+			subscribe() {
+				var _this = this;
+				if(this.deptList && this.deptList.length) {
+					this.deptList.forEach((item)=>{
+						this.$goeasy.subscribe({
+							channel: `${item._id}-foodChange`,
+							onMessage: function(message) {
+								debugger
+								if (message.content.indexOf('addFood') > -1) {
+									_this.paddingAudioArr.push({
+										type: 'food',
+										audio: _this.food
+									})
+									_this.openAudio = true;
+									var notification = _this.$notify.info({
+										title: '消息',
+										duration: 0,
+										message: '您有新的菜品，请及时制作！',
+										onClick: function() {
+											notification.close();
+											uni.navigateTo({
+												url: '/pages/dishes/dishesByDept?dept=' + item._id + '&name=' + item.dept_name
+											});
+										}
+									});
+								}
+							},
+							onSuccess: function() {
+								console.log(`${item.dept_name} 订阅成功。`);
+							},
+							onFailed: function() {
+								console.log(`${item.dept_name} 订阅失败。`);
+							}
+						
+						});
+					})
+				}
+			},
 			playAudio() {
 				if (this.openAudio && this.paddingAudioArr.length) {
 					var obj = this.paddingAudioArr.shift();

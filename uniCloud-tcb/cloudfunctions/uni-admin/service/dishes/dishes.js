@@ -55,13 +55,6 @@ module.exports = class MenuService extends Service {
 		var {
 			_ids
 		} = data;
-		// if (!_ids || !_ids.length) {
-		// 	return {
-		// 		code: 500,
-		// 		message: `作废失败！`,
-		// 	}
-		// }
-		
 		const transaction = await this.db.startTransaction();
 		try {
 			
@@ -80,26 +73,6 @@ module.exports = class MenuService extends Service {
 						code: 500,
 						data: dishesRes,
 						message: '作废失败！'
-					}
-				}
-				var {data: dishes} = await this.db.collection('opendb-admin-dishes').doc(id).get();
-				if(dishes && dishes.length) {
-					var {goodsPrice, orderId} = dishes[0];
-					var {data: order} = await this.db.collection('opendb-admin-order').doc(orderId).get();
-					var {order_price} = order[0];
-					var orderRes = await transaction.collection('opendb-admin-order').doc(orderId).update({
-						// order_price: NP.minus(order_price, parseFloat(goodsPrice)),
-						// number: dbCmd.inc(-1),
-						update_date,
-						operator
-					});
-					if (!orderRes.updated) {
-						await transaction.rollback()
-						return {
-							code: 500,
-							data: orderRes,
-							message: '作废失败！'
-						}
 					}
 				}
 			}

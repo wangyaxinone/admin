@@ -5,6 +5,8 @@ import {
 	getItem,
 	setItem
 } from '@/js_sdk/uni-admin/localStorage.js'
+import {getDeptByUser} from "@/api/system/user.js"
+import getList from "@/api/system/dept.js"
 export default {
 	namespaced: true,
 	state: {
@@ -19,6 +21,7 @@ export default {
 		mode: getItem("app_mode") || 1, // 1 管理平台 2 门店
 		activeTenant: getItem("app_activeTenant") || '',
 		activeTenantInfo: getItem("app_activeTenantInfo") || {},
+		deptlist:  getItem("app_deptlist") || [],
 	},
 	mutations: {
 		set_ACTIVETENANTINFO: (state, activeTenantInfo) => {
@@ -52,7 +55,11 @@ export default {
 		},
 		TOGGLE_MENU_ACTIVE: (state, url) => {
 			state.active = url
-		}
+		},
+		SET_DEPT_LIST: (state, deptlist) => {
+			state.deptlist = deptlist
+			setItem('app_deptlist', deptlist)
+		},
 	},
 	actions: {
 		mode({commit}){
@@ -98,6 +105,29 @@ export default {
 			commit
 		}, url) {
 			commit('TOGGLE_MENU_ACTIVE', url)
+		},
+		getCurrentDepts({
+			state,
+			commit,
+			rootState
+		}) {
+			if(state.isTenantAdminOrAdmin){
+				return request('system/dept/list', {
+					isCook: 1,
+					tenantId: state.activeTenant
+				}).then((res)=>{
+					commit('SET_DEPT_LIST', res);
+					return res;
+				})
+			}else{
+				return request('system/user/getDeptByUser', {
+					userId: rootState.user.userInfo._id
+				}).then((res)=>{
+					commit('SET_DEPT_LIST', res);
+					return res;
+				})
+				
+			}
 		}
 	}
 }

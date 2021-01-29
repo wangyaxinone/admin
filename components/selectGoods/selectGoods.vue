@@ -280,6 +280,7 @@ export default {
 					}
 					this.currentCateId = goods[0].id;
 					var newParams = Object.assign(params, this.goodsForm);
+					newParams.status = 1;
 					select(newParams)
 						.then(res => {
 							if (res && res.length) {

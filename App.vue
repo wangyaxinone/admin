@@ -5,12 +5,19 @@
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
+	
 	export default {
+		data(){
+			return {
+				deptlist: []
+			}
+		},
 		computed: {
 			...mapGetters({
 				isTokenValid: 'user/isTokenValid'
 			}),
-			...mapState('app', ['mode'])
+			...mapState('app', ['appName', 'mode', 'isTenantAdminOrAdmin', 'activeTenant', 'activeTenantInfo']),
+			...mapState('user', ['userInfo']),
 		},
 		watch:{
 			'mode': {
@@ -41,7 +48,7 @@
 			...mapActions({
 				init: 'app/init',
 				getMode: 'app/mode'
-			})
+			}),
 		},
 		onPageNotFound(msg) {
 			uni.redirectTo({

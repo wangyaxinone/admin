@@ -8,7 +8,7 @@ const {
 	appendTenantParams,
 	getEvertDayCode,
 	goeasyConfig,
-	updateOrder
+	goeasyPushByFood
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -39,15 +39,12 @@ module.exports = class MenuService extends Service {
 		var goods_list = JSON.parse(JSON.stringify(data.goods_list));
 		delete data.goods_list;
 		var goodIds = [];
-		var num = 0;
-		var order_price = 0;
 		var numMap = {};
 		var foods = [];
 		if (goods_list && goods_list.length) {
 			goods_list.forEach((item) => {
 				goodIds.push(item.goodId);
 				numMap[item.goodId] = item;
-				num += parseFloat(item.num || 0);
 			})
 			var {
 				data: goods
@@ -58,7 +55,6 @@ module.exports = class MenuService extends Service {
 				goods.forEach((item) => {
 					if (numMap[item._id].num) {
 						for (var i = 0; i < numMap[item._id].num; i++) {
-							order_price = NP.plus(order_price, parseFloat(item.goodsPrice));
 							foods.push({
 								every_day_code,
 								orderNumber,
@@ -88,8 +84,6 @@ module.exports = class MenuService extends Service {
 				})
 			}
 		}
-		// data.number = num;
-		// data.order_price = order_price;
 		data.isLeave = 2;
 		const transaction = await this.db.startTransaction();
 		try {
@@ -205,11 +199,10 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		if (isStartTransaction) {
-
 			const transaction = await this.db.startTransaction();
 			try {
+				delete data.order_price;
 				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
-
 				if (orderRes.updated) {
 					for (var i = 0; i < foods.length; i++) {
 						var item = foods[i];
@@ -241,6 +234,10 @@ module.exports = class MenuService extends Service {
 						},
 						dataType: 'json'
 					})
+					goeasyPushByFood({
+						orderId: _id,
+						_this: this
+					})
 					await transaction.commit();
 					return orderRes;
 				} else {
@@ -267,6 +264,10 @@ module.exports = class MenuService extends Service {
 				order_comment: data.comment,
 				update_date: getServerDate()
 			})
+			goeasyPushByFood({
+				orderId: _id,
+				_this: this
+			})
 			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 				method: 'POST',
 				data: {
@@ -279,6 +280,7 @@ module.exports = class MenuService extends Service {
 				},
 				dataType: 'json'
 			})
+			delete data.order_price;
 			return await this.db.collection('opendb-admin-order').doc(_id).update(data);
 		}
 
@@ -387,23 +389,6 @@ module.exports = class MenuService extends Service {
 				as: 'foods',
 			})
 			.lookup({
-				from: 'opendb-admin-dishes',
-				let: {
-					orderId: '$_id'
-				},
-				pipeline: $.pipeline()
-					.match(dbCmd.expr(
-						$.eq(['$orderId', '$$orderId'])
-					))
-					.group({
-						_id: null,
-						num: $.sum(1),
-						orderPrice: $.sum('$goodsPrice')
-					})
-					.done(),
-				as: 'foodData',
-			})
-			.lookup({
 				from: 'opendb-admin-table',
 				localField: 'table',
 				foreignField: '_id',
@@ -427,6 +412,18 @@ module.exports = class MenuService extends Service {
 				as: 'operatorShow',
 			})
 			.end();
+			if(data && data.length) {
+				data.forEach((item) =>{
+					item.number = 0;
+					item.order_price = 0;
+					if(item.foods && item.foods.length) {
+						item.foods.forEach((food)=>{
+							item.number = NP.plus(item.number, 1) 
+							item.order_price = NP.plus(item.order_price, food.goodsPrice || 0) 
+						})
+					}
+				})
+			}
 		return {
 			total,
 			page,
@@ -571,15 +568,12 @@ module.exports = class MenuService extends Service {
 		updateData.status = 1;
 		var goods_list = JSON.parse(JSON.stringify(data.goods_list));
 		var goodIds = [];
-		var num = 0;
-		var order_price = 0;
 		var numMap = {};
 		var foods = [];
 		if (goods_list && goods_list.length) {
 			goods_list.forEach((item) => {
 				goodIds.push(item.goodId);
 				numMap[item.goodId] = item;
-				num += parseFloat(item.num || 0);
 			})
 			var {
 				data: goods
@@ -593,7 +587,6 @@ module.exports = class MenuService extends Service {
 				goods.forEach((item) => {
 					if (numMap[item._id].num) {
 						for (var i = 0; i < numMap[item._id].num; i++) {
-							order_price = NP.plus(order_price, parseFloat(item.goodsPrice));
 							foods.push({
 								every_day_code: data.every_day_code,
 								orderNumber: data.order_number,
@@ -622,13 +615,10 @@ module.exports = class MenuService extends Service {
 				})
 			}
 		}
-		// updateData.number = NP.plus(num, parseFloat(data.number));
-		// updateData.order_price = NP.plus(order_price, data.order_price);
 		const transaction = await this.db.startTransaction();
 		try {
 			var orderRes = await transaction.collection('opendb-admin-order').doc(data._id).update(updateData);
-
-			if (orderRes.updated && goods_list && goods_list.length) {
+			if (orderRes.updated && foods && foods.length) {
 				var falg = true;
 				var foodByDept = {};
 				for (var i = 0; i < foods.length; i++) {
@@ -671,10 +661,7 @@ module.exports = class MenuService extends Service {
 						})
 					})
 					await transaction.commit();
-					return  await updateOrder({
-						_this: this,
-						orderId: data._id
-					});
+					return  orderRes;
 				} else {
 					await transaction.rollback(-100)
 					return {

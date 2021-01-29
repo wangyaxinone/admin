@@ -148,30 +148,37 @@ async function getEvertDayCode(cfg) {
 		orderNumber,
 	}
 }
-async function updateOrder(params) {
-	var {
-		orderId,
-		_this
-	} = params;
-	var dbCmd = _this.db.command;
-	var $ = _this.db.command.aggregate;
-	var data = await _this.db.collection('opendb-admin-dishes')
-		.aggregate()
-		.match({
-			'orderId': orderId,
-			'status': dbCmd.neq(4)
-		})
-		.group({
-			_id: null,
-			num: $.sum(1),
-			orderPrice: $.sum('$goodsPrice')
-		})
-		.end();
-	return data;
-}
+
 const goeasyConfig = {
 	path: 'https://rest-hangzhou.goeasy.io/publish',
 	appkey: 'BC-28371c5513814c3dbad7fbd510235716'
+}
+async function goeasyPushByFood(params) {
+	var {orderId, _this} = params;
+	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
+		orderId: orderId
+	}).get();
+	var classMap = {};
+	if(dishes && dishes.length) {
+		for(var i=0;i<dishes.length;i++){
+			var item = dishes[i];
+			if(!classMap[item.deptId]) {
+				classMap[item.deptId] = true;
+				var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+					method: 'POST',
+					data: {
+						appkey: goeasyConfig.appkey,
+						channel: `${item.deptId}-foodChange`,
+						content: `{
+						  type: 'updateFood',
+						  deptId: ${item.deptId}
+					  }`
+					},
+					dataType: 'json'
+				})
+			}
+		}
+	}
 }
 module.exports = {
 	getEvertDayCode,
@@ -180,5 +187,5 @@ module.exports = {
 	getPageConfig,
 	appendTenantParams,
 	goeasyConfig,
-	updateOrder
+	goeasyPushByFood
 }

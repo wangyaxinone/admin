@@ -616,6 +616,7 @@ export default {
 								item.no_order_price = no_order_price;
 								item.foodsMapZhiZuo = foodsMapZhiZuo;
 								item.foodsMapZhiFu = foodsMapZhiFu;
+								
 							})
 						}
 						this.data = res.data;
