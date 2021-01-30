@@ -234,7 +234,7 @@ module.exports = class MenuService extends Service {
 						},
 						dataType: 'json'
 					})
-					goeasyPushByFood({
+					await goeasyPushByFood({
 						orderId: _id,
 						_this: this
 					})
@@ -264,7 +264,7 @@ module.exports = class MenuService extends Service {
 				order_comment: data.comment,
 				update_date: getServerDate()
 			})
-			goeasyPushByFood({
+			await goeasyPushByFood({
 				orderId: _id,
 				_this: this
 			})
@@ -333,6 +333,12 @@ module.exports = class MenuService extends Service {
 				},
 				dataType: 'json'
 			})
+			for (var i = 0; i < _ids.length; i++) {
+				await goeasyPushByFood({
+					orderId: _ids[i],
+					_this: this
+				})
+			}
 			await transaction.commit();
 			return remobeRes;
 		} catch (e) {
@@ -495,6 +501,12 @@ module.exports = class MenuService extends Service {
 				},
 				dataType: 'json'
 			})
+			for (var i = 0; i < _ids.length; i++) {
+				await goeasyPushByFood({
+					orderId: _ids[i],
+					_this: this
+				})
+			}
 			await transaction.commit();
 			return remobeRes;
 		} catch (e) {

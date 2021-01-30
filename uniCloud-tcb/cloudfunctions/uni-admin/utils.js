@@ -180,6 +180,33 @@ async function goeasyPushByFood(params) {
 		}
 	}
 }
+async function goeasyPushBydishes(params) {
+	var {_ids, _this} = params;
+	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
+		_id: _this.db.command.in(_ids)
+	}).get();
+	var classMap = {};
+	if(dishes && dishes.length) {
+		for(var i=0;i<dishes.length;i++){
+			var item = dishes[i];
+			if(!classMap[item.deptId]) {
+				classMap[item.deptId] = true;
+				var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+					method: 'POST',
+					data: {
+						appkey: goeasyConfig.appkey,
+						channel: `${item.deptId}-foodChange`,
+						content: `{
+						  type: 'updateFood',
+						  deptId: ${item.deptId}
+					  }`
+					},
+					dataType: 'json'
+				})
+			}
+		}
+	}
+}
 module.exports = {
 	getEvertDayCode,
 	getServerDate,
@@ -187,5 +214,6 @@ module.exports = {
 	getPageConfig,
 	appendTenantParams,
 	goeasyConfig,
-	goeasyPushByFood
+	goeasyPushByFood,
+	goeasyPushBydishes
 }

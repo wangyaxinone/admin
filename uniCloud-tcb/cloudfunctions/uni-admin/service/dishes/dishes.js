@@ -5,7 +5,8 @@ const {
 	getPageConfig,
 	getServerDate,
 	getTree,
-	appendTenantParams
+	appendTenantParams,
+	goeasyPushBydishes
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -20,35 +21,52 @@ module.exports = class MenuService extends Service {
 		return await this.db.collection('opendb-admin-dishes').add(data);
 	}
 	async cook(data) {
+		var _this = this;
 		var {
 			_ids
 		} = data;
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
-		return await this.db.collection('opendb-admin-dishes').where({
+		var res= await this.db.collection('opendb-admin-dishes').where({
 			'_id': this.db.command.in(_ids)
 		}).update({
 			status: 2,
 			update_date,
 			operator
 		});
+		if(res.updated){
+			await goeasyPushBydishes({
+				_ids: _ids,
+				_this: _this
+			})
+		}
+		return res;
 	}
 	async updateStatus(data) {
+		var _this = this;
 		var {
 			_ids,
 			status
 		} = data;
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
-		return await this.db.collection('opendb-admin-dishes').where({
+		var res = await this.db.collection('opendb-admin-dishes').where({
 			'_id': this.db.command.in(_ids)
 		}).update({
 			status: status,
 			update_date,
 			operator
 		});
+		if(res.updated){
+			await goeasyPushBydishes({
+				_ids: _ids,
+				_this: _this
+			})
+		}
+		return res;
 	}
 	async invalid(data) {
+		var _this = this;
 		var dbCmd = this.db.command;
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
@@ -76,6 +94,13 @@ module.exports = class MenuService extends Service {
 					}
 				}
 			}
+			var {data: dishes} = await this.db.collection('opendb-admin-dishes').where({
+				'_id': this.db.command.in(_ids)
+			}).get();
+			await goeasyPushBydishes({
+				_ids: _ids,
+				_this: _this
+			})
 			await transaction.commit();
 			return {
 				code: 0,

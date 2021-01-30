@@ -174,6 +174,9 @@ export default {
 			this.tableTypeList = res;
 		});
 		this.loadData();
+		this.$eventBus.on('orderChange', ()=>{
+			this.loadData();
+		})
 	},
 	watch: {
 		dialogVisible() {

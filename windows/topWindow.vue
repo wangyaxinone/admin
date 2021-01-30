@@ -145,6 +145,7 @@
 						_this.$goeasy.subscribe({
 							channel: `${newValue}-orderChange`,
 							onMessage: function(message) {
+								_this.$eventBus.emit('orderChange');
 								if (message.content.indexOf('addOrder') > -1) {
 									_this.paddingAudioArr.push({
 										type: 'order',
@@ -222,7 +223,7 @@
 						this.$goeasy.subscribe({
 							channel: `${item._id}-foodChange`,
 							onMessage: function(message) {
-								debugger
+								_this.$eventBus.emit('foodChange');
 								if (message.content.indexOf('addFood') > -1) {
 									_this.paddingAudioArr.push({
 										type: 'food',

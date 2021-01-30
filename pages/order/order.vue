@@ -302,6 +302,9 @@ export default {
 		e.order_number && (params.order_number = e.order_number);
 		e.status && (params.status = parseFloat(e.status));
 		this.params = params;
+		this.$eventBus.on('orderChange', ()=>{
+			this.loadData();
+		})
 	},
 	watch: {
 		'form.order_type':(newValue, oldValue)=>{

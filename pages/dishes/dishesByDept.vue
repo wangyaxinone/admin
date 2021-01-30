@@ -240,6 +240,10 @@ export default {
 		e.dept && (params.deptId = e.dept);
 		this.dept_name = e.name;
 		this.params = params;
+		this.$eventBus.on('foodChange', ()=>{
+			debugger
+			this.loadData();
+		})
 	},
 	watch: {
 		'form.order_type':(newValue, oldValue)=>{
@@ -548,36 +552,13 @@ export default {
 								if(item.operatorShow && item.operatorShow.length) {
 									item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
 								}
-								var foodsMapZhiZuo = {};
-								var foodsMapZhiFu = {};
-								var no_order_price = 0;
 								var tableName = [];
-								if(item.foods && item.foods.length) {
-									item.foods.forEach((food)=>{
-										foodsMapZhiZuo[food.status] = foodsMapZhiZuo[food.status] || {};
-										foodsMapZhiZuo[food.status][food.goodsId] = foodsMapZhiZuo[food.status][food.goodsId] || JSON.parse(JSON.stringify(food));
-										foodsMapZhiZuo[food.status][food.goodsId].num = foodsMapZhiZuo[food.status][food.goodsId].num || 0;
-										foodsMapZhiZuo[food.status][food.goodsId].num++;
-										
-										foodsMapZhiFu[food.order_status] = foodsMapZhiFu[food.order_status] || {};
-										foodsMapZhiFu[food.order_status][food.goodsId] = foodsMapZhiFu[food.order_status][food.goodsId] || JSON.parse(JSON.stringify(food));
-										foodsMapZhiFu[food.order_status][food.goodsId].num = foodsMapZhiFu[food.order_status][food.goodsId].num || 0;
-										foodsMapZhiFu[food.order_status][food.goodsId].num++;
-										
-										if(food.order_status === 1) {
-											no_order_price = _this.$NP.plus(no_order_price, food.goodsPrice);
-										}
-									})
-								}
 								if(item.tables && item.tables.length){
 									item.tables.forEach((child)=>{
 										tableName.push(child.name);
 									})
 								}
 								item.tableName = tableName.join(',');
-								item.no_order_price = no_order_price;
-								item.foodsMapZhiZuo = foodsMapZhiZuo;
-								item.foodsMapZhiFu = foodsMapZhiFu;
 							})
 						}
 						this.data = res.data;

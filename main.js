@@ -17,6 +17,9 @@ Vue.use(ElementUI);
 Vue.use(AvueMap);
 Vue.use(plugin)
 
+import eventBus from '@/util/eventBus.js';
+Vue.prototype.$eventBus = eventBus;
+
 import GoEasy from 'goeasy';
 Vue.prototype.$goeasy = GoEasy.getInstance({
     host: 'hangzhou.goeasy.io',
