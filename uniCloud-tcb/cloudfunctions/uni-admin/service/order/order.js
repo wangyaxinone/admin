@@ -114,7 +114,7 @@ module.exports = class MenuService extends Service {
 						},
 						dataType: 'json'
 					})
-					Object.keys(foodByDept).forEach(async (deptId) => {
+					for(var deptId in foodByDept){
 						var num = foodByDept[deptId];
 						var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 							method: 'POST',
@@ -129,7 +129,7 @@ module.exports = class MenuService extends Service {
 							},
 							dataType: 'json'
 						})
-					})
+					}
 					await transaction.commit();
 					return orderRes;
 				} else {
@@ -656,7 +656,7 @@ module.exports = class MenuService extends Service {
 						},
 						dataType: 'json'
 					})
-					Object.keys(foodByDept).forEach(async (deptId) => {
+					for(var deptId in foodByDept){
 						var num = foodByDept[deptId];
 						var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 							method: 'POST',
@@ -671,7 +671,7 @@ module.exports = class MenuService extends Service {
 							},
 							dataType: 'json'
 						})
-					})
+					}
 					await transaction.commit();
 					return  orderRes;
 				} else {

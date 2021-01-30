@@ -241,7 +241,6 @@ export default {
 		this.dept_name = e.name;
 		this.params = params;
 		this.$eventBus.on('foodChange', ()=>{
-			debugger
 			this.loadData();
 		})
 	},

@@ -75,6 +75,9 @@ class EventBus {
 	 * @param event
 	 */
 	emit(event) {
+		if(!this._events[event]){
+			return;
+		}
 		//once删除事件会导致下面循环过程中this._events内fn前移, 所以此处复制成新数组
 		let cbs = [...this._events[event]];
 		if (cbs) {
