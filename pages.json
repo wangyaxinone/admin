@@ -86,6 +86,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/tenantset/tenantset",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/system",

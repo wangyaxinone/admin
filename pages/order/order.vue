@@ -132,7 +132,7 @@ export default {
 			return {
 				addBtn: this.navBtn.goods_type_add || false,
 				viewBtn: this.navBtn.goods_type_list || false,
-				delBtn: this.navBtn.goods_type_remove || false,
+				delBtn: this.$store.state.user.userInfo.role.indexOf('admin')>-1 || false,
 				editBtn: this.navBtn.goods_type_update || false
 			};
 		}
