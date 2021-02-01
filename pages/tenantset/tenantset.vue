@@ -19,9 +19,13 @@
 
 <script>
 	import payset from "./components/payset.vue"
+	import pushset from "./components/pushset.vue"
+	import printset from "./components/printset.vue"
 	export default {
 		components:{
-			payset
+			payset,
+			pushset,
+			printset
 		},
 		data() {
 			return {
@@ -30,10 +34,10 @@
 					components: 'payset'
 				}, {
 					label: '推送设置',
-					components: ''
+					components: 'pushset'
 				}, {
 					label: '打印机设置',
-					components: ''
+					components: 'printset'
 				}, {
 					label: '菜品制作设置',
 					components: ''
