@@ -80,6 +80,15 @@ module.exports = class MenuService extends Service {
 		data.point = new this.db.Geo.Point(data.longitude, data.latitude);
 		return await this.db.collection('opendb-admin-tenant').doc(_id).update(data);
 	}
+	async updatePush(data) {
+		const {
+			_id
+		} = data;
+		delete data._id;
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth._id;
+		return await this.db.collection('opendb-admin-tenant').doc(_id).update(data);
+	}
 	async remove(_ids) {
 		await this.db.collection('uni-id-roles').where({
 			'tenantId': this.db.command.in(_ids)
@@ -91,9 +100,11 @@ module.exports = class MenuService extends Service {
 			'_id': this.db.command.in(_ids)
 		}).remove();
 	}
-	async list(name) {
+	async list(params) {
+		var {name, _id} = params;
 		var match = {};
 		name && (match.name = new RegExp(name));
+		_id && (match._id = _id);
 		appendTenantParams({
 			match, 
 			_this: this,

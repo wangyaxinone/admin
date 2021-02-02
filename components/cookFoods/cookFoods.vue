@@ -57,12 +57,14 @@
 			},
 			cencel() {
 				this.loading = true;
+				var tenantId = this.tableData[0].tenantId;
 				var _ids = this.tableData.map((item)=>{
 					return item._id;
 				})
 				updateStatus({
 					_ids,
-					status: 1
+					status: 1,
+					tenantId
 				}).then(()=>{
 					this.loading = false;
 					this.hide();
@@ -73,12 +75,14 @@
 			},
 			submit() {
 				this.loading = true;
+				var tenantId = this.tableData[0].tenantId;
 				var _ids = this.tableData.map((item)=>{
 					return item._id;
 				})
 				updateStatus({
 					_ids,
-					status: 3
+					status: 3,
+					tenantId
 				}).then(()=>{
 					this.loading = false;
 					this.hide();

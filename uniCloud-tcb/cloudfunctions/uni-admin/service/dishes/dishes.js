@@ -18,12 +18,15 @@ module.exports = class MenuService extends Service {
 		if (!data.tenantId) {
 			data.tenantId = this.ctx.auth.userInfo.tenantId;
 		}
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: data.tenantId}).get();
+		var goeasyConfig = tenants[0];
 		return await this.db.collection('opendb-admin-dishes').add(data);
 	}
 	async cook(data) {
 		var _this = this;
 		var {
-			_ids
+			_ids,
+			tenantId
 		} = data;
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
@@ -37,7 +40,8 @@ module.exports = class MenuService extends Service {
 		if(res.updated){
 			await goeasyPushBydishes({
 				_ids: _ids,
-				_this: _this
+				_this: _this,
+				tenantId
 			})
 		}
 		return res;
@@ -46,7 +50,8 @@ module.exports = class MenuService extends Service {
 		var _this = this;
 		var {
 			_ids,
-			status
+			status,
+			tenantId
 		} = data;
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
@@ -60,7 +65,8 @@ module.exports = class MenuService extends Service {
 		if(res.updated){
 			await goeasyPushBydishes({
 				_ids: _ids,
-				_this: _this
+				_this: _this,
+				tenantId
 			})
 		}
 		return res;
@@ -71,7 +77,8 @@ module.exports = class MenuService extends Service {
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
 		var {
-			_ids
+			_ids,
+			tenantId
 		} = data;
 		const transaction = await this.db.startTransaction();
 		try {
@@ -99,7 +106,8 @@ module.exports = class MenuService extends Service {
 			}).get();
 			await goeasyPushBydishes({
 				_ids: _ids,
-				_this: _this
+				_this: _this,
+				tenantId
 			})
 			await transaction.commit();
 			return {

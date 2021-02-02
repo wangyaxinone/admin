@@ -149,12 +149,12 @@ async function getEvertDayCode(cfg) {
 	}
 }
 
-const goeasyConfig = {
-	path: 'https://rest-hangzhou.goeasy.io/publish',
-	appkey: 'BC-28371c5513814c3dbad7fbd510235716'
-}
+// const goeasyConfig = {
+// 	path: 'https://rest-hangzhou.goeasy.io/publish',
+// 	appkey: 'BC-28371c5513814c3dbad7fbd510235716'
+// }
 async function goeasyPushByFood(params) {
-	var {orderId, _this} = params;
+	var {orderId, _this, goeasyConfig} = params;
 	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
 		orderId: orderId
 	}).get();
@@ -181,7 +181,9 @@ async function goeasyPushByFood(params) {
 	}
 }
 async function goeasyPushBydishes(params) {
-	var {_ids, _this} = params;
+	var {_ids, _this, tenantId} = params;
+	var {data: tenants} =await _this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+	var goeasyConfig = tenants[0];
 	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
 		_id: _this.db.command.in(_ids)
 	}).get();
@@ -213,7 +215,7 @@ module.exports = {
 	getTree,
 	getPageConfig,
 	appendTenantParams,
-	goeasyConfig,
+	// goeasyConfig,
 	goeasyPushByFood,
 	goeasyPushBydishes
 }

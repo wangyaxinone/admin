@@ -14,6 +14,10 @@ export const update = (params) => {
   return request('system/tenant/update', params);
 }
 
+export const updatePush = (params) => {
+  return request('system/tenant/updatePush', params);
+}
+
 export const remove = (params) => {
   return request('system/tenant/remove', params);
 }

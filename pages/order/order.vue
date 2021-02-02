@@ -378,7 +378,8 @@ export default {
 				type: 'warning'
 			}).then(() => {
 				invalid({
-					_ids: [row._id]
+					_ids: [row._id],
+					tenantId: row.tenantId
 				}).then(res => {
 					this.$message({
 						message: '作废成功',
@@ -487,7 +488,8 @@ export default {
 				type: 'warning'
 			}).then(() => {
 				remove({
-					_ids: [row._id]
+					_ids: [row._id],
+					tenantId: row.tenantId
 				}).then(res => {
 					this.$message({
 						message: '删除成功',

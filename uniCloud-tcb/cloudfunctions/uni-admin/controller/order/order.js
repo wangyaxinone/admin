@@ -53,8 +53,9 @@ module.exports = class UserController extends Controller {
 	async remove() {
 		const {
 			_ids,
+			tenantId
 		} = this.ctx.data
-		return await this.service.order.order.remove(_ids);
+		return await this.service.order.order.remove(_ids, tenantId);
 	}
 	async list() {
 		return await this.service.order.order.list(this.ctx.data);

@@ -6,7 +6,7 @@
 					<a href="https://www.goeasy.io/" target="_blank">GoEasy</a>
 					）
 				</span>
-				<el-button @click="submitForm('ruleForm')" style="float: right; " size="small" type="success">保存</el-button>
+				<el-button :loading="loading" @click="submitForm('ruleForm')" style="float: right; " size="small" type="success">保存</el-button>
 			</div>
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="path" prop="path">
@@ -21,6 +21,10 @@
 </template>
 
 <script>
+	import {
+		getList,
+		updatePush
+	} from "@/api/tenant/tenant.js"
 	export default {
 
 		data() {
@@ -29,6 +33,7 @@
 					path: '',
 					appkey: ''
 				},
+				loading: false,
 				rules: {
 					path: [{
 						required: true,
@@ -44,15 +49,29 @@
 			}
 		},
 		created() {
-
+			getList({
+				_id: this.$store.state.app.activeTenant
+			}).then((res)=>{
+				if(res && res.length) {
+					this.ruleForm = res[0]
+				}
+			})
 		},
 		methods: {
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						alert('submit!');
+						this.loading = true;
+						updatePush(this.ruleForm).then(()=>{
+							this.$message({
+							  message: '保存成功',
+							  type: 'success'
+							});
+							this.loading = false;
+						}).catch(()=>{
+							this.loading = false;
+						})
 					} else {
-						console.log('error submit!!');
 						return false;
 					}
 				});

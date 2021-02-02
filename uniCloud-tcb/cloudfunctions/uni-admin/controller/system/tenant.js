@@ -44,6 +44,18 @@ module.exports = class UserController extends Controller {
 			latitude
 		});
 	}
+	async updatePush() {
+		const {
+			_id,
+			path,
+			appkey,
+		} = this.ctx.data
+		return await this.service.system.tenant.updatePush({
+			_id,
+			path,
+			appkey,
+		});
+	}
 	async remove() {
 		const {
 			_ids,
@@ -51,10 +63,7 @@ module.exports = class UserController extends Controller {
 		return await this.service.system.tenant.remove(_ids);
 	}
 	async list() {
-		const {
-			name,
-		} = this.ctx.data
-		return await this.service.system.tenant.list(name);
+		return await this.service.system.tenant.list(this.ctx.data);
 	}
 	async tree() {
 		const {

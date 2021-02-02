@@ -7,7 +7,7 @@ const {
 	getTree,
 	appendTenantParams,
 	getEvertDayCode,
-	goeasyConfig,
+	// goeasyConfig,
 	goeasyPushByFood
 } = require('../../utils.js');
 const NP = require('number-precision');
@@ -17,6 +17,8 @@ module.exports = class MenuService extends Service {
 		var {
 			tenantId
 		} = data;
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+		var goeasyConfig = tenants[0];
 		var date = getServerDate();
 		data.create_date = date
 		data.update_date = date;
@@ -85,6 +87,7 @@ module.exports = class MenuService extends Service {
 			}
 		}
 		data.isLeave = 2;
+		
 		const transaction = await this.db.startTransaction();
 		try {
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
@@ -165,6 +168,8 @@ module.exports = class MenuService extends Service {
 			no_amound_price,
 			tenantId
 		} = data;
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+		var goeasyConfig = tenants[0];
 		var _this = this;
 		var foods = JSON.parse(JSON.stringify(data.foods));
 		delete data._id;
@@ -236,7 +241,8 @@ module.exports = class MenuService extends Service {
 					})
 					await goeasyPushByFood({
 						orderId: _id,
-						_this: this
+						_this: this,
+						goeasyConfig
 					})
 					await transaction.commit();
 					return orderRes;
@@ -266,7 +272,8 @@ module.exports = class MenuService extends Service {
 			})
 			await goeasyPushByFood({
 				orderId: _id,
-				_this: this
+				_this: this,
+				goeasyConfig
 			})
 			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 				method: 'POST',
@@ -285,8 +292,9 @@ module.exports = class MenuService extends Service {
 		}
 
 	}
-	async remove(_ids) {
+	async remove(_ids, tenantId) {
 		var _this = this;
+		
 		const transaction = await this.db.startTransaction();
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
@@ -321,6 +329,8 @@ module.exports = class MenuService extends Service {
 			var {
 				tenantId
 			} = dishesyes[0];
+			var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+			var goeasyConfig = tenants[0];
 			var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 				method: 'POST',
 				data: {
@@ -336,7 +346,8 @@ module.exports = class MenuService extends Service {
 			for (var i = 0; i < _ids.length; i++) {
 				await goeasyPushByFood({
 					orderId: _ids[i],
-					_this: this
+					_this: this,
+					goeasyConfig
 				})
 			}
 			await transaction.commit();
@@ -424,8 +435,10 @@ module.exports = class MenuService extends Service {
 					item.order_price = 0;
 					if(item.foods && item.foods.length) {
 						item.foods.forEach((food)=>{
-							item.number = NP.plus(item.number, 1) 
-							item.order_price = NP.plus(item.order_price, food.goodsPrice || 0) 
+							if(food.status != 4) {
+								item.number = NP.plus(item.number, 1)
+								item.order_price = NP.plus(item.order_price, food.goodsPrice || 0) 
+							}
 						})
 					}
 				})
@@ -440,11 +453,14 @@ module.exports = class MenuService extends Service {
 	async invalid(data) {
 		var _this = this;
 		var {
-			_ids
+			_ids,
+			tenantId
 		} = data;
 		if (!_ids || !_ids.length) {
 			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
 		}
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+		var goeasyConfig = tenants[0];
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
 		const transaction = await this.db.startTransaction();
@@ -504,7 +520,8 @@ module.exports = class MenuService extends Service {
 			for (var i = 0; i < _ids.length; i++) {
 				await goeasyPushByFood({
 					orderId: _ids[i],
-					_this: this
+					_this: this,
+					goeasyConfig
 				})
 			}
 			await transaction.commit();
@@ -520,11 +537,14 @@ module.exports = class MenuService extends Service {
 	async leave(data) {
 		var _this = this;
 		var {
-			_ids
+			_ids,
+			tenantId
 		} = data;
 		if (!_ids || !_ids.length) {
 			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
 		}
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
+		var goeasyConfig = tenants[0];
 		const transaction = await this.db.startTransaction();
 		var update_date = getServerDate();
 		var operator = this.ctx.auth.uid;
@@ -573,6 +593,8 @@ module.exports = class MenuService extends Service {
 	}
 	async addFoods(data) {
 		var _this = this;
+		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: data.tenantId}).get();
+		var goeasyConfig = tenants[0];
 		var updateData = {};
 		var date = getServerDate();
 		updateData.update_date = date;

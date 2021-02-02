@@ -322,7 +322,8 @@ export default {
 					var _ids = foods.map((item)=>{
 						return item._id;
 					})
-					cook({_ids}).then(()=>{
+					var tenantId = foods[0].tenantId;
+					cook({_ids, tenantId}).then(()=>{
 						this.$refs.cookFoods.show();
 						this.loadData();
 					})
@@ -336,7 +337,8 @@ export default {
 				type: 'warning'
 			}).then(() => {
 				invalid({
-					_ids: [row._id]
+					_ids: [row._id],
+					tenantId: row.tenantId
 				}).then(res => {
 					this.$message({
 						message: '作废成功',

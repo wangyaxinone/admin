@@ -196,7 +196,8 @@ export default {
 		},
 		leave(item) {
 			leave({
-				_ids: [item.order._id]
+				_ids: [item.order._id],
+				tenantId:item.order.tenantId
 			}).then((res)=>{
 				this.loadData();
 				this.$message({
