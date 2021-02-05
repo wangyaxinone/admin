@@ -20,22 +20,8 @@ Vue.use(plugin)
 import eventBus from '@/util/eventBus.js';
 Vue.prototype.$eventBus = eventBus;
 
-import GoEasy from 'goeasy';
-Vue.prototype.$goeasy = GoEasy.getInstance({
-    host: 'hangzhou.goeasy.io',
-    appkey: 'BC-28371c5513814c3dbad7fbd510235716'
-});
-Vue.prototype.$goeasy.connect({
-    onSuccess: function () {  //连接成功
-        console.log("GoEasy connect successfully.") //连接成功
-    },
-    onFailed: function (error) { //连接失败
-        console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
-    },
-    onProgress:function(attempts) { //连接或自动重连中
-        console.log("GoEasy is connecting", attempts);    
-    }
-});
+
+
 
 App.mpType = 'app'
 Vue.component('selectUser', selectUser)

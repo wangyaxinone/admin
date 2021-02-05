@@ -1,6 +1,6 @@
 <template>
 	<view class="uni-container">
-		<el-card class="box-card">
+		<el-card class="box-card" v-loading="loading2">
 			<div slot="header" class="clearfix">
 				<span>推送设置（仅支持
 					<a href="https://www.goeasy.io/" target="_blank">GoEasy</a>
@@ -34,6 +34,7 @@
 					appkey: ''
 				},
 				loading: false,
+				loading2: false,
 				rules: {
 					path: [{
 						required: true,
@@ -49,12 +50,16 @@
 			}
 		},
 		created() {
+			this.loading2 = true;
 			getList({
 				_id: this.$store.state.app.activeTenant
 			}).then((res)=>{
 				if(res && res.length) {
 					this.ruleForm = res[0]
 				}
+				this.loading2 = false;
+			}).catch(()=>{
+				this.loading2 = false;
 			})
 		},
 		methods: {

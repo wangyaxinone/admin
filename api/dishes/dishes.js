@@ -11,14 +11,14 @@ export const add = (params) => {
 }
 
 export const cook = (params) => {
-  return request('dishes/dishes/cook', params);
+  return request('dishes/dishes/cook', params, {loading: true});
 }
 export const updateStatus = (params) => {
   return request('dishes/dishes/updateStatus', params);
 }
 
 export const invalid = (params) => {
-  return request('dishes/dishes/invalid', params);
+  return request('dishes/dishes/invalid', params, {loading: true});
 }
 
 

@@ -14,8 +14,8 @@
 					<text style="font-size:16px;font-weight:bold;color:#333;">{{activeTenant ? activeTenantInfo.name : appName}}</text>
 				</navigator>
 				<uni-icons @click="toggleSidebar" type="bars" class="menu-icon" size="30" color="#999"></uni-icons>
-				<audio ref="media" :src="active" controls="controls" autobuffer="autobuffer" width="0" heigt="0" style="position:absolute;left:-1000px;">
-				</audio>
+				<!-- <audio ref="media" id="audio" :src="active" controls="controls" autobuffer="autobuffer" width="0" heigt="0" style="position:absolute;left:-1000px;">
+				</audio> -->
 			</view>
 			<view class="navbar-middle">
 				<text class="title-text">{{navigationBarTitleText}}</text>
@@ -81,7 +81,8 @@
 		food,
 		foodSuccess
 	} from "@/util/audio.js"
-	
+	import GoEasy from 'goeasy';
+	import Vue from 'vue'
 	export default {
 		components: {
 			errorLog,
@@ -137,51 +138,76 @@
 			'$store.state.app.activeTenant': {
 				handler: function(newValue, oldvalue) {
 					var _this = this;
-					if (newValue) {
-						_this.getCurrentDepts().then((res)=>{
-							_this.deptList = res;
-							_this.subscribe();
-						})
-						_this.$goeasy.subscribe({
-							channel: `${newValue}-orderChange`,
-							onMessage: function(message) {
-								_this.$eventBus.emit('orderChange');
-								if (message.content.indexOf('addOrder') > -1) {
-									_this.paddingAudioArr.push({
-										type: 'order',
-										audio: _this.order
-									})
-									_this.openAudio = true;
-									var notification = _this.$notify.info({
-										title: '消息',
-										duration: 0,
-										message: '您有新的订单，请注意查收！',
-										onClick: function() {
-											notification.close();
-											uni.navigateTo({
-												url: '/pages/order/order'
+					
+					if (newValue && this.activeTenantInfo.appkey) {
+						Vue.prototype.$goeasy = GoEasy.getInstance({
+						    host: 'hangzhou.goeasy.io',
+						    appkey: this.activeTenantInfo.appkey
+						});
+						Vue.prototype.$goeasy.connect({
+						    onSuccess: function () {  //连接成功
+						        console.log("GoEasy connect successfully.") //连接成功
+								_this.getCurrentDepts().then((res)=>{
+									_this.deptList = res;
+									_this.subscribe();
+								})
+								_this.$goeasy.subscribe({
+									channel: `${newValue}-orderChange`,
+									onMessage: function(message) {
+										_this.$eventBus.emit('orderChange');
+										if (message.content.indexOf('addOrder') > -1) {
+											_this.paddingAudioArr.push({
+												type: 'order',
+												audio: _this.order
+											})
+											_this.openAudio = true;
+											var notification = _this.$notify.info({
+												title: '消息',
+												duration: 0,
+												message: '您有新的订单，请注意查收！',
+												onClick: function() {
+													notification.close();
+													uni.navigateTo({
+														url: '/pages/order/order'
+													});
+												}
 											});
 										}
-									});
-								}
-							},
-							onSuccess: function() {
-								console.log("订阅成功")
-							},
-							onFailed: function() {
-								console.log("订阅失败")
-							}
-
+									},
+									onSuccess: function() {
+										console.log("订阅成功")
+									},
+									onFailed: function() {
+										console.log("订阅失败")
+									}
+								
+								});
+						    },
+						    onFailed: function (error) { //连接失败
+						        console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);
+						    },
+						    onProgress:function(attempts) { //连接或自动重连中
+						        console.log("GoEasy is connecting", attempts);    
+						    }
 						});
+						
 					} else {
-						_this.unsubscribe();
-						_this.$goeasy.unsubscribe({
-							channel: `${oldvalue}-orderChange`,
-							onSuccess: function() {
-								console.log("订阅取消成功。");
+						// _this.unsubscribe();
+						// _this.$goeasy && _this.$goeasy.unsubscribe({
+						// 	channel: `${oldvalue}-orderChange`,
+						// 	onSuccess: function() {
+						// 		console.log("订阅取消成功。");
+						// 	},
+						// 	onFailed: function(error) {
+						// 		console.log("取消订阅失败，错误编码：" + error.code + " 错误信息：" + error.content)
+						// 	}
+						// });
+						_this.$goeasy && _this.$goeasy.disconnect({
+							onSuccess: function(){
+								console.log("GoEasy disconnect successfully.")
 							},
-							onFailed: function(error) {
-								console.log("取消订阅失败，错误编码：" + error.code + " 错误信息：" + error.content)
+							onFailed: function(error){
+								console.log("Failed to disconnect GoEasy, code:"+error.code+ ",error:"+error.content);
 							}
 						});
 					}
@@ -204,7 +230,7 @@
 				var _this = this;
 				if(this.deptList && this.deptList.length) {
 					this.deptList.forEach((item)=>{
-						_this.$goeasy.unsubscribe({
+						_this.$goeasy && _this.$goeasy.unsubscribe({
 							channel: `${item._id}-foodChange`,
 							onSuccess: function() {
 								console.log(`${item.dept_name} 订阅取消成功。`);
@@ -297,7 +323,6 @@
 				})
 			},
 			toggleSidebar() {
-				debugger
 				if (!this.showLeftWindow) {
 					uni.showLeftWindow()
 				} else {

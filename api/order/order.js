@@ -15,15 +15,15 @@ export const update = (params) => {
 }
 
 export const remove = (params) => {
-  return request('order/order/remove', params);
+  return request('order/order/remove', params, {loading: true});
 }
 
 export const invalid = (params) => {
-  return request('order/order/invalid', params);
+  return request('order/order/invalid', params, {loading: true});
 }
 
 export const leave = (params) => {
-  return request('order/order/leave', params);
+  return request('order/order/leave', params, {loading: true});
 }
 
 export const addFood = (params) => {

@@ -1,11 +1,18 @@
 import store from '@/store'
 import config from '@/admin.config.js'
 const debugOptions = config.navBar.debug
-import { Message } from 'element-ui';
-export function request(action, data, {
+import {
+	Message,
+	Loading
+} from 'element-ui';
+var loadingInstance = null;
+export function request(action, data, options,{
 	functionName = 'uni-admin',
 	showModal = true
 } = {}) {
+	if(options && options.loading) {
+		loadingInstance = Loading.service();
+	}
 	return uniCloud.callFunction({
 		name: functionName,
 		data: {
@@ -15,6 +22,9 @@ export function request(action, data, {
 	}).then(({
 		result
 	}) => {
+		if(loadingInstance) {
+			loadingInstance.close();
+		}
 		if (result.code) {
 			if (typeof result.code === 'string' && result.code.indexOf('TOKEN_INVALID') === 0) {
 				uni.reLaunch({
@@ -37,6 +47,9 @@ export function request(action, data, {
 		}
 		return Promise.resolve(result)
 	}).catch(err => {
+		if(loadingInstance) {
+			loadingInstance.close();
+		}
 		Message.error(err.message || '请求服务失败');
 		if (debugOptions && debugOptions.enable === true) {
 			store.dispatch('error/add', {

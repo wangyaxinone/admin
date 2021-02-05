@@ -153,8 +153,29 @@ async function getEvertDayCode(cfg) {
 // 	path: 'https://rest-hangzhou.goeasy.io/publish',
 // 	appkey: 'BC-28371c5513814c3dbad7fbd510235716'
 // }
+async function goeasyPushByTenant(params) {
+	var {tenantId, _this, goeasyConfig} = params;
+	if(!goeasyConfig.path || !goeasyConfig.appkey) {
+		return;
+	}
+	var res = await uniCloud.httpclient.request(goeasyConfig.path, {
+		method: 'POST',
+		data: {
+			appkey: goeasyConfig.appkey,
+			channel: `${tenantId}-orderChange`,
+			content: `{
+			  type: 'updateOrder',
+			  tenantId: ${tenantId}
+		  }`
+		},
+		dataType: 'json'
+	})
+}
 async function goeasyPushByFood(params) {
 	var {orderId, _this, goeasyConfig} = params;
+	if(!goeasyConfig.path || !goeasyConfig.appkey) {
+		return;
+	}
 	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
 		orderId: orderId
 	}).get();
@@ -184,6 +205,9 @@ async function goeasyPushBydishes(params) {
 	var {_ids, _this, tenantId} = params;
 	var {data: tenants} =await _this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
 	var goeasyConfig = tenants[0];
+	if(!goeasyConfig.path || !goeasyConfig.appkey) {
+		return;
+	}
 	var {data: dishes} = await _this.db.collection('opendb-admin-dishes').where({
 		_id: _this.db.command.in(_ids)
 	}).get();
@@ -217,5 +241,6 @@ module.exports = {
 	appendTenantParams,
 	// goeasyConfig,
 	goeasyPushByFood,
-	goeasyPushBydishes
+	goeasyPushBydishes,
+	goeasyPushByTenant
 }
