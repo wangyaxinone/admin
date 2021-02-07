@@ -168,7 +168,9 @@ export default {
 			this.statusMap = statusMap;
 		});
 
-		select().then(res => {
+		select({
+			tenantId: this.$store.state.app.activeTenant
+		}).then(res => {
 			const column = this.findObject(this.option.column, 'tableType');
 			column.dicData = res;
 			this.tableTypeList = res;

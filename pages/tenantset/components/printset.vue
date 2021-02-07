@@ -19,7 +19,7 @@
 		add,
 		update,
 		remove,
-	} from "@/api/goods/goods_unit.js"
+	} from "@/api/print/print.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
 		mapState,
@@ -34,10 +34,10 @@
 			...mapState('app', ['navBtn']),
 			 permissionList() {
 				return {
-				  addBtn: this.navBtn.goods_type_add || false,
-				  viewBtn: false,
-				  delBtn: this.navBtn.goods_type_remove || false,
-				  editBtn: this.navBtn.goods_type_update || false,
+				  addBtn: true,
+				  viewBtn: true,
+				  delBtn: true,
+				  editBtn: true,
 				};
 			  },
 		},
@@ -65,7 +65,7 @@
 					viewBtn: true,
 					menuWidth: 180,
 					column: [{
-							label: "支付方式",
+							label: "打印机名称",
 							prop: "name",
 							span: 12,
 							rules: [{
@@ -75,20 +75,74 @@
 							}, ],
 						},
 						{
-							label: "是否启用",
-							prop: "update_date",
+							label: "打印机类型",
+							prop: "type",
 							span: 12,
 						},
 						{
-							label: "排序",
-							prop: "sort",
+							label: "打印机部门",
+							prop: "type",
 							span: 12,
-							type: 'number',
+						},
+						{
+							label: "打印机类型",
+							prop: "type",
+							span: 12,
+						},
+						{
+							label: "USER",
+							prop: "USER",
+							span: 12,
 							rules: [{
-								required: false,
-								message: "请输入备注",
+								required: true,
+								message: "请输入USER",
 								trigger: "change",
 							}, ],
+						},
+						{
+							label: "UKEY",
+							prop: "UKEY",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入UKEY",
+								trigger: "change",
+							}, ],
+						},
+						{
+							label: "SN",
+							prop: "SN",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入SN",
+								trigger: "change",
+							}, ],
+						},
+						{
+							label: "KEY",
+							prop: "KEY",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入KEY",
+								trigger: "change",
+							}, ],
+						},
+						{
+							label: "phone",
+							prop: "phone",
+							span: 12,
+						},
+						{
+							label: "打印机状态",
+							prop: "printStatus",
+							span: 12,
+						},
+						{
+							label: "状态",
+							prop: "status",
+							span: 12,
 						},
 						{
 							label: "备注",
