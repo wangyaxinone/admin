@@ -5,20 +5,28 @@ module.exports = class UserController extends Controller {
 	async add() {
 		const {
 			tenantId,
-			user,
 			name,
+			type,
+			deptId,
+			USER,
+			UKEY,
 			SN,
 			KEY,
 			phone,
+			printStatus,
 			comment
 		} = this.ctx.data
 		return await this.service.print.print.add({
 			tenantId,
-			user,
 			name,
+			type,
+			deptId,
+			USER,
+			UKEY,
 			SN,
 			KEY,
 			phone,
+			printStatus,
 			comment
 		});
 	}
@@ -26,21 +34,29 @@ module.exports = class UserController extends Controller {
 		const {
 			_id,
 			tenantId,
-			user,
 			name,
+			type,
+			deptId,
+			USER,
+			UKEY,
 			SN,
 			KEY,
 			phone,
+			printStatus,
 			comment
 		} = this.ctx.data
 		return await this.service.print.print.update({
 			_id,
 			tenantId,
-			user,
 			name,
+			type,
+			deptId,
+			USER,
+			UKEY,
 			SN,
 			KEY,
 			phone,
+			printStatus,
 			comment
 		});
 	}

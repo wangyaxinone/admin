@@ -21,11 +21,13 @@
 	import payset from "./components/payset.vue"
 	import pushset from "./components/pushset.vue"
 	import printset from "./components/printset.vue"
+	import foodset from "./components/foodset.vue"
 	export default {
 		components:{
 			payset,
 			pushset,
-			printset
+			printset,
+			foodset
 		},
 		data() {
 			return {
@@ -40,7 +42,7 @@
 					components: 'printset'
 				}, {
 					label: '菜品制作设置',
-					components: ''
+					components: 'foodset'
 				}],
 				currComponents: 'payset'
 			};

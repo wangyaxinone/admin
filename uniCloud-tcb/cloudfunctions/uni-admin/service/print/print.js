@@ -39,6 +39,8 @@ module.exports = class MenuService extends Service {
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
 		param.name && (match.name = new RegExp(param.name));
 		appendTenantParams({
 			match,
@@ -57,12 +59,31 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-print').where(match).count();
 		let {
 			data
-		} = await this.db.collection('opendb-admin-print')
-			.where(match)
-			.orderBy('sort', "asc")
+		} = await this.db.collection('opendb-admin-print').aggregate()
+			.match(match)
+			.sort({
+				'create_date': -1
+			})
 			.skip((page - 1) * size)
 			.limit(size)
-			.get();
+			.lookup({
+				from: 'uni-id-users',
+				let: {
+					operator: '$operator'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id', '$$operator'])
+					))
+					.project({
+						_id: 0,
+						username: 1,
+						nickname: 1
+					})
+					.done(),
+				as: 'operatorShow',
+			})
+			.end();
 		return {
 			total,
 			page,

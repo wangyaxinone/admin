@@ -26,6 +26,8 @@
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
+	import {getDeptByUser} from "@/api/system/user.js"
+	import {getList as getDeptList} from "@/api/system/dept.js"
 	export default {
 		components: {
 			uniDateformate,
@@ -63,7 +65,7 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
-					menuWidth: 180,
+					menuWidth: 220,
 					column: [{
 							label: "打印机名称",
 							prop: "name",
@@ -78,15 +80,41 @@
 							label: "打印机类型",
 							prop: "type",
 							span: 12,
+							type: 'select',
+							value: 1,
+							dicData: [{
+								label: '前台打印机',
+								value: 1
+							},{
+								label: '后厨打印机',
+								value: 2
+							}],
+							rules: [
+								{
+									required: true,
+									message: '请选择下单类型',
+									trigger: 'change'
+								}
+							]
 						},
 						{
 							label: "打印机部门",
-							prop: "type",
-							span: 12,
-						},
-						{
-							label: "打印机类型",
-							prop: "type",
+							prop: "deptId",
+							display: true,
+							type: 'select',
+							dicData:[],
+							multiple: true,
+							props: {
+								label: "dept_name",
+								value: "_id"
+							},
+							rules: [
+								{
+									required: true,
+									message: '请选择打印机部门',
+									trigger: 'change'
+								}
+							],
 							span: 12,
 						},
 						{
@@ -130,18 +158,35 @@
 							}, ],
 						},
 						{
-							label: "phone",
+							label: "电话卡",
 							prop: "phone",
 							span: 12,
 						},
 						{
-							label: "打印机状态",
+							label: "是否启用",
 							prop: "printStatus",
-							span: 12,
+							type: 'select',
+							value: 1,
+							dicData: [{
+								label: '启用',
+								value: 1
+							},{
+								label: '禁用',
+								value: 2
+							}],
+							rules: [
+								{
+									required: true,
+									message: '请选择是否启用',
+									trigger: 'change'
+								}
+							]
 						},
 						{
 							label: "状态",
 							prop: "status",
+							fixed: true,
+							display: false,
 							span: 12,
 						},
 						{
@@ -154,7 +199,28 @@
 								trigger: "change",
 							}, ],
 						},
-						
+						{
+							label: '创建时间',
+							prop: 'create_date',
+							addDisplay: false,
+							editDisplay: false,
+							width: 130,
+							slot: true
+						},
+						{
+							label: '最后一次操作时间',
+							prop: 'update_date',
+							addDisplay: false,
+							editDisplay: false,
+							width: 130,
+							slot: true
+						},
+						{
+							label: '最后一次操作人',
+							prop: 'operator',
+							addDisplay: false,
+							editDisplay: false
+						}
 					],
 				},
 				data: [],
@@ -162,17 +228,36 @@
 		},
 		created() {
 			_this = this;
-			
+			const column = _this.findObject(_this.option.column, "deptId");
+			if(this.$store.state.app.isTenantAdminOrAdmin){
+				getDeptList({
+					isCook: 1,
+					tenantId: this.$store.state.app.activeTenant
+				}).then((res)=>{
+					column.dicData = res;
+				})
+			}else{
+				getDeptByUser({
+					userId: this.$store.state.user.userInfo._id
+				}).then((res)=>{
+					column.dicData = res;
+				})
+				
+			}
+		},
+		watch: {
+			'form.type': function(newValue) {
+				const column = _this.findObject(_this.option.column, "deptId");
+				if(newValue==1){
+					column.display = false;
+					this.form.deptId = '';
+				}else{
+					column.display = true;
+				}
+			}
 		},
 		methods: {
 			rowDel(row) {
-				if (row.children && row.children.length) {
-					this.$message({
-						message: '请先删除子菜单！',
-						type: 'warning'
-					});
-					return
-				}
 				this.$confirm("确定将选择数据删除?", {
 						confirmButtonText: "确定",
 						cancelButtonText: "取消",
@@ -250,6 +335,13 @@
 					this.params.tenantId = this.$store.state.app.activeTenant;
 					getList(this.params).then((res) => {
 						this.loading = false;
+						if(res.data && res.data.length) {
+							res.data.forEach((item)=>{
+								if(item.operatorShow && item.operatorShow.length) {
+									item.operator = item.operatorShow[0].nickname || item.operatorShow[0].username;
+								}
+							})
+						}
 						this.data = res.data;
 					}).catch(() => {
 						this.loading = false;
