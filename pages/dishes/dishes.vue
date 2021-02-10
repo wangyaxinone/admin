@@ -51,7 +51,7 @@
         methods: {
 			dishesByDept(item){
 				uni.navigateTo({
-				    url: `/pages/dishes/dishesByDept?dept=${item._id}&name=${item.dept_name}` 
+				    url: `/pages/dishes/dishesByDept?dept=${item._id}&name=${item.dept_name}&foodNum=${item.foodNum || 1}` 
 				});
 			}
         }

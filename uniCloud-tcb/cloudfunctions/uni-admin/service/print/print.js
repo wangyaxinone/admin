@@ -4,9 +4,9 @@ const {
 const {
 	getPageConfig,
 	getServerDate,
-	getTree,
 	appendTenantParams,
-	goeasyPushBydishes
+	requestfeieyun,
+	sha1
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -18,7 +18,42 @@ module.exports = class MenuService extends Service {
 		if (!data.tenantId) {
 			data.tenantId = this.ctx.auth.userInfo.tenantId;
 		}
-		return await this.db.collection('opendb-admin-print').add(data);
+		var UNIX = Math.round(new Date().getTime()/1000);
+		const transaction = await this.db.startTransaction();
+		var feieyun = await requestfeieyun({
+			data: {
+				user: data.USER,
+				stime: UNIX,
+				sig: sha1(`${data.USER}${data.UKEY}${UNIX}`),
+				apiname: 'Open_printerAddlist',
+				printerContent: `${data.SN}#${data.KEY}#${data.name}#${data.phone}`,
+			}
+		})
+		if(feieyun.data && feieyun.data.data && feieyun.data.data.ok && feieyun.data.data.ok.length){
+			var res = await this.db.collection('opendb-admin-print').add(data)
+			if (res.id){
+				return res;
+			}else{
+				var feieyun = await requestfeieyun({
+					data: {
+						user: data.USER,
+						stime: UNIX,
+						sig: sha1(`${data.USER}${data.UKEY}${UNIX}`),
+						apiname: 'Open_printerDelList',
+						snlist: `${data.SN}`,
+					}
+				})
+				return {
+					code: 500,
+					message: '新增打印机失败'
+				}
+			}
+		}else{
+			return {
+				code: 500,
+				message: feieyun.data.data.no.join(',')
+			}
+		}
 	}
 	async update(data) {
 		const {
@@ -31,9 +66,29 @@ module.exports = class MenuService extends Service {
 	}
 	async remove(params) {
 		var {_ids} = params;
-		return await this.db.collection('opendb-admin-print').where({
-			'_id': this.db.command.in(_ids)
-		}).remove();
+		var {data: print} = await this.db.collection('opendb-admin-print').doc(_ids[0]).get();
+		var data = print[0];
+		var UNIX = Math.round(new Date().getTime()/1000);
+		var {data: feieyun} = await requestfeieyun({
+			data: {
+				user: data.USER,
+				stime: UNIX,
+				sig: sha1(`${data.USER}${data.UKEY}${UNIX}`),
+				apiname: 'Open_printerDelList',
+				snlist: `${data.SN}`,
+			}
+		})
+		if(feieyun.data && feieyun.data.ok && feieyun.data.ok.length) {
+			return await this.db.collection('opendb-admin-print').where({
+				'_id': this.db.command.in(_ids)
+			}).remove();
+		}else{
+			return {
+				code: 500,
+				message: feieyun.data.no.join(',')
+			}
+		}
+		
 	}
 	async list(param) {
 		var match = {
@@ -84,6 +139,22 @@ module.exports = class MenuService extends Service {
 				as: 'operatorShow',
 			})
 			.end();
+			
+		
+		for(var i=0;i<data.length;i++){
+			var item = data[i];
+			var UNIX = Math.round(new Date().getTime()/1000);
+			var {data: feieyun} = await requestfeieyun({
+				data: {
+					user: item.USER,
+					stime: UNIX,
+					sig: sha1(`${item.USER}${item.UKEY}${UNIX}`),
+					apiname: 'Open_queryPrinterStatus',
+					sn: `${item.SN}`,
+				}
+			})
+			item.status = feieyun.data;
+		}
 		return {
 			total,
 			page,

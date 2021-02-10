@@ -9,7 +9,11 @@ const {
 	getEvertDayCode,
 	// goeasyConfig,
 	goeasyPushByFood,
-	goeasyPushByTenant
+	goeasyPushByTenant,
+	requestfeieyun,
+	sha1,
+	printPerOrder,
+	printByDept
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -44,10 +48,11 @@ module.exports = class MenuService extends Service {
 		var goodIds = [];
 		var numMap = {};
 		var foods = [];
+		var goodsClassMap = {};
 		if (goods_list && goods_list.length) {
 			goods_list.forEach((item) => {
 				goodIds.push(item.goodId);
-				numMap[item.goodId] = item;
+				numMap[item.goodId+(item.goodsAttrValue?`-${item.goodsAttrValue}`:'')] = item;
 			})
 			var {
 				data: goods
@@ -56,8 +61,13 @@ module.exports = class MenuService extends Service {
 			}).get();
 			if (goods && goods.length) {
 				goods.forEach((item) => {
-					if (numMap[item._id].num) {
-						for (var i = 0; i < numMap[item._id].num; i++) {
+					goodsClassMap[item._id] = item;
+				})
+				Object.keys(numMap).forEach((name)=>{
+					var [goodId,goodsAttrValue] = name.split('-');
+					var item = goodsClassMap[goodId];
+					if (numMap[name].num) {
+						for (var i = 0; i < numMap[name].num; i++) {
 							foods.push({
 								every_day_code,
 								orderNumber,
@@ -66,9 +76,9 @@ module.exports = class MenuService extends Service {
 								goodsPrice: item.goodsPrice,
 								goodsCost: item.goodsCost,
 								goodsVipPrice: item.goodsVipPrice,
-								goodsAttrValue: numMap[item._id].goodsAttrValue || '',
-								order_comment: numMap[item._id].comment || '',
-								order_type: numMap[item._id].order_type,
+								goodsAttrValue: numMap[name].goodsAttrValue || '',
+								order_comment: numMap[name].comment || '',
+								order_type: numMap[name].order_type,
 								tenantId: item.tenantId,
 								deptId: item.deptId,
 								goodsBigImg: item.goodsBigImg,
@@ -98,14 +108,26 @@ module.exports = class MenuService extends Service {
 				for (var i = 0; i < foods.length; i++) {
 					var item = foods[i];
 					item.orderId = orderRes.id;
-					foodByDept[item.deptId] = foodByDept[item.deptId] || 0;
-					foodByDept[item.deptId]++;
+					foodByDept[item.deptId] = foodByDept[item.deptId] || [];
+					foodByDept[item.deptId].push(item);
 					var dishesRes = await transaction.collection('opendb-admin-dishes').add(item);
 					if (!dishesRes.id) {
 						falg = false;
 					}
 				}
 				if (falg) {
+					await printPerOrder({
+						tenantId,
+						foods,
+						_this,
+						order: data
+					});
+					await printByDept({
+						tenantId,
+						foods,
+						_this,
+						order: data
+					})
 					if(goeasyConfig.path && goeasyConfig.appkey) {
 						var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 							method: 'POST',
@@ -120,7 +142,6 @@ module.exports = class MenuService extends Service {
 							dataType: 'json'
 						})
 						for(var deptId in foodByDept){
-							var num = foodByDept[deptId];
 							var res = await uniCloud.httpclient.request(goeasyConfig.path, {
 								method: 'POST',
 								data: {
@@ -129,13 +150,13 @@ module.exports = class MenuService extends Service {
 									content: `{
 									  type: 'addFood',
 									  deptId: ${deptId},
-									  num: ${num}
 								  }`
 								},
 								dataType: 'json'
 							})
 						}
 					}
+					
 					await transaction.commit();
 					return orderRes;
 				} else {
@@ -159,7 +180,7 @@ module.exports = class MenuService extends Service {
 			await transaction.rollback(-100)
 			return {
 				code: 500,
-				message: `新增订单失败！`,
+				message: e.message,
 				rollbackCode: -100,
 			}
 		}
@@ -572,10 +593,11 @@ module.exports = class MenuService extends Service {
 		var goodIds = [];
 		var numMap = {};
 		var foods = [];
+		var goodsClassMap = {};
 		if (goods_list && goods_list.length) {
 			goods_list.forEach((item) => {
 				goodIds.push(item.goodId);
-				numMap[item.goodId] = item;
+				numMap[item.goodId+(item.goodsAttrValue?`-${item.goodsAttrValue}`:'')] = item;
 			})
 			var {
 				data: goods
@@ -587,8 +609,13 @@ module.exports = class MenuService extends Service {
 			} = goods[0];
 			if (goods && goods.length) {
 				goods.forEach((item) => {
-					if (numMap[item._id].num) {
-						for (var i = 0; i < numMap[item._id].num; i++) {
+					goodsClassMap[item._id] = item;
+				})
+				Object.keys(numMap).forEach((name)=>{
+					var [goodId,goodsAttrValue] = name.split('-');
+					var item = goodsClassMap[goodId];
+					if (numMap[name].num) {
+						for (var i = 0; i < numMap[name].num; i++) {
 							foods.push({
 								every_day_code: data.every_day_code,
 								orderNumber: data.order_number,
@@ -597,7 +624,7 @@ module.exports = class MenuService extends Service {
 								goodsPrice: item.goodsPrice,
 								goodsCost: item.goodsCost,
 								goodsVipPrice: item.goodsVipPrice,
-								goodsAttrValue: numMap[item._id].goodsAttrValue || '',
+								goodsAttrValue: numMap[name].goodsAttrValue || '',
 								order_comment: data.comment || '',
 								order_type: data.order_type,
 								tenantId: item.tenantId,
@@ -634,6 +661,12 @@ module.exports = class MenuService extends Service {
 					}
 				}
 				if (falg) {
+					await printByDept({
+						tenantId,
+						foods,
+						_this,
+						order: data
+					})
 					await goeasyPushByTenant({
 						tenantId: tenantId,
 						_this: this,

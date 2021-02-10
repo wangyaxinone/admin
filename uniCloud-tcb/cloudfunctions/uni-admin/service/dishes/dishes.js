@@ -131,6 +131,7 @@ module.exports = class MenuService extends Service {
 		};
 		param.goodsName && (match.goodsName = new RegExp(param.goodsName));
 		param.deptId && (match.deptId = param.deptId);
+		param.goodsAttrValue && (match.goodsAttrValue = param.goodsAttrValue);
 		param.operator && (match.operator = param.operator);
 		param.status && (match.status = this.db.command.in(param.status));
 		appendTenantParams({

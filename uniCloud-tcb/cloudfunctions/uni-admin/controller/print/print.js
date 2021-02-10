@@ -13,6 +13,7 @@ module.exports = class UserController extends Controller {
 			SN,
 			KEY,
 			phone,
+			width,
 			printStatus,
 			comment
 		} = this.ctx.data
@@ -26,6 +27,7 @@ module.exports = class UserController extends Controller {
 			SN,
 			KEY,
 			phone,
+			width,
 			printStatus,
 			comment
 		});
@@ -42,6 +44,7 @@ module.exports = class UserController extends Controller {
 			SN,
 			KEY,
 			phone,
+			width,
 			printStatus,
 			comment
 		} = this.ctx.data
@@ -56,6 +59,7 @@ module.exports = class UserController extends Controller {
 			SN,
 			KEY,
 			phone,
+			width,
 			printStatus,
 			comment
 		});

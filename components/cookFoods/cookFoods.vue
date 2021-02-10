@@ -16,6 +16,11 @@
 				</el-table-column>
 				<el-table-column prop="every_day_code" label="订单编号">
 				</el-table-column>
+				<el-table-column prop="order_type" label="下单类型">
+					<template slot-scope="scope">
+						<el-tag type="danger" size="medium ">{{order_typeMap[scope.row.order_type]}}</el-tag>
+					</template>
+				</el-table-column>
 			</el-table>
 			<span slot="footer" class="dialog-footer">
 				<el-button :loading="loading" @click="cencel">取 消</el-button>
@@ -30,13 +35,27 @@
 		getList,
 		updateStatus
 	} from '@/api/dishes/dishes.js';
+	import { getDictByDictCode } from '@/api/system/dict.js';
 	export default {
 		data() {
 			return {
 				dialogVisible: false,
 				tableData: [],
 				loading: false,
+				order_typeMap: {}
 			};
+		},
+		created() {
+			var _this = this;
+			getDictByDictCode({
+				dict_code: 'order_type'
+			}).then((res) => {
+				if(res && res.length){
+					res.forEach((item)=>{
+						_this.order_typeMap[item.dict_key] = item.dict_name;
+					})
+				}
+			})
 		},
 		methods: {
 			show() {

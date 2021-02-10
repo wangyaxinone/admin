@@ -26,8 +26,8 @@
 			@on-load="loadData"
 		>
 			<template slot="menu"  slot-scope="{type,size, row}">
-				<el-button v-if="row.status==1 && navBtn.dishes_cook" @click="cook(row)" icon="el-icon-delete-solid" :type="type" size="small">制作</el-button>
 				<el-button v-if="row.status!=4 && navBtn.dishes_invalid" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
+				<el-button v-if="row.status==1 && navBtn.dishes_cook" @click="cook(row)" icon="el-icon-delete-solid" :type="type" size="small">制作</el-button>
 			  </template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
@@ -82,6 +82,7 @@ export default {
 		return {
 			activeName: 'zhiFu',
 			dept_name: '',
+			foodNum: 1,
 			page: {
 				pageSize: config.pages.pageSize,
 				currentPage: config.pages.currentPage,
@@ -239,6 +240,7 @@ export default {
 		var params = JSON.parse(JSON.stringify(this.params));
 		e.dept && (params.deptId = e.dept);
 		this.dept_name = e.name;
+		this.foodNum = e.foodNum;
 		this.params = params;
 		this.$eventBus.on('foodChange', ()=>{
 			this.loadData();
@@ -314,8 +316,9 @@ export default {
 			}).then(() => {
 				getList({
 					page:1,
-					size:5,
+					size:parseFloat(this.foodNum),
 					goodsName: row.goodsName,
+					goodsAttrValue: row.goodsAttrValue,
 					status: [1]
 				}).then((res)=>{
 					var foods = res.data || [];

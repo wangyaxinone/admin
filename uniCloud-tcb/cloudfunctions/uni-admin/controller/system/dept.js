@@ -28,6 +28,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			sort,
 			isCook,
+			foodNum,
 			comment
 		} = this.ctx.data
 		return await this.service.system.dept.update({
@@ -37,6 +38,7 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			sort,
 			isCook,
+			foodNum,
 			comment
 		});
 	}

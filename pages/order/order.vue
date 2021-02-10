@@ -133,7 +133,7 @@ export default {
 				addBtn: this.navBtn.goods_type_add || false,
 				viewBtn: this.navBtn.goods_type_list || false,
 				delBtn: this.$store.state.user.userInfo.role.indexOf('admin')>-1 || false,
-				editBtn: this.navBtn.goods_type_update || false
+				editBtn: this.params.status==3 ? false: (this.navBtn.goods_type_update || false)
 			};
 		}
 	},
@@ -598,14 +598,14 @@ export default {
 								if(item.foods && item.foods.length) {
 									item.foods.forEach((food)=>{
 										foodsMapZhiZuo[food.status] = foodsMapZhiZuo[food.status] || {};
-										foodsMapZhiZuo[food.status][food.goodsId] = foodsMapZhiZuo[food.status][food.goodsId] || JSON.parse(JSON.stringify(food));
-										foodsMapZhiZuo[food.status][food.goodsId].num = foodsMapZhiZuo[food.status][food.goodsId].num || 0;
-										foodsMapZhiZuo[food.status][food.goodsId].num++;
+										foodsMapZhiZuo[food.status][food.goodsId+food.goodsAttrValue] = foodsMapZhiZuo[food.status][food.goodsId+food.goodsAttrValue] || JSON.parse(JSON.stringify(food));
+										foodsMapZhiZuo[food.status][food.goodsId+food.goodsAttrValue].num = foodsMapZhiZuo[food.status][food.goodsId+food.goodsAttrValue].num || 0;
+										foodsMapZhiZuo[food.status][food.goodsId+food.goodsAttrValue].num++;
 										
 										foodsMapZhiFu[food.order_status] = foodsMapZhiFu[food.order_status] || {};
-										foodsMapZhiFu[food.order_status][food.goodsId] = foodsMapZhiFu[food.order_status][food.goodsId] || JSON.parse(JSON.stringify(food));
-										foodsMapZhiFu[food.order_status][food.goodsId].num = foodsMapZhiFu[food.order_status][food.goodsId].num || 0;
-										foodsMapZhiFu[food.order_status][food.goodsId].num++;
+										foodsMapZhiFu[food.order_status][food.goodsId+food.goodsAttrValue] = foodsMapZhiFu[food.order_status][food.goodsId+food.goodsAttrValue] || JSON.parse(JSON.stringify(food));
+										foodsMapZhiFu[food.order_status][food.goodsId+food.goodsAttrValue].num = foodsMapZhiFu[food.order_status][food.goodsId+food.goodsAttrValue].num || 0;
+										foodsMapZhiFu[food.order_status][food.goodsId+food.goodsAttrValue].num++;
 										
 										if(food.order_status === 1) {
 											no_order_price = _this.$NP.plus(no_order_price, food.goodsPrice);

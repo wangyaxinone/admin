@@ -31,10 +31,12 @@
 		},
 		data() {
 			return {
-				tabs: [{
-					label: '支付设置',
-					components: 'payset'
-				}, {
+				tabs: [
+				// 	{
+				// 	label: '支付设置',
+				// 	components: 'payset'
+				// }, 
+				{
 					label: '推送设置',
 					components: 'pushset'
 				}, {
@@ -44,7 +46,7 @@
 					label: '菜品制作设置',
 					components: 'foodset'
 				}],
-				currComponents: 'payset'
+				currComponents: 'pushset'
 			};
 		},
 		methods:{

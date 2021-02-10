@@ -4,9 +4,18 @@
 		 @row-update="rowUpdate" @row-save="rowSave" @search-change="searchChange" @search-reset="searchReset"
 		 @current-change="currentChange"
 		 @size-change="sizeChange"
+		  @refresh-change="loadData"
 		 @selection-change="selectionChange" @on-load="loadData">
+			<template slot-scope="scope" slot="create_date">
+				<uniDateformate :date="scope.row.create_date"></uniDateformate>
+			</template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
+			</template>
+			<template slot-scope="scope" slot="status">
+				<el-tooltip class="item" effect="dark" :content="scope.row.status" placement="top">
+				  <span style="width:15px;height: 15px;border-radius:10px;display:inline-block;" :style="{backgroundColor: mapClass[scope.row.status].color}"></span>
+				</el-tooltip>
 			</template>
 		</avue-crud>
 	</view>
@@ -45,6 +54,20 @@
 		},
 		data() {
 			return {
+				mapClass: {
+					'离线。':{
+						color: '#F56C6C',
+						status: '1',
+					},
+					'在线，工作状态正常。':{
+						color: '#67C23A',
+						status: '2',
+					},
+					'在线，工作状态不正常。':{
+						color: '#E6A23C',
+						status: '3',
+					},
+				},
 				page: {
 					pageSize: config.pages.pageSize,
 					currentPage: config.pages.currentPage,
@@ -120,7 +143,9 @@
 						{
 							label: "USER",
 							prop: "USER",
+							value:'410694500@qq.com',	
 							span: 12,
+							editDisabled: true,
 							rules: [{
 								required: true,
 								message: "请输入USER",
@@ -130,6 +155,8 @@
 						{
 							label: "UKEY",
 							prop: "UKEY",
+							editDisabled: true,
+							value:'gUj5WWM8XsbnGhQD',
 							span: 12,
 							rules: [{
 								required: true,
@@ -140,7 +167,9 @@
 						{
 							label: "SN",
 							prop: "SN",
+							editDisabled: true,
 							span: 12,
+							value:'921592694',
 							rules: [{
 								required: true,
 								message: "请输入SN",
@@ -150,7 +179,9 @@
 						{
 							label: "KEY",
 							prop: "KEY",
+							editDisabled: true,
 							span: 12,
+							value:'m4pw29mx',
 							rules: [{
 								required: true,
 								message: "请输入KEY",
@@ -160,12 +191,21 @@
 						{
 							label: "电话卡",
 							prop: "phone",
+							editDisabled: true,
+							span: 12,
+						},
+						{
+							label: "打印机宽度（mm）",
+							prop: "width",
+							value: '58',
 							span: 12,
 						},
 						{
 							label: "是否启用",
 							prop: "printStatus",
 							type: 'select',
+							fixed: true,
+							width:60,
 							value: 1,
 							dicData: [{
 								label: '启用',
@@ -185,9 +225,11 @@
 						{
 							label: "状态",
 							prop: "status",
+							width:50,
 							fixed: true,
 							display: false,
 							span: 12,
+							slot: true
 						},
 						{
 							label: "备注",
