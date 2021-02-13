@@ -27,8 +27,8 @@
 						<el-popover placement="bottom" width="200" trigger="hover">
 							<div style="text-align: center;">
 								<el-button-group>
-									<el-button v-if="item.status == 1" @click="dianCai(item)" size="mini" type="primary">点菜</el-button>
-									<el-button v-if="item.status == 2 || item.status == 3" @click="addFoods(item)" size="mini" type="primary">加菜</el-button>
+									<el-button v-if="item.status == 1 && navBtn.order_list_add" @click="dianCai(item)" size="mini" type="primary">点菜</el-button>
+									<el-button v-if="(item.status == 2 || item.status == 3) && navBtn.order_list_addFoods" @click="addFoods(item)" size="mini" type="primary">加菜</el-button>
 									<el-button v-if="item.status == 3" @click="leave(item)" size="mini" type="primary">离开</el-button>
 									<el-button @click="editTable(item)" size="mini" type="primary">编辑</el-button>
 									<el-button @click="delTable(item)" size="mini" type="primary">删除</el-button>
@@ -65,6 +65,7 @@ import { addFood, leave } from '@/api/order/order.js';
 import { getDictByDictCode } from '@/api/system/dict.js';
 import { select } from '@/api/table/table_type.js';
 import { getList, add, update, remove } from '@/api/table/table.js';
+import { mapState, mapActions } from 'vuex';
 var personLiableName = '';
 var _this = null;
 export default {
@@ -151,6 +152,9 @@ export default {
 			tableTypeList: [],
 			statusMap: {}
 		};
+	},
+	computed:{
+		...mapState('app', ['navBtn']),
 	},
 	mounted() {
 		_this = this;

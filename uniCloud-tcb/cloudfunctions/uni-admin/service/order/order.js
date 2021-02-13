@@ -20,8 +20,10 @@ module.exports = class MenuService extends Service {
 	async add(data) {
 		var _this = this;
 		var {
-			tenantId
+			tenantId,
+			tableName
 		} = data;
+		delete data.tableName;
 		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
 		var goeasyConfig = tenants[0];
 		var date = getServerDate();
@@ -120,13 +122,15 @@ module.exports = class MenuService extends Service {
 						tenantId,
 						foods,
 						_this,
-						order: data
+						order: data,
+						tableName
 					});
 					await printByDept({
 						tenantId,
 						foods,
 						_this,
-						order: data
+						order: data,
+						tableName
 					})
 					if(goeasyConfig.path && goeasyConfig.appkey) {
 						var res = await uniCloud.httpclient.request(goeasyConfig.path, {
@@ -378,6 +382,12 @@ module.exports = class MenuService extends Service {
 		param.tenantId && (match.tenantId = param.tenantId);
 		param.status && (match.status = param.status);
 		param.order_number && (match.order_number = param.order_number);
+		if(param.startTime) {
+			match.create_date = dbCmd.gte(new Date(param.startTime))
+		}
+		if(param.endTime) {
+			match.create_date = dbCmd.lte(new Date(param.startTime))
+		}
 		let {
 			basePage,
 			baseSize
@@ -452,6 +462,34 @@ module.exports = class MenuService extends Service {
 			size,
 			data
 		};
+	}
+	async getOrderCount(param) {
+		var _this = this;
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
+		var match = {
+			_id: param._id ? param._id : this.db.command.exists(true)
+		};
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
+		param.tenantId && (match.tenantId = param.tenantId);
+		if(param.startTime) {
+			match.create_date = dbCmd.gte(new Date(param.startTime))
+		}
+		if(param.endTime) {
+			match.create_date = dbCmd.lte(new Date(param.startTime))
+		}
+		param.table && (match.table = param.table);
+		param.order_type && (match.order_type = param.order_type);
+		param.status && (match.status = this.db.command.in(param.status));
+		let {
+			total
+		} = await this.db.collection('opendb-admin-order').where(match).count();
+		
+		return total;
 	}
 	async invalid(data) {
 		var _this = this;

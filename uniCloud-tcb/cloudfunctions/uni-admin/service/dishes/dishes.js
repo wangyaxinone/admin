@@ -195,4 +195,62 @@ module.exports = class MenuService extends Service {
 			data
 		};
 	}
+	async getDishesCount(param) {
+		var _this = this;
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
+		var match = {
+			_id: param._id ? param._id : this.db.command.exists(true)
+		};
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
+		param.tenantId && (match.tenantId = param.tenantId);
+		if(param.startTime) {
+			match.create_date = dbCmd.gte(new Date(param.startTime))
+		}
+		if(param.endTime) {
+			match.create_date = dbCmd.lte(new Date(param.startTime))
+		}
+		param.status && (match.status = this.db.command.in(param.status));
+		let {
+			total
+		} = await this.db.collection('opendb-admin-dishes').where(match).count();
+		
+		return total;
+	}
+	async getDishesPrice(param) {
+		var _this = this;
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
+		var match = {
+			_id: param._id ? param._id : this.db.command.exists(true)
+		};
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
+		param.tenantId && (match.tenantId = param.tenantId);
+		if(param.startTime) {
+			match.create_date = dbCmd.gte(new Date(param.startTime))
+		}
+		if(param.endTime) {
+			match.create_date = dbCmd.lte(new Date(param.startTime))
+		}
+		param.status && (match.status = this.db.command.in(param.status));
+		let {
+			data: allprice
+		} = await this.db.collection('opendb-admin-dishes').aggregate()
+		.match(match)
+		.group({
+			_id: null,
+			allprice: $.sum('$goodsPrice')
+		})
+		.end()
+		
+		return (allprice && allprice[0]) ? allprice[0].allprice : 0;
+	}
 }

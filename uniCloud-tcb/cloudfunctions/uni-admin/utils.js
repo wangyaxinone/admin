@@ -295,7 +295,7 @@ function sha1(s) {
 }
 
 async function printPerOrder(params) {
-	var {tenantId, foods, _this, order} = params;
+	var {tenantId, foods, _this, order, tableName} = params;
 	var {data: prints} = await _this.db.collection('opendb-admin-print').where({
 		"tenantId": tenantId,
 		"type": 1,
@@ -335,6 +335,7 @@ async function printPerOrder(params) {
 			var {chinese, english} = widthMap[print.width];
 			var orderInfo = '';
 			orderInfo = `<CB>#${order.every_day_code}（${orderTypeMap[order.order_type]}）</CB><BR>`;
+			tableName && (orderInfo += `<C>餐桌（${tableName}）</C><BR>`);
 			orderInfo += paiBan('名称', ['数量', '金额'], chinese);
 			orderInfo += '--------------------------------<BR>';
 			Object.keys(printList).forEach((name)=>{
@@ -359,7 +360,7 @@ async function printPerOrder(params) {
 	}
 }
 async function printByDept(params) {
-	var {tenantId, foods, _this, order} = params;
+	var {tenantId, foods, _this, order, tableName} = params;
 	const dbCmd = _this.db.command;
 	var widthMap = {
 		'58': {
@@ -407,6 +408,7 @@ async function printByDept(params) {
 				var {chinese, english} = widthMap[print.width];
 				var orderInfo = '';
 				orderInfo = `<CB>#${order.every_day_code}（${orderTypeMap[order.order_type]}）</CB><BR>`;
+				tableName && (orderInfo += `<CB>（${tableName}）</CB><BR>`);
 				orderInfo += '--------------------------------<BR>';
 				Object.keys(foodsByDept).forEach((name)=>{
 					var arr = foodsByDept[name];

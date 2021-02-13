@@ -1,17 +1,23 @@
 <template>
-    <view style="padding: 15px;">
-        内容主体，可自定义内容及样式
-    </view>
+	<view style="padding: 15px;">
+		<stores v-if="$store.state.app.activeTenant"></stores>
+	</view>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {}
-        },
-        onLoad() {},
-        methods: {}
-    }
+	import stores from "./store.vue"
+	export default {
+		components:{stores},
+		data() {
+			return {
+				
+			}
+		},
+		onLoad() {
+			
+		},
+		methods: {}
+	}
 </script>
 
 <style>

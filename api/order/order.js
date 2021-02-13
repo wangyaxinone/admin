@@ -29,3 +29,6 @@ export const leave = (params) => {
 export const addFood = (params) => {
   return request('order/order/addFoods', params);
 }
+export const getTodayCount = (params) => {
+  return request('order/order/getTodayCount', params);
+}

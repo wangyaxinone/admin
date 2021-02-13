@@ -22,8 +22,8 @@
 			@on-load="loadData"
 		>
 			<template slot="menu"  slot-scope="{type,size, row}">
-			    <el-button v-if="row.status!=3" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
-				<el-button v-if="row.status!=3" @click="addFoods(row)" icon="el-icon-delete-solid" :type="type" size="small">加菜</el-button>
+			    <el-button v-if="row.status!=3 && navBtn.order_list_invalid" @click="invalid(row)" icon="el-icon-delete-solid" :type="type" size="small">作废</el-button>
+				<el-button v-if="row.status!=3 && navBtn.order_list_addFoods" @click="addFoods(row)" icon="el-icon-delete-solid" :type="type" size="small">加菜</el-button>
 			  </template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
@@ -130,10 +130,10 @@ export default {
 		...mapState('app', ['navBtn']),
 		permissionList() {
 			return {
-				addBtn: this.navBtn.goods_type_add || false,
-				viewBtn: this.navBtn.goods_type_list || false,
+				addBtn: this.navBtn.order_list_add || false,
+				viewBtn: this.navBtn.order_list_list || false,
 				delBtn: this.$store.state.user.userInfo.role.indexOf('admin')>-1 || false,
-				editBtn: this.params.status==3 ? false: (this.navBtn.goods_type_update || false)
+				editBtn: this.params.status==3 ? false: (this.navBtn.order_list_update || false)
 			};
 		}
 	},

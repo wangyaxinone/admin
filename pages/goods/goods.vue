@@ -99,7 +99,6 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
-					menuWidth: 300,
 					column: [{
 							label: "商品小图",
 							prop: "goodsSmallImg",
