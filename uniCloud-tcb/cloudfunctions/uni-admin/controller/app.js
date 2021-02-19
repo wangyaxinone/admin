@@ -17,4 +17,7 @@ module.exports = class UserController extends Controller {
 	async modeAndTenant() {
 		return await this.service.system.user.modeAndTenant()
 	}
+	async weixinLogin() {
+		return await this.service.user.weixinLogin(this.ctx.data)
+	}
 }

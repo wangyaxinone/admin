@@ -107,4 +107,19 @@ module.exports = class UserService extends Service {
 
         return !!total
     }
+	
+	async weixinLogin(params) {
+		const {code} = params;
+		var res = await uniCloud.httpclient.request('https://api.weixin.qq.com/sns/jscode2session', {
+			method: 'GET',
+			data: {
+				appid: goeasyConfig.appkey,
+				secret: `${tenantId}-orderChange`,
+				js_code: code,
+				grant_type: 'authorization_code'
+			},
+			dataType: 'json'
+		})
+		return res 
+	}
 }

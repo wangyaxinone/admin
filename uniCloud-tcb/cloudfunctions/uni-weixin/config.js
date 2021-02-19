@@ -10,16 +10,8 @@ module.exports = {
             {
                 name: 'auth',
                 enable: true,
-                ignore: ['user/login','app/weixinLogin']
+                ignore: ['app/weixinLogin']
             }
         ],
-        // [
-        //     permission(), // uniId 校验权限中间件
-        //     {
-        //         name: 'permission',
-        //         enable: true,
-        //         ignore: ['self', 'user', 'system']
-        //     }
-        // ]
     ]
 }
