@@ -1,5 +1,4 @@
 const auth = require('./middleware/auth')
-const permission = require('./middleware/permission')
 
 module.exports = {
     debug: true, // 输出调试信息

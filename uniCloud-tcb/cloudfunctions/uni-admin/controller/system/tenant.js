@@ -56,6 +56,18 @@ module.exports = class UserController extends Controller {
 			appkey,
 		});
 	}
+	async updateXiaoCHengXu() {
+		const {
+			_id,
+			appid,
+			secret,
+		} = this.ctx.data
+		return await this.service.system.tenant.updateXiaoCHengXu({
+			_id,
+			appid,
+			secret,
+		});
+	}
 	async remove() {
 		const {
 			_ids,

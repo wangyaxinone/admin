@@ -18,6 +18,10 @@ export const updatePush = (params) => {
   return request('system/tenant/updatePush', params);
 }
 
+export const updateXiaoCHengXu = (params) => {
+  return request('system/tenant/updateXiaoCHengXu', params);
+}
+
 export const remove = (params) => {
   return request('system/tenant/remove', params);
 }

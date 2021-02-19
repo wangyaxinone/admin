@@ -89,6 +89,15 @@ module.exports = class MenuService extends Service {
 		data.operator = this.ctx.auth._id;
 		return await this.db.collection('opendb-admin-tenant').doc(_id).update(data);
 	}
+	async updateXiaoCHengXu(data) {
+		const {
+			_id
+		} = data;
+		delete data._id;
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth._id;
+		return await this.db.collection('opendb-admin-tenant').doc(_id).update(data);
+	}
 	async remove(_ids) {
 		await this.db.collection('uni-id-roles').where({
 			'tenantId': this.db.command.in(_ids)

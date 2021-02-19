@@ -22,20 +22,22 @@
 	import pushset from "./components/pushset.vue"
 	import printset from "./components/printset.vue"
 	import foodset from "./components/foodset.vue"
+	import xiaoChengXu from "./components/xiaoChengXu.vue"
 	export default {
 		components:{
 			payset,
 			pushset,
 			printset,
-			foodset
+			foodset,
+			xiaoChengXu
 		},
 		data() {
 			return {
 				tabs: [
-				// 	{
-				// 	label: '支付设置',
-				// 	components: 'payset'
-				// }, 
+					{
+					label: '小程序设置',
+					components: 'xiaoChengXu'
+				}, 
 				{
 					label: '推送设置',
 					components: 'pushset'
