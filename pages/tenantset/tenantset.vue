@@ -48,7 +48,7 @@
 					label: '菜品制作设置',
 					components: 'foodset'
 				}],
-				currComponents: 'pushset'
+				currComponents: 'xiaoChengXu'
 			};
 		},
 		methods:{

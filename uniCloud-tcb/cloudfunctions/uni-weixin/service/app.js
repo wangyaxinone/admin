@@ -1,8 +1,10 @@
 const {
     Service
 } = require('uni-cloud-router')
+const {getServerDate} = require('../utils.js')
 module.exports = class UserService extends Service {
 	async weixinLogin(params) {
+		var date = getServerDate();
 		const {code, tenantId} = params;
 		let {data: tenandList} = await this.db.collection('opendb-admin-tenant').where({
 			_id: tenantId
@@ -23,7 +25,32 @@ module.exports = class UserService extends Service {
 			dataType: 'json'
 		})
 		if(res.data && res.data.openid) {
-			return res
+			var {data: members} = await this.db.collection('opendb-admin-member').where({
+				openid: res.data.openid
+			})
+			.field({
+				openid: false,
+				session_key: false
+			})
+			.get();
+			if(!members || !members.length) {
+				var data = {
+					update_date: date,
+					create_date: date,
+					openid: res.data.openid,
+					session_key: res.data.session_key
+				}
+				await this.db.collection('opendb-admin-member').add(data);
+				var {data: members} = await this.db.collection('opendb-admin-member').where({
+					openid: res.data.openid
+				})
+				.field({
+					openid: false,
+					session_key: false
+				})
+				.get();
+			}
+			return members[0];
 		}else{
 			this.ctx.throw('error', `微信登录失败 ${res.data.errmsg}`);
 		}
