@@ -10,7 +10,7 @@
 		<view class="navbar" :class="{'navbar-mini':!matchLeftWindow,'popup-menu':popupMenuOpened}">
 			<view class="navbar-left pointer">
 				<navigator class="logo" open-type="reLaunch" url="/">
-					<image :src="logo" mode="heightFix"></image>
+					<image :src="activeTenant ? activeTenantInfo.logo : logo" mode="heightFix"></image>
 					<text style="font-size:16px;font-weight:bold;color:#333;">{{activeTenant ? activeTenantInfo.name : appName}}</text>
 				</navigator>
 				<uni-icons @click="toggleSidebar" type="bars" class="menu-icon" size="30" color="#999"></uni-icons>

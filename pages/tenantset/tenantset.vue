@@ -23,21 +23,27 @@
 	import printset from "./components/printset.vue"
 	import foodset from "./components/foodset.vue"
 	import xiaoChengXu from "./components/xiaoChengXu.vue"
+	import tenantSet from "./components/tenantSet.vue"
 	export default {
 		components:{
 			payset,
 			pushset,
 			printset,
 			foodset,
-			xiaoChengXu
+			xiaoChengXu,
+			tenantSet
 		},
 		data() {
 			return {
 				tabs: [
 					{
-					label: '小程序设置',
-					components: 'xiaoChengXu'
-				}, 
+						label: '门店设置',
+						components: 'tenantSet'
+					}, 
+					{
+						label: '小程序设置',
+						components: 'xiaoChengXu'
+					}, 
 				{
 					label: '推送设置',
 					components: 'pushset'
@@ -48,7 +54,7 @@
 					label: '菜品制作设置',
 					components: 'foodset'
 				}],
-				currComponents: 'xiaoChengXu'
+				currComponents: 'tenantSet'
 			};
 		},
 		methods:{

@@ -9,6 +9,8 @@ module.exports = class UserController extends Controller {
 			type,
 			enable,
 			address,
+			tenantPeople,
+			tenantPhone,
 			longitude,
 			latitude
 		} = this.ctx.data
@@ -18,6 +20,8 @@ module.exports = class UserController extends Controller {
 			type,
 			enable,
 			address,
+			tenantPeople,
+			tenantPhone,
 			longitude,
 			latitude
 		});
@@ -29,6 +33,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			type,
 			address,
+			tenantPeople,
+			tenantPhone,
 			enable,
 			longitude,
 			latitude
@@ -39,6 +45,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			type,
 			address,
+			tenantPeople,
+			tenantPhone,
 			enable,
 			longitude,
 			latitude
@@ -49,11 +57,13 @@ module.exports = class UserController extends Controller {
 			_id,
 			path,
 			appkey,
+			logo
 		} = this.ctx.data
 		return await this.service.system.tenant.updatePush({
 			_id,
 			path,
 			appkey,
+			logo
 		});
 	}
 	async updateXiaoCHengXu() {

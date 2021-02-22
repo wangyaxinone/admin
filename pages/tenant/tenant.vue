@@ -130,6 +130,26 @@
 							],
 						},
 						{
+							label: "门店负责人",
+							prop: "tenantPeople",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入门店负责人",
+								trigger: "blur",
+							}, ],
+						},
+						{
+							label: "门店电话",
+							prop: "tenantPhone",
+							span: 12,
+							rules: [{
+								required: true,
+								message: "请输入门店电话",
+								trigger: "blur",
+							}, ],
+						},
+						{
 							label: "门店地址",
 							prop: "address",
 							formslot: true,
