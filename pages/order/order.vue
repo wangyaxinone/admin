@@ -60,18 +60,21 @@
 								<el-alert  style="margin-top:5px;" :title="dishesZhiFuMap[key]" :type="key==1 || key==3? 'error': 'success'" :closable="false"></el-alert>
 								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
 									<el-row :gutter="20">
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											{{ item.goodsName }}
 											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											x {{item.num}}
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+										</el-col>
+										<el-col :span="4" style="text-align: center;">
+											<el-button v-if="item.status!=4" @click="foodInvalid(item, scope)" type="danger" icon="el-icon-delete" circle></el-button>
 										</el-col>
 									</el-row>
 								</el-card>
@@ -82,18 +85,21 @@
 								<el-alert  style="margin-top:5px;" :title="dishesZhiZuoMap[key]" :type="key==1 ||　key==4? 'error': 'success'" :closable="false"></el-alert>
 								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
 									<el-row :gutter="20">
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											{{ item.goodsName }}
 											<span v-if="item.goodsAttrValue">（{{ item.goodsAttrValue }}）</span>
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											<span style="color:#e4393c;font-weight: bold;">{{ item.goodsPrice }}元</span>
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											x {{item.num}}
 										</el-col>
-										<el-col :span="6" style="text-align: center;">
+										<el-col :span="5" style="text-align: center;">
 											<span style="color:#e4393c;font-weight: bold;">{{ $NP.times(item.goodsPrice, item.num)}}元</span>
+										</el-col>
+										<el-col :span="4" style="text-align: center;">
+											<el-button v-if="item.status!=4" @click="foodInvalid(item, scope)" type="danger" icon="el-icon-delete" circle></el-button>
 										</el-col>
 									</el-row>
 								</el-card>
@@ -112,6 +118,7 @@
 <script>
 var _this;
 import { getList, add, update, remove, invalid, addFood } from '@/api/order/order.js';
+import { invalid as foodInvalid } from '@/api/dishes/dishes.js';
 import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue';
 import selectGoods from '@/components/selectGoods/selectGoods.vue';
 import addFoods from '@/components/addFoods/addFoods.vue';
@@ -305,6 +312,7 @@ export default {
 		this.$eventBus.on('orderChange', ()=>{
 			this.loadData();
 		})
+		
 	},
 	watch: {
 		'form.order_type':(newValue, oldValue)=>{
@@ -362,6 +370,32 @@ export default {
 		})
 	},
 	methods: {
+		foodInvalid(item,scope) {
+			var _this = this;
+			var {row, index} = scope;
+			this.$confirm('确定将选择数据作废? ', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				foodInvalid({
+					_ids: [item._id],
+					tenantId: item.tenantId
+				}).then(res => {
+					this.$message({
+						message: '作废成功',
+						type: 'success'
+					});
+					this.loadData(true,'edit',row, index);
+					var children = _this.$refs.crud.$children || [];
+					children.forEach((item)=>{
+						if(item.boxType && item.boxType=='edit') {
+							item.boxVisible = false;
+						}
+					})
+				});
+			});
+		},
 		submitTable(data) {
 			var form = JSON.parse(JSON.stringify(this.form))
 			form.table = data._id;
@@ -578,7 +612,7 @@ export default {
 		sizeChange(pageSize) {
 			this.page.pageSize = pageSize;
 		},
-		loadData(clear = true) {
+		async loadData(clear = true,type,row, index) {
 			var _this = this;
 			this.$nextTick(() => {
 				this.loading = true;
@@ -626,6 +660,9 @@ export default {
 						}
 						this.data = res.data;
 						this.page.total = res.total;
+						if(type=='edit') {
+							_this.$refs.crud.rowEdit(this.data[index], index);
+						}
 					})
 					.catch(() => {
 						this.loading = false;

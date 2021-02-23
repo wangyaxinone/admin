@@ -197,3 +197,12 @@ html {
 .dataTree .el-tree-node__content{
 	height: 38px !important;
 }
+.el-backtop, .el-calendar-table td.is-today .el-calendar-day{
+	color:#409EFF;
+	border:1px solid #409EFF;
+	border-radius:10px;
+}
+.el-calendar-table td.is-selected .el-calendar-day{
+	border:1px solid #ccc;
+	border-radius:10px;
+}
