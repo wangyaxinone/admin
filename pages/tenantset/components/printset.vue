@@ -88,7 +88,7 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
-					menuWidth: 220,
+					menuWidth:200,
 					column: [{
 							label: "打印机名称",
 							prop: "name",

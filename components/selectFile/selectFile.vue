@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="资源库" :visible.sync="dialogFile" width="60%">
+		<el-dialog title="资源库" :visible.sync="dialogFile" width="80%">
 			<el-container>
 				<el-main>
 					<div>
@@ -8,7 +8,7 @@
 						<el-button type="primary" @click="updateFile" size="small">上传文件</el-button>
 					</div>
 					<el-container v-loading="loading">
-						<el-row style="width:100%;min-height:600px;margin-top:20px;">
+						<el-row style="width:100%;min-height:400px;margin-top:20px;">
 							<el-col :span="24">
 								<el-breadcrumb separator="/">
 									<el-breadcrumb-item>

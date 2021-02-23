@@ -64,6 +64,7 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
+					menuWidth:200,
 					column: [{
 							label: "单位名称",
 							prop: "name",

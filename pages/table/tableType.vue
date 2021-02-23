@@ -64,7 +64,7 @@
 					index: true,
 					selection: true,
 					viewBtn: true,
-					menuWidth: 300,
+					menuWidth:200,
 					column: [{
 							label: "分类名称",
 							prop: "name",

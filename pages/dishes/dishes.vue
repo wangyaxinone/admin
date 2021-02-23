@@ -1,7 +1,7 @@
 <template>
     <view class="dishes" v-loading="loading">
         <el-row :gutter="20" v-if="deptlist && deptlist.length">
-          <el-col :span="6" v-for="(item,idx) in deptlist" :key="idx">
+          <el-col style="padding-right:0;" :span="6" v-for="(item,idx) in deptlist" :key="idx">
 			  <el-card @click.native="dishesByDept(item)" shadow="hover" style="cursor: pointer;height:100px;" :style="{'background-color': colors[idx],}">
 				<text style="color:#fff;font-size:24px;font-weight: bold;">{{item.dept_name}}</text>
 			  </el-card>

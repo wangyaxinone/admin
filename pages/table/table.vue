@@ -23,7 +23,7 @@
 			<div v-for="(value, idx) in tableList" :key="idx">
 				<div style="padding:5px;margin-bottom:10px;">{{ value.key }}</div>
 				<el-row :gutter="10">
-					<el-col style="margin-bottom:5px;" :span="3" v-for="(item, idx) in value.arr" :key="item._id" @dblclick.native="odlclickTable(item)">
+					<el-col style="margin-bottom:5px;" :span="4" v-for="(item, idx) in value.arr" :key="item._id" @dblclick.native="odlclickTable(item)">
 						<el-popover placement="bottom" width="200" trigger="hover">
 							<div style="text-align: center;">
 								<el-button-group>
@@ -34,12 +34,13 @@
 									<el-button @click="delTable(item)" size="mini" type="primary">删除</el-button>
 								</el-button-group>
 							</div>
-							<el-card slot="reference" shadow="hover" :class="[item.status ? `color_${item.status}` : '']">
+							<el-card  slot="reference" shadow="hover" :class="[item.status ? `color_${item.status}` : '']">
 								<div style="user-select:none;">
 									<span style="font-size: 18px;">{{ item.name }}</span>
 									<span style="font-size: 12px;margin-left:5px;">({{ statusMap[item.status] }})</span>
 								</div>
 							</el-card>
+							
 						</el-popover>
 					</el-col>
 				</el-row>
@@ -378,7 +379,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
+	
 .table {
 	padding: 15px;
 

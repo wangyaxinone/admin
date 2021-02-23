@@ -206,3 +206,6 @@ html {
 	border:1px solid #ccc;
 	border-radius:10px;
 }
+.table .el-card__body{
+	padding: 10px;
+}

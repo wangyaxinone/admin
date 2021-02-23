@@ -1,4 +1,5 @@
 export default {
+	platform: 'ipad', // 'ipad'//'pc'
 	login: {
 		url: '/pages/login/login' // 登录页面路径
 	},

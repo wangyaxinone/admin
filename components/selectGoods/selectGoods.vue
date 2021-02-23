@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<el-dialog v-loading="loading" top="3vh" title="点菜" append-to-body :visible.sync="dialogVisible" width="60%">
+		<el-dialog v-loading="loading" top="3vh" title="点菜" append-to-body :visible.sync="dialogVisible" width="80%">
 			<el-form :inline="true" :model="goodsForm" class="demo-form-inline">
 				<el-form-item label="菜品名称"><el-input size="mini" v-model="goodsForm.goodsName" placeholder="菜品名称"></el-input></el-form-item>
 				<el-form-item>

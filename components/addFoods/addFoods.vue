@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<el-dialog title="加菜" :visible.sync="dialogVisible" width="60%" append-to-body>
+		<el-dialog title="加菜" :visible.sync="dialogVisible" width="80%" append-to-body>
 			<avue-form ref="form" v-model="form" :option="option">
 				<template slot="menuForm">
 					<el-button type="primary" :loading="loading" @click="handleSubmit">提 交</el-button>
