@@ -11,6 +11,7 @@
 		      <!--  <p :class="data.isSelected ? 'is-selected' : ''">
 		          {{ data.day.split('-').slice(1).join('-') }} {{ data.isSelected ? '✔️' : ''}}
 		        </p> -->
+				<div>{{map[data.day]?'1':''}}</div>
 		      </template>
 		    </el-calendar>
 		</el-card>
@@ -18,15 +19,38 @@
 </template>
 
 <script>
+	import {select} from "@/api/reserve/reserve.js"
 	import Lunar from "@/util/Lunar.js"
 	export default {
 		data() {
 			return {
-				Lunar
+				Lunar,
+				map:[]
 			}
 		},
+		mounted() {
+			this.loadData();
+		},
 		methods: {
-			
+			loadData() {
+				var currentYear = new Date().getFullYear();
+				var currentMonth = new Date().getMonth()+1;
+				var params = {
+					startDate:`${new Date(`${currentYear}-${currentMonth}-01`)/1}`,
+					endDate:`${new Date(`${currentYear}-${currentMonth}-31`)/1}`,
+				};
+				params.tenantId = this.$store.state.app.activeTenant;
+				select(params).then((res)=>{
+					var map = {};
+					if(res && res.length) {
+						res.forEach((item)=>{
+							var date = new Date(item.eatDate).Format('yyyy-MM-dd')
+							map[date] = item;
+						})
+					}
+					this.map = map;
+				})
+			}
 		}
 	}
 </script>

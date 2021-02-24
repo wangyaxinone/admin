@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="sidebar" scroll-y="true">
+	<scroll-view class="sidebar" :style="{width:`${platform=='ipad'?56:200}px`}" scroll-y="true">
 		<template v-if="inited">
 			<!-- <uni-nav-menu :active="active" activeKey="url" activeTextColor="#409eff" @select="select">
 				<uni-menu-sidebar :data="navMenu"></uni-menu-sidebar>
@@ -59,7 +59,21 @@
 					}
 				}
 			},
-
+			platform: {
+				handler: function() {
+					this.$nextTick(() => {
+						var dom = document.getElementsByTagName('uni-left-window');
+						var a = dom.item(()=>{})
+						if(this.platform=='ipad') {
+							a.setAttribute('style','width:56px');
+						}else{
+							a.setAttribute('style','width:200px');
+						}
+					})
+					
+				},
+				immediate: true
+			}
 		},
 		methods: {
 			...mapActions({
@@ -107,7 +121,7 @@
 	.sidebar {
 		position: fixed;
 		top: var(--window-top);
-		width: 240px;
+		width: 56px;
 		height: calc(100vh - (var(--window-top)));
 		box-sizing: border-box;
 		border-right: 1px solid darken($left-window-bg-color, 8%);
