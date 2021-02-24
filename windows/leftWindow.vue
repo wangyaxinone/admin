@@ -64,10 +64,16 @@
 					this.$nextTick(() => {
 						var dom = document.getElementsByTagName('uni-left-window');
 						var a = dom.item(()=>{})
+						var style = '';
+						if(!this.$store.state.user.token) {
+							style += 'display:none;'
+						}
 						if(this.platform=='ipad') {
-							a.setAttribute('style','width:56px');
+							style += 'width:56px;'
+							a.setAttribute('style',style);
 						}else{
-							a.setAttribute('style','width:200px');
+							style += 'width:200px;'
+							a.setAttribute('style',style);
 						}
 					})
 					

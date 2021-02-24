@@ -23,6 +23,11 @@
 		<el-card class="box-card" style="margin-top:10px;">
 			<avue-data-display :option="option"></avue-data-display>
 		</el-card>
+		<el-card class="box-card" style="margin-top:10px;">
+			<el-calendar :range="['2021-02-22', '2021-02-28']">
+			</el-calendar>
+		</el-card>
+		
 	</div>
 </template>
 
