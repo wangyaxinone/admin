@@ -124,7 +124,7 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-tenant').where(match).orderBy('sort', "asc").get();
 		return menuList;
 	}
-	async getOrderCount(params) {
+	async getTenantCount(params) {
 		var match = {
 		};
 		
@@ -133,10 +133,10 @@ module.exports = class MenuService extends Service {
 			_this: this,
 			_id: '_id'
 		});
-		param.tenandId && (match.id = param.tenandId);
+		params.tenandId && (match.id = params.tenandId);
 		let {
 			total
-		} = await this.db.collection('uni-id-tenant').where(match).count();
+		} = await this.db.collection('opendb-admin-tenant').where(match).count();
 		return total;
 	}
 	async tree(name) {

@@ -91,7 +91,9 @@
 						},
 						{
 							click: function(item) {
-								
+								uni.navigateTo({
+								    url: `/pages/dishes/dishes`
+								})
 							},
 							title: '作废菜品',
 							count: 0,
@@ -111,7 +113,9 @@
 						},
 						{
 							click: function(item) {
-								alert(JSON.stringify(item));
+								uni.navigateTo({
+								    url: `/pages/reserve/reserve`
+								})
 							},
 							title: '今日订餐',
 							count: 0,
@@ -124,6 +128,7 @@
 		},
 		mounted() {
 			_this = this;
+			this.getTodatServe();
 			getTodayCount({
 				tenantId: this.$store.state.app.activeTenant,
 				startTime: `${new Date().Format('yyyy-MM-dd')} 00:00:00`
@@ -162,7 +167,22 @@
 				this.map = map;
 			})
 		},
-		methods: {}
+		methods: {
+			
+			getTodatServe() {
+				var currentYear = new Date().getFullYear();
+				var currentMonth = new Date().getMonth() + 1;
+				var currentDay =  new Date().getDate();
+				var params = {
+					startDate: `${new Date(`${currentYear}-${currentMonth}-${currentDay} 00:00:00`)/1}`,
+					endDate: `${new Date(`${currentYear}-${currentMonth}-${currentDay} 23:59:59`)/1}`,
+				};
+				params.tenantId = this.$store.state.app.activeTenant;
+				select(params).then((res) => {
+					this.option.data[3].count = res.length || 0;
+				})
+			}
+		}
 	}
 </script>
 
