@@ -8,9 +8,6 @@
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
 			</template>
-			<template slot-scope="scope" slot="eatDate">
-				<uniDateformate format="yyyy/MM/dd" :date="scope.row.eatDate"></uniDateformate>
-			</template>
 		</avue-crud>
 	</view>
 </template>
@@ -22,16 +19,13 @@
 		add,
 		update,
 		remove,
-	} from "@/api/reserve/reserve.js"
+	} from "@/api/reserve/setMeal.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
 		mapState,
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
-	import {
-		select,
-	} from "@/api/reserve/setMeal.js"
 	export default {
 		components: {
 			uniDateformate,
@@ -72,107 +66,28 @@
 					viewBtn: true,
 					menuWidth:200,
 					column: [{
-							label: "订餐人",
+							label: "套餐名称",
 							prop: "name",
 							search: true,
-							width: 100,
+							width: 150,
 							span: 12,
 							rules: [{
 								required: true,
-								message: "请输入订餐人",
+								message: "请输入套餐名称",
 								trigger: "blur",
 							}, ],
 						},
+						
 						{
-							label: "客户电话",
-							prop: "phone",
-							span: 12,
-							width: 100,
-							type: 'number',
-							rules: [{
-								required: true,
-								message: "请输入客户电话",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "就餐日期",
-							prop: "eatDate",
-							span: 12,
-							type: 'date',
-							width: 100,
-							slot: true,
-							pickerOptions:{
-							  disabledDate(time) {
-								return time.getTime() < Date.now() - 8.64e7;  //如果没有后面的-8.64e7就是不可以选择今天的 
-							  }
-							},
-							rules: [{
-								required: true,
-								message: "请输入客户电话",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "午餐/晚餐",
-							prop: "type",
-							span: 12,
-							type: 'select',
-							dicData: [{
-								label: '午餐',
-								value: 1
-							},{
-								label: '晚餐',
-								value: 2
-							}],
-							rules: [{
-								required: true,
-								message: "请输入客户电话",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "套餐类型",
-							prop: "setMeal",
-							span: 12,
-							type: 'select',
-							props: {
-								label: "name",
-								value: "_id"
-							},
-							typeformat(item, label, value) {
-								return `${item[label]} (${item.comment})`;
-							},
-							dicData: []
-							
-						},
-						{
-							label: "就餐人数",
-							prop: "eatNumber",
+							label: "排序",
+							prop: "sort",
 							span: 12,
 							type: 'number',
 							rules: [{
-								required: true,
-								message: "请输入套餐类型",
-								trigger: "blur",
+								required: false,
+								message: "请输入备注",
+								trigger: "change",
 							}, ],
-						},
-						{
-							label: "就餐桌数",
-							prop: "eatTable",
-							span: 12,
-							type: 'number',
-							rules: [{
-								required: true,
-								message: "请输入套餐类型",
-								trigger: "blur",
-							}, ],
-						},
-						{
-							label: "押金",
-							prop: "deposit",
-							span: 12,
-							type: 'number',
 						},
 						{
 							label: "备注",
@@ -200,10 +115,7 @@
 		},
 		created() {
 			_this = this;
-			select().then((data) => {
-				const column = this.findObject(this.option.column, "setMeal");
-				column.dicData = data;
-			})
+			
 		},
 		methods: {
 			rowDel(row) {
@@ -234,9 +146,7 @@
 
 			},
 			rowUpdate(row, index, done, loading) {
-				var data = JSON.parse(JSON.stringify(row))
-				data.eatDate = new Date(data.eatDate)/1;
-				update(data)
+				update(row)
 					.then(() => {
 						this.loadData();
 						this.$message({
@@ -253,9 +163,7 @@
 			},
 			rowSave(row, done, loading) {
 				row.tenantId = this.$store.state.app.activeTenant;
-				var data = JSON.parse(JSON.stringify(row))
-				data.eatDate = new Date(data.eatDate)/1;
-				add(data)
+				add(row)
 					.then(() => {
 						this.loadData();
 						this.$message({

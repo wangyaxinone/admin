@@ -1,11 +1,11 @@
 <template>
 	<scroll-view class="sidebar" :style="{width:`${platform=='ipad'?56:200}px`}" scroll-y="true">
 		<template v-if="inited">
-			<!-- <uni-nav-menu :active="active" activeKey="url" activeTextColor="#409eff" @select="select">
+			<uni-nav-menu :active="active" :style="{width:`${platform=='ipad'?56:200}px`}" activeKey="url" activeTextColor="#409eff" @select="select">
 				<uni-menu-sidebar :data="navMenu"></uni-menu-sidebar>
 				<uni-menu-sidebar :data="staticMenu"></uni-menu-sidebar>
-			</uni-nav-menu> -->
-			<el-menu default-active="1-1" class="el-menu-vertical-demo" menu-trigger="click" :collapse="isCollapse" @select="select">
+			</uni-nav-menu>
+			<!-- <el-menu default-active="1-1" class="el-menu-vertical-demo" menu-trigger="click" :collapse="isCollapse" @select="select">
 				<template v-for="(item,idx) in navMenu">
 					<el-submenu :index="`${idx}`" v-if="item.children && item.children.length">
 						<template slot="title">
@@ -25,7 +25,7 @@
 					</el-menu-item>
 				</template>
 
-			</el-menu>
+			</el-menu> -->
 		</template>
 	</scroll-view>
 </template>
@@ -86,13 +86,13 @@
 				changeMenuActive: 'app/changeMenuActive'
 			}),
 			select(e) {
-				var idxArr = e.split('-');
-				if(idxArr.length==1) {
-					var item = this.navMenu[idxArr[0]];
-				}else{
-					var item = this.navMenu[idxArr[0]].children[idxArr[1]];
-				}
-				let url = item.url
+				// var idxArr = e.split('-');
+				// if(idxArr.length==1) {
+				// 	var item = this.navMenu[idxArr[0]];
+				// }else{
+				// 	var item = this.navMenu[idxArr[0]].children[idxArr[1]];
+				// }
+				let url = e.url
 				if (!url) {
 					url = this.active
 				}

@@ -36,6 +36,9 @@
 				<el-table-column
 				  prop="setMeal"
 				  label="套餐类型">
+				  <template slot-scope="scope">
+				          {{(scope.row.setMealShow &&scope.row.setMealShow[0])?scope.row.setMealShow[0].name: ''}}
+					</template>
 				</el-table-column>
 				<el-table-column
 				  prop="eatNumber"

@@ -124,6 +124,21 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-tenant').where(match).orderBy('sort', "asc").get();
 		return menuList;
 	}
+	async getOrderCount(params) {
+		var match = {
+		};
+		
+		appendTenantParams({
+			match, 
+			_this: this,
+			_id: '_id'
+		});
+		param.tenandId && (match.id = param.tenandId);
+		let {
+			total
+		} = await this.db.collection('uni-id-tenant').where(match).count();
+		return total;
+	}
 	async tree(name) {
 		var match = {};
 		name && (match.name = new RegExp(name));

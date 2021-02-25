@@ -113,6 +113,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/reserve/setMeal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root": "pages/system",

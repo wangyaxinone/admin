@@ -256,7 +256,9 @@
 				const column = this.findObject(this.option.column, "deptId");
 				column.dicData = data;
 			})
-			select().then((data) => {
+			select({
+				tenantId: this.$store.state.app.activeTenant,
+			}).then((data) => {
 				const column = this.findObject(this.option.column, "goodsType");
 				column.dicData = data;
 			})

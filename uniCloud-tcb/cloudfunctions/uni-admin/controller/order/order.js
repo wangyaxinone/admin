@@ -79,6 +79,7 @@ module.exports = class UserController extends Controller {
 			todayInvalidDishesCount: await this.service.dishes.dishes.getDishesCount(Object.assign(this.ctx.data,{status: [4]})),
 			todayDishesPrice: await this.service.dishes.dishes.getDishesPrice(Object.assign(this.ctx.data,{status: [1,2,3]})),
 			todayUpTable:  await this.service.order.order.getOrderCount(Object.assign(this.ctx.data,{status: [1,2],order_type: 1, table: this.db.command.exists(true)})),
+			todayTenantCount:  await this.service.system.tenant.getOrderCount(Object.assign(this.ctx.data,{})),
 		};
 	}
 }

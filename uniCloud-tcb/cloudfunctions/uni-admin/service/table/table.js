@@ -19,11 +19,6 @@ module.exports = class MenuService extends Service {
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
 		var {data: table} = await this.db.collection('opendb-admin-table').doc(_id).get();
-		if(table && table.length){
-			if(table[0].status == 2 || table[0].status == 3 || table[0].status == 4) {
-				_this.ctx.throw('FORBIDDEN', `当前餐桌状态不能操作`)
-			}
-		}
 		return await this.db.collection('opendb-admin-table').doc(_id).update(data);
 	}
 	async remove(_ids) {

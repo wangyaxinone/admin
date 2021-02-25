@@ -1,6 +1,25 @@
 <template>
 	<view>
-		<h2>支持二次开发 加微信 s7952787</h2>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">
+				<h3>今日所有门店数据</h3>
+			</div>
+			<el-row :gutter="20">
+				<el-col :span="8" v-for="(item,idx) in todayList" :key="idx">
+					<div style="height:130px;border-radius:3px;position: relative;margin-bottom:10px;" :style="{backgroundColor: item.color}">
+						<div style="padding-left:30px;font-size:40px;color:#fff;line-height:65px;">
+							<countTo style="" :startVal='0' :endVal='item.count/1'
+							 :decimals="item.decimals" :duration='3000'></countTo>
+						</div>
+						<div style="line-height:65px;padding-left:30px;font-size:18px;font-weight:bold;color:#fff;">
+							{{item.title}}
+						</div>
+						<i style="position: absolute;top: 20px;right: 20px;font-size: 65px;color: rgba(0,0,0,.15);" :class="[item.icon]"></i>
+					</div>
+				</el-col>
+			</el-row>
+		</el-card>
+		<!-- <h2>支持二次开发 加微信 s7952787</h2>
 		<h3>平台功能</h3>
 		<view style="color:#e4393c;">
 			<h3>没有杂乱的营销功能，只有提升门店效率的功能</h3>
@@ -79,11 +98,71 @@
 			</el-col>
 		</el-row>
 		<el-image style="width: 100%" src="/static/2.png" fit="contain "></el-image>
-		<el-image style="width: 100%" src="/static/3.png" fit="contain "></el-image>
+		<el-image style="width: 100%" src="/static/3.png" fit="contain "></el-image> -->
 	</view>
 </template>
 
 <script>
+	var _this = null;
+	import {
+		getTodayCount
+	} from '@/api/order/order.js';
+	import countTo from 'vue-count-to';
+	import {
+		select
+	} from "@/api/reserve/reserve.js"
+	export default {
+		components: {
+			countTo
+		},
+		data() {
+			return {
+				map: {},
+				range: ['2019-03-04', '2019-03-24'],
+				todayList: [{
+					click: function(item) {},
+					count: '0',
+					decimals: 0,
+					title: '今日订单',
+					icon: 'el-icon-warning',
+					color: 'rgb(49, 180, 141)'
+				}, {
+					click: function(item) {},
+					count: '0',
+					title: '今日点菜量',
+					icon: 'el-icon-view',
+					decimals: 0,
+					color: '#00a65a'
+				}, {
+					click: function(item) {},
+					count: '0',
+					title: '当日营业额',
+					decimals: 2,
+					icon: 'el-icon-setting',
+					color: '#f39c12'
+				}, {
+					click: function(item) {},
+					count: '0',
+					title: '门店数量',
+					decimals: 0,
+					icon: 'el-icon-setting',
+					color: '#a59c12'
+				}],
+			}
+		},
+		mounted() {
+			_this = this;
+			getTodayCount({
+				startTime: `${new Date().Format('yyyy-MM-dd')} 00:00:00`
+			}).then((res) => {
+				this.todayList[0].count = res.todayOrderCount || 0;
+				this.todayList[1].count = res.todayDishesCount || 0;
+				this.todayList[2].count = res.todayDishesPrice || 0;
+				this.todayList[3].count = res.todayTenantCount || 0;
+			})
+		},
+		methods: {}
+	}
 </script>
 
 <style>

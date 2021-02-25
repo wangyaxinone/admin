@@ -76,6 +76,18 @@ module.exports = class MenuService extends Service {
 					.done(),
 				as: 'operatorShow',
 			})
+			.lookup({
+				from: 'uni-id-setMeal',
+				let: {
+					setMeal: '$setMeal'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id','$$setMeal'])
+					))
+					.done(),
+				as: 'setMealShow',
+			})
 			.end();
 		return {
 			total,
@@ -85,6 +97,8 @@ module.exports = class MenuService extends Service {
 		};
 	}
 	async select(param) {
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
 		var match = {
 			_id: param._id ? param._id : this.db.command.exists(true)
 		};
@@ -107,10 +121,21 @@ module.exports = class MenuService extends Service {
 		}
 		let {
 			data
-		} = await this.db.collection('opendb-admin-reserve')
-			.where(match)
-			.orderBy('sort', "asc")
-			.get();
+		} = await this.db.collection('opendb-admin-reserve').aggregate()
+			.match(match)
+			.lookup({
+				from: 'opendb-admin-setMeal',
+				let: {
+					setMeal: '$setMeal'
+				},
+				pipeline: $.pipeline()
+					.match(dbCmd.expr(
+						$.eq(['$_id','$$setMeal'])
+					))
+					.done(),
+				as: 'setMealShow',
+			})
+			.end();
 		return data;
 		
 	}

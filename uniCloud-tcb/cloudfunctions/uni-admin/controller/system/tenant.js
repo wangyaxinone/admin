@@ -87,6 +87,7 @@ module.exports = class UserController extends Controller {
 	async list() {
 		return await this.service.system.tenant.list(this.ctx.data);
 	}
+	
 	async tree() {
 		const {
 			name,

@@ -9,7 +9,7 @@
 				<el-col :span="8" v-for="(item,idx) in todayList" :key="idx">
 					<div style="height:130px;border-radius:3px;position: relative;" :style="{backgroundColor: item.color}">
 						<div style="padding-left:30px;font-size:40px;color:#fff;line-height:65px;">
-							<countTo style="" :startVal='0' :endVal='item.count'
+							<countTo style="" :startVal='0' :endVal='item.count/1'
 							 :decimals="item.decimals" :duration='3000'></countTo>
 						</div>
 						<div style="line-height:65px;padding-left:30px;font-size:18px;font-weight:bold;color:#fff;">
@@ -24,7 +24,13 @@
 			<avue-data-display :option="option"></avue-data-display>
 		</el-card>
 		<el-card class="box-card" style="margin-top:10px;">
-			<el-calendar :range="['2021-02-22', '2021-02-28']">
+			<el-calendar :range="range">
+				<!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
+				<div style="position: relative;" slot="dateCell" slot-scope="{date, data}">
+					<div>{{date.getDate()}}</div>
+					<span v-if="map[data.day]" style="position: absolute;top:10px;right:10px;display:inline-block;width:10px;height: 10px;border-radius:5px;background-color: #e4393c;"></span>
+					<div v-if="map[data.day]">({{map[data.day]}}桌)</div>
+				</div>
 			</el-calendar>
 		</el-card>
 		
@@ -37,12 +43,17 @@
 		getTodayCount
 	} from '@/api/order/order.js';
 	import countTo from 'vue-count-to';
+	import {
+		select
+	} from "@/api/reserve/reserve.js"
 	export default {
 		components: {
 			countTo
 		},
 		data() {
 			return {
+				map: {},
+				range: ['2019-03-04', '2019-03-24'],
 				todayList: [{
 					click: function(item) {},
 					count: '0',
@@ -125,11 +136,36 @@
 				this.option.data[1].count = res.todayInvalidDishesCount || 0;
 				this.option.data[2].count = res.todayUpTable || 0;
 			})
+			var range = [];
+			var date = new Date();
+			var day = date.getDay() - 1;
+			var curDate = date.Format('yyyy-MM-dd').split('-');
+			curDate[2] = curDate[2] - day;
+			range.push(curDate.join('-'));
+			curDate[2] = curDate[2] + 6;
+			range.push(curDate.join('-'));
+			this.range = range;
+			var params = {
+				startDate: `${new Date(range[0])/1}`,
+				endDate: `${new Date(range[1])/1}`,
+			};
+			params.tenantId = this.$store.state.app.activeTenant;
+			select(params).then((res) => {
+				var map = {};
+				if (res && res.length) {
+					res.forEach((item) => {
+						var date = new Date(item.eatDate).Format('yyyy-MM-dd');
+						map[date] = map[date] || 0;
+						map[date] += item.eatTable;
+					})
+				}
+				this.map = map;
+			})
 		},
 		methods: {}
 	}
 </script>
 
-<style scoped>
+<style >
 
 </style>

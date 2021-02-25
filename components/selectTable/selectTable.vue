@@ -93,7 +93,7 @@
 				this.loadData();
 			},
 			odlclickTable(item){
-				if(!item.order.order_number){
+				if(!item.order.order_number && item.status == 1){
 					this.$emit('submit', item)
 					this.dialogVisible = false;
 				}
