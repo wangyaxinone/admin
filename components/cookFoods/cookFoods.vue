@@ -16,6 +16,11 @@
 				</el-table-column>
 				<el-table-column prop="every_day_code" label="订单编号">
 				</el-table-column>
+				<el-table-column prop="tables" label="餐桌">
+					<template slot-scope="scope">
+						{{scope.row.tables && scope.row.tables[0] && scope.row.tables[0].name}}
+					</template>
+				</el-table-column>
 				<el-table-column prop="order_type" label="下单类型">
 					<template slot-scope="scope">
 						<el-tag type="danger" size="medium ">{{order_typeMap[scope.row.order_type]}}</el-tag>
