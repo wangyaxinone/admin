@@ -27,6 +27,11 @@ export function request(action, data, options,{
 		}
 		if (result.code) {
 			if (typeof result.code === 'string' && result.code.indexOf('TOKEN_INVALID') === 0) {
+				store.commit('app/set_ACTIVETENANTINFO', {})
+				store.commit('app/SET_NAV_MENU', [])
+				store.commit('app/SET_MODE', 1)
+				store.commit('app/SET_ACTIVETENANT', '')
+				store.commit('user/SET_USER_INFO', {})
 				uni.reLaunch({
 					url: config.login.url
 				})

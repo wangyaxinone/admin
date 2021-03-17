@@ -97,6 +97,12 @@
 							span: 24
 						},
 						{
+							label: '就餐人数',
+							prop: 'eatPeople',
+							type: 'number',
+							value: 1
+						},
+						{
 							label: '订单总价',
 							prop: 'order_price',
 							disabled: true

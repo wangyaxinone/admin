@@ -16,6 +16,9 @@
 			<template slot-scope="scope" slot="goodsBigImg">
 				<el-image :src="scope.row.goodsBigImg"></el-image>
 			</template>
+			<template slot-scope="scope" slot="packingPriceEvery">
+				{{scope.row.packingPriceEvery?'是':'否'}}
+			</template>
 			<template slot-scope="scope" slot="goodsSmallImgForm">
 				<div class="el-upload" @click="getgoodsImg('goodsSmallImg')">
 					<img v-if="scope.row.goodsSmallImg" :src="scope.row.goodsSmallImg" class="avatar">
@@ -28,6 +31,12 @@
 					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 				</div>
 			</template>
+			<template slot-scope="scope" slot="menuLeft">
+			    <el-button type="danger" size="small" plain>批量上架</el-button>
+			    <el-button type="danger" size="small" plain>批量下架</el-button>
+			    <el-button type="danger" size="small" plain>批量设置包装费</el-button>
+			    <el-button type="danger" size="small" plain>重置所有商品库存</el-button>
+		  </template>
 		</avue-crud>
 		<selectFile ref="selectFile" @submit="getImg"></selectFile>
 	</view>
@@ -189,7 +198,18 @@
 							prop: "goodsVipPrice",
 							type: 'number',
 						},
-
+						{
+							label: "包装费",
+							prop: "packingPrice",
+							type: 'number',
+						},
+						{
+							label: "包装费是否按件计价",
+							prop: "packingPriceEvery",
+							type: 'switch',
+							slot: true,
+							value: false,
+						},
 						{
 							label: "商品属性",
 							prop: "goodsAttr",
@@ -197,10 +217,10 @@
 							span: 24
 						},
 						{
-							label: "总销量",
-							prop: "totalSales",
-							addDisplay: false,
-							editDisplay: false,
+							label: "库存",
+							value: 9999,
+							prop: "stockNumber",
+							type: 'number',
 						},
 						{
 							label: "商品状态",

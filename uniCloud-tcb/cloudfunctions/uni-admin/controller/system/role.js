@@ -8,6 +8,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			orderPush,
+			foodPush,
 			sort,
 			comment
 		} = this.ctx.data
@@ -16,6 +18,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			orderPush,
+			foodPush,
 			sort,
 			comment
 		});
@@ -27,6 +31,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			orderPush,
+			foodPush,
 			sort,
 			comment
 		} = this.ctx.data
@@ -36,6 +42,8 @@ module.exports = class UserController extends Controller {
 			parent_id,
 			tenantId,
 			type,
+			orderPush,
+			foodPush,
 			sort,
 			comment
 		});

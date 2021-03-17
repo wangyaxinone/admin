@@ -13,6 +13,9 @@
 						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 					</div>
 				</el-form-item>
+				<el-form-item label="餐具费用" prop="utensils">
+					<el-input-number v-model="ruleForm.utensils"  controls-position="right" :min="0"></el-input-number>
+				</el-form-item>
 			</el-form>
 		</el-card>
 		<selectFile ref="selectFile" @submit="getImg"></selectFile>
@@ -33,7 +36,7 @@
 			return {
 				ruleForm: {
 					path: '',
-					appkey: ''
+					utensils: 0
 				},
 				loading: false,
 				loading2: false,

@@ -143,6 +143,22 @@
 							}, ],
 						},
 						{
+							label: "订单推送",
+							prop: "orderPush",
+							width: 150,
+							type: 'switch',
+							value: false,
+							span: 12,
+						},
+						{
+							label: "菜品推送",
+							prop: "foodPush",
+							width: 150,
+							type: 'switch',
+							value: false,
+							span: 12,
+						},
+						{
 							label: "备注",
 							prop: "comment",
 							span: 12,

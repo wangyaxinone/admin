@@ -24,6 +24,7 @@
 	import foodset from "./components/foodset.vue"
 	import xiaoChengXu from "./components/xiaoChengXu.vue"
 	import tenantSet from "./components/tenantSet.vue"
+	import otherPaySet from "./components/otherPaySet.vue"
 	export default {
 		components:{
 			payset,
@@ -31,7 +32,8 @@
 			printset,
 			foodset,
 			xiaoChengXu,
-			tenantSet
+			tenantSet,
+			otherPaySet
 		},
 		data() {
 			return {
@@ -53,7 +55,12 @@
 				}, {
 					label: '菜品制作设置',
 					components: 'foodset'
-				}],
+				},
+				// {
+				// 	label: '其他支付费用',
+				// 	components: 'otherPaySet'
+				// },
+				],
 				currComponents: 'tenantSet'
 			};
 		},

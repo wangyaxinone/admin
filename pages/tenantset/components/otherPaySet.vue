@@ -37,6 +37,9 @@
 	import config from '@/admin.config.js'
 	import {getDeptByUser} from "@/api/system/user.js"
 	import {getList as getDeptList} from "@/api/system/dept.js"
+	import {
+		getDictByDictCode
+	} from '@/api/system/dict.js';
 	export default {
 		components: {
 			uniDateformate,
@@ -90,7 +93,7 @@
 					viewBtn: true,
 					menuWidth:200,
 					column: [{
-							label: "打印机名称",
+							label: "费用名称",
 							prop: "name",
 							span: 12,
 							rules: [{
@@ -100,18 +103,29 @@
 							}, ],
 						},
 						{
-							label: "打印机类型",
+							label: "费用生效范围",
 							prop: "type",
 							span: 12,
 							type: 'select',
 							value: 1,
-							dicData: [{
-								label: '前台打印机',
-								value: 1
-							},{
-								label: '后厨打印机',
-								value: 2
-							}],
+							props: {
+								label: 'dict_name',
+								value: 'dict_key'
+							},
+							dicData: [],
+							rules: [
+								{
+									required: true,
+									message: '请选择费用生效范围',
+									trigger: 'change'
+								}
+							]
+						},
+						{
+							label: "费用金额",
+							prop: "print",
+							span: 12,
+							type: 'number',
 							rules: [
 								{
 									required: true,
@@ -121,87 +135,36 @@
 							]
 						},
 						{
-							label: "打印机部门",
-							prop: "deptId",
-							display: true,
+							label: "计算规则",
+							prop: "calc",
 							type: 'select',
-							dicData:[],
-							multiple: true,
-							props: {
-								label: "dept_name",
-								value: "_id"
-							},
+							width:60,
+							dicData: [{
+								label: '+',
+								value: 'plus'
+							},{
+								label: '-',
+								value: 'minus'
+							},{
+								label: '*',
+								value: 'times'
+							},{
+								label: '/',
+								value: 'divide'
+							}],
 							rules: [
 								{
 									required: true,
-									message: '请选择打印机部门',
+									message: '请选择是否启用',
 									trigger: 'change'
 								}
-							],
-							span: 12,
-						},
-						{
-							label: "USER",
-							prop: "USER",
-							span: 12,
-							editDisabled: true,
-							rules: [{
-								required: true,
-								message: "请输入USER",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "UKEY",
-							prop: "UKEY",
-							editDisabled: true,
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入UKEY",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "SN",
-							prop: "SN",
-							editDisabled: true,
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入SN",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "KEY",
-							prop: "KEY",
-							editDisabled: true,
-							span: 12,
-							rules: [{
-								required: true,
-								message: "请输入KEY",
-								trigger: "change",
-							}, ],
-						},
-						{
-							label: "电话卡",
-							prop: "phone",
-							editDisabled: true,
-							span: 12,
-						},
-						{
-							label: "打印机宽度（mm）",
-							prop: "width",
-							value: '58',
-							span: 12,
+							]
 						},
 						{
 							label: "是否启用",
-							prop: "printStatus",
+							prop: "status",
 							type: 'select',
 							fixed: true,
-							width:60,
 							value: 1,
 							dicData: [{
 								label: '启用',
@@ -217,15 +180,6 @@
 									trigger: 'change'
 								}
 							]
-						},
-						{
-							label: "状态",
-							prop: "status",
-							width:50,
-							fixed: true,
-							display: false,
-							span: 12,
-							slot: true
 						},
 						{
 							label: "备注",
@@ -282,6 +236,12 @@
 				})
 				
 			}
+			getDictByDictCode({
+				dict_code: 'order_type'
+			}).then((res) => {
+				const column = this.findObject(this.option.column, "type");
+				column.dicData = res;
+			})
 		},
 		watch: {
 			'form.type': function(newValue) {

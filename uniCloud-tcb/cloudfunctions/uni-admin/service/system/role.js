@@ -41,6 +41,7 @@ module.exports = class MenuService extends Service {
 	async list(param) {
 		var match = {};
 		param.role_name && (match.role_name = new RegExp(param.role_name));
+		param._ids && (match._id = this.db.command.in(param._ids));
 		appendTenantParams({
 			match,
 			_this: this,

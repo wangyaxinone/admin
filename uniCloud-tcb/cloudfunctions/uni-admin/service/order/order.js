@@ -495,7 +495,8 @@ module.exports = class MenuService extends Service {
 		var _this = this;
 		var {
 			_ids,
-			tenantId
+			tenantId,
+			comment
 		} = data;
 		if (!_ids || !_ids.length) {
 			_this.ctx.throw('FORBIDDEN', `_ids 不能为空`)
@@ -510,6 +511,7 @@ module.exports = class MenuService extends Service {
 				var remobeRes = await transaction.collection('opendb-admin-order').doc(_ids[i]).update({
 					isLeave: 1,
 					status: 3,
+					comment,
 					update_date,
 					operator
 				});
@@ -532,6 +534,7 @@ module.exports = class MenuService extends Service {
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
 					order_status: 3,
 					status: 4,
+					order_comment: comment,
 					update_date,
 					operator
 				});

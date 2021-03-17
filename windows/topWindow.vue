@@ -138,7 +138,17 @@
 			'$store.state.app.activeTenant': {
 				handler: function(newValue, oldvalue) {
 					var _this = this;
-					
+					var foodPush = false, orderPush = false;
+					if(this.$store.state.user.userInfo && this.$store.state.user.userInfo.roles && this.$store.state.user.userInfo.roles.length){
+						this.$store.state.user.userInfo.roles.forEach((item)=>{
+							if(!foodPush) {
+								foodPush = item.foodPush;
+							}
+							if(!orderPush) {
+								orderPush = item.orderPush;
+							}
+						})
+					}
 					if (newValue && this.activeTenantInfo.appkey) {
 						Vue.prototype.$goeasy = GoEasy.getInstance({
 						    host: 'hangzhou.goeasy.io',
@@ -147,41 +157,46 @@
 						Vue.prototype.$goeasy.connect({
 						    onSuccess: function () {  //连接成功
 						        console.log("GoEasy connect successfully.") //连接成功
-								_this.getCurrentDepts().then((res)=>{
-									_this.deptList = res;
-									_this.subscribe();
-								})
-								_this.$goeasy.subscribe({
-									channel: `${newValue}-orderChange`,
-									onMessage: function(message) {
-										_this.$eventBus.emit('orderChange');
-										if (message.content.indexOf('addOrder') > -1) {
-											_this.paddingAudioArr.push({
-												type: 'order',
-												audio: _this.order
-											})
-											_this.openAudio = true;
-											var notification = _this.$notify.info({
-												title: '消息',
-												duration: 0,
-												message: '您有新的订单，请注意查收！',
-												onClick: function() {
-													notification.close();
-													uni.navigateTo({
-														url: '/pages/order/order'
-													});
-												}
-											});
+								if(foodPush) {
+									_this.getCurrentDepts().then((res)=>{
+										_this.deptList = res;
+										_this.subscribe();
+									})
+								}
+								if(orderPush) {
+									_this.$goeasy.subscribe({
+										channel: `${newValue}-orderChange`,
+										onMessage: function(message) {
+											_this.$eventBus.emit('orderChange');
+											if (message.content.indexOf('addOrder') > -1) {
+												_this.paddingAudioArr.push({
+													type: 'order',
+													audio: _this.order
+												})
+												_this.openAudio = true;
+												var notification = _this.$notify.info({
+													title: '消息',
+													duration: 0,
+													message: '您有新的订单，请注意查收！',
+													onClick: function() {
+														notification.close();
+														uni.navigateTo({
+															url: '/pages/order/order'
+														});
+													}
+												});
+											}
+										},
+										onSuccess: function() {
+											console.log("订阅成功")
+										},
+										onFailed: function() {
+											console.log("订阅失败")
 										}
-									},
-									onSuccess: function() {
-										console.log("订阅成功")
-									},
-									onFailed: function() {
-										console.log("订阅失败")
-									}
+									
+									});
+								}
 								
-								});
 						    },
 						    onFailed: function (error) { //连接失败
 						        console.log("Failed to connect GoEasy, code:"+error.code+ ",error:"+error.content);

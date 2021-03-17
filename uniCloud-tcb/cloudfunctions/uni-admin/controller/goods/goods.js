@@ -16,7 +16,10 @@ module.exports = class UserController extends Controller {
 			goodsAttr,
 			status,
 			remark,
-			tenantId
+			tenantId,
+			packingPrice,
+			packingPriceEvery,
+			stockNumber
 		} = this.ctx.data
 		return await this.service.goods.goods.add({
 			goodsSmallImg,
@@ -31,7 +34,10 @@ module.exports = class UserController extends Controller {
 			goodsAttr,
 			status,
 			remark,
-			tenantId
+			tenantId,
+			packingPrice,
+			packingPriceEvery,
+			stockNumber
 		});
 	}
 	async update() {
@@ -49,7 +55,10 @@ module.exports = class UserController extends Controller {
 			goodsAttr,
 			status,
 			remark,
-			tenantId
+			tenantId,
+			packingPrice,
+			packingPriceEvery,
+			stockNumber
 		} = this.ctx.data
 		return await this.service.goods.goods.update({
 			_id,
@@ -65,7 +74,10 @@ module.exports = class UserController extends Controller {
 			goodsAttr,
 			status,
 			remark,
-			tenantId
+			tenantId,
+			packingPrice,
+			packingPriceEvery,
+			stockNumber
 		});
 	}
 	async remove() {
