@@ -134,6 +134,7 @@ module.exports = class MenuService extends Service {
 		param.goodsAttrValue && (match.goodsAttrValue = param.goodsAttrValue);
 		param.operator && (match.operator = param.operator);
 		param.status && (match.status = this.db.command.in(param.status));
+		param._ids && (match._id = this.db.command.in(param._ids));
 		appendTenantParams({
 			match,
 			_this: this,

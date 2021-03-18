@@ -66,7 +66,7 @@
 			show() {
 				getList({
 					page: 1,
-					size: 5,
+					size: 100,
 					status: [2],
 					operator: this.$store.state.user.userInfo._id
 				}).then((res) => {

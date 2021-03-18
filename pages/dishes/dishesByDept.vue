@@ -17,9 +17,12 @@
 					:type="type" size="small">制作</el-button>
 			</template>
 			<template slot-scope="scope" slot="menuLeft">
-				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>临时制作菜品</el-button>
-				<el-button type="danger" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>批量制作</el-button>
-				<el-button type="danger" v-if="params.status!=4 && navBtn.dishes_invalid" size="small" plain>批量作废
+				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>临时制作菜品
+				</el-button>
+				<el-button type="danger" v-if="params.status==1 && navBtn.dishes_cook" @click="cookList" size="small" plain>批量制作
+				</el-button>
+				<el-button type="danger" v-if="params.status!=4 && navBtn.dishes_invalid" @click="invalidList"
+					size="small" plain>批量作废
 				</el-button>
 			</template>
 			<template slot-scope="scope" slot="update_date">
@@ -299,6 +302,60 @@
 			this.$refs.cookFoods.show();
 		},
 		methods: {
+			invalidList() {
+				if(!this.selection.length){
+					this.$message.warning('至少选择一项！')
+					return;
+				}
+				this.$confirm('确定将选择数据作废? ', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					invalid({
+						_ids: this.selection.map((item)=>{return item._id}),
+						tenantId: this.selection[0].tenantId
+					}).then(res => {
+						this.$message({
+							message: '作废成功',
+							type: 'success'
+						});
+						this.loadData();
+					});
+				});
+			},
+			cookList() {
+				if(!this.selection.length){
+					this.$message.warning('至少选择一项！')
+					return;
+				}
+				this.$confirm('确定开始制作? ', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					getList({
+						page: 1,
+						size: 100,
+						_ids: this.selection.map((item)=>{return item._id}),
+						status: [1]
+					}).then((res) => {
+						var foods = res.data || [];
+						var _ids = foods.map((item) => {
+							return item._id;
+						})
+						debugger
+						var tenantId = foods[0].tenantId;
+						cook({
+							_ids,
+							tenantId
+						}).then(() => {
+							this.$refs.cookFoods.show();
+							this.loadData();
+						})
+					})
+				});
+			},
 			submitTable(data) {
 				var form = JSON.parse(JSON.stringify(this.form))
 				form.table = data._id;

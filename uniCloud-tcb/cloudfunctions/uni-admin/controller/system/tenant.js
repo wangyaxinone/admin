@@ -57,13 +57,15 @@ module.exports = class UserController extends Controller {
 			_id,
 			path,
 			appkey,
-			logo
+			logo,
+			utensils
 		} = this.ctx.data
 		return await this.service.system.tenant.updatePush({
 			_id,
 			path,
 			appkey,
-			logo
+			logo,
+			utensils
 		});
 	}
 	async updateXiaoCHengXu() {
