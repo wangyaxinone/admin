@@ -139,7 +139,9 @@
 				handler: function(newValue, oldvalue) {
 					var _this = this;
 					var foodPush = false, orderPush = false;
+					
 					if(this.$store.state.user.userInfo && this.$store.state.user.userInfo.roles && this.$store.state.user.userInfo.roles.length){
+						debugger
 						this.$store.state.user.userInfo.roles.forEach((item)=>{
 							if(!foodPush) {
 								foodPush = item.foodPush;
@@ -148,6 +150,10 @@
 								orderPush = item.orderPush;
 							}
 						})
+					}
+					if(this.$store.state.user.userInfo && this.$store.state.user.userInfo.role && this.$store.state.user.userInfo.role.indexOf('admin')>-1) {
+						foodPush = true;
+						orderPush = true;
 					}
 					if (newValue && this.activeTenantInfo.appkey) {
 						Vue.prototype.$goeasy = GoEasy.getInstance({
