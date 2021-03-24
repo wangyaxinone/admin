@@ -26,6 +26,7 @@ module.exports = class MenuService extends Service {
 		delete data.tableName;
 		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
 		var goeasyConfig = tenants[0];
+		data.utensils = goeasyConfig.utensils;// 餐具费
 		var date = getServerDate();
 		data.create_date = date
 		data.update_date = date;
@@ -91,6 +92,8 @@ module.exports = class MenuService extends Service {
 								table: data.table,
 								create_date: date,
 								update_date: date,
+								packingPrice: item.packingPrice,
+								packingPriceEvery: item.packingPriceEvery,
 								operator: '',
 								creater: _this.ctx.auth.uid,
 							})
@@ -397,6 +400,7 @@ module.exports = class MenuService extends Service {
 		let {
 			total
 		} = await this.db.collection('opendb-admin-order').where(match).count();
+		
 		let {
 			data
 		} = await this.db.collection('opendb-admin-order').aggregate()
@@ -442,6 +446,7 @@ module.exports = class MenuService extends Service {
 				as: 'operatorShow',
 			})
 			.end();
+			var packingPriceEveryMap = {};
 			if(data && data.length) {
 				data.forEach((item) =>{
 					item.number = 0;
@@ -449,10 +454,24 @@ module.exports = class MenuService extends Service {
 					if(item.foods && item.foods.length) {
 						item.foods.forEach((food)=>{
 							if(food.status != 4) {
-								item.number = NP.plus(item.number, 1)
-								item.order_price = NP.plus(item.order_price, food.goodsPrice || 0) 
+								item.number = NP.plus(item.number, 1);
+								item.order_price = NP.plus(item.order_price, food.goodsPrice || 0);
+								if(item.order_type == 2) {
+									if(food.packingPriceEvery) {
+										if(!packingPriceEveryMap[food._id]) {
+											packingPriceEveryMap[food._id] = true;
+											item.order_price = NP.plus(item.order_price, food.packingPrice || 0);
+										}
+									}else{
+										item.order_price = NP.plus(item.order_price, food.packingPrice || 0);
+									}
+								}
 							}
 						})
+						if(item.order_type == 1 ){
+							var utensils = NP.times(item.utensils || 0, item.eatPeople || 0);
+							item.order_price = NP.plus(item.order_price, utensils|| 0);
+						}
 					}
 				})
 			}
@@ -673,6 +692,8 @@ module.exports = class MenuService extends Service {
 								goodsBigImg: item.goodsBigImg,
 								goodsSmallImg: item.goodsSmallImg,
 								goodsType: item.goodsType,
+								packingPrice: item.packingPrice,
+								packingPriceEvery: item.packingPriceEvery,
 								status: 1,
 								order_status: 1,
 								table: data.table,
