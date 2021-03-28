@@ -209,7 +209,8 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-dishes').where(match).count();
 		let {
 			data
-		} = await this.db.collection('opendb-admin-dishes').aggregate()
+		} = await this.db.collection('opendb-admin-dishes')
+			.aggregate()
 			.match(match)
 			.sort({
 				'create_date': 1

@@ -105,4 +105,16 @@ module.exports = class MenuService extends Service {
 		return data;
 		
 	}
+	async updateGoods(params) {
+		var {_ids, status, packingPrice, stockNumber} = params;
+		var data = {};
+		data.update_date = getServerDate();
+		data.operator = this.ctx.auth.uid;
+		status && (data.status = status);
+		packingPrice && (data.packingPrice = packingPrice);
+		stockNumber && (data.stockNumber = stockNumber);
+		return await this.db.collection('opendb-admin-goods').where({
+			'_id': this.db.command.in(_ids)
+		}).update(data);
+	}
 }

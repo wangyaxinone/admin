@@ -32,10 +32,10 @@
 				</div>
 			</template>
 			<template slot-scope="scope" slot="menuLeft">
-			    <el-button type="danger" size="small" plain>批量上架</el-button>
-			    <el-button type="danger" size="small" plain>批量下架</el-button>
-			    <el-button type="danger" size="small" plain>批量设置包装费</el-button>
-			    <el-button type="danger" size="small" plain>重置所有商品库存</el-button>
+			    <el-button type="danger" size="small" plain @click="updateStatus(1)">批量上架</el-button>
+			    <el-button type="danger" size="small" plain @click="updateStatus(2)">批量下架</el-button>
+			    <el-button type="danger" size="small" plain @click="updatePackingPrice">批量设置包装费</el-button>
+			    <el-button type="danger" size="small" plain @click="updateStockNumber">批量设置库存</el-button>
 		  </template>
 		</avue-crud>
 		<selectFile ref="selectFile" @submit="getImg"></selectFile>
@@ -49,6 +49,7 @@
 		add,
 		update,
 		remove,
+		updateGoods
 	} from "@/api/goods/goods.js"
 	import uniDateformate from '@/components/uni-dateformat/uni-dateformat.vue'
 	import {
@@ -301,6 +302,99 @@
 			})
 		},
 		methods: {
+			updatePackingPrice() {
+				if(!this.selection || !this.selection.length) {
+					this.$message({
+						message: '请先选择商品！',
+						type: 'warning'
+					});
+					return;
+				}
+				this.$prompt('请输入包装费', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					inputValidator: function(value) {
+						return value ? true : '不能为空';
+					},
+				}).then(({
+					value
+				}) => {
+					var reg = new RegExp("^[0-9]*$");
+					if(!reg.test(value)){
+						this.$message({
+							message: '请输入数字！',
+							type: 'warning'
+						});
+						return;
+					}
+					updateGoods({
+						_ids: this.selection.map((item)=>item._id),
+						packingPrice: parseFloat(value)
+					}).then(res => {
+						this.$message({
+							message: '作废成功',
+							type: 'success'
+						});
+						this.loadData();
+					});
+				});
+			},
+			updateStockNumber() {
+				if(!this.selection || !this.selection.length) {
+					this.$message({
+						message: '请先选择商品！',
+						type: 'warning'
+					});
+					return;
+				}
+				this.$prompt('请输入库存', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					inputValidator: function(value) {
+						return value ? true : '不能为空';
+					},
+				}).then(({
+					value
+				}) => {
+					var reg = new RegExp("^[0-9]*$");
+					if(!reg.test(value)){
+						this.$message({
+							message: '请输入数字！',
+							type: 'warning'
+						});
+						return;
+					}
+					updateGoods({
+						_ids: this.selection.map((item)=>item._id),
+						stockNumber: parseFloat(value)
+					}).then(res => {
+						this.$message({
+							message: '作废成功',
+							type: 'success'
+						});
+						this.loadData();
+					});
+				});
+			},
+			updateStatus(status) {
+				if(this.selection && this.selection.length) {
+					updateGoods({
+						_ids: this.selection.map((item)=>item._id),
+						status: status
+					}).then((res)=>{
+						this.$message({
+							message: '操作成功',
+							type: 'success'
+						});
+						this.loadData();
+					})
+				}else{
+					this.$message({
+						message: '请先选择商品！',
+						type: 'warning'
+					});
+				}
+			},
 			getImg(item) {
 				this.form[this.imgType] = item.path;
 				this.$refs.selectFile.hide();

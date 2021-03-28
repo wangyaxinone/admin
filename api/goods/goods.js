@@ -22,4 +22,8 @@ export const select = (params) => {
   return request('goods/goods/select', params);
 }
 
+export const updateGoods = (params) => {
+  return request('goods/goods/updateGoods', params);
+}
+
 

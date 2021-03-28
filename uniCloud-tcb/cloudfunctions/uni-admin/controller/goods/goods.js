@@ -92,4 +92,7 @@ module.exports = class UserController extends Controller {
 	async select() {
 		return await this.service.goods.goods.select(this.ctx.data);
 	}
+	async updateGoods() {
+		return await this.service.goods.goods.updateGoods(this.ctx.data);
+	}
 }
