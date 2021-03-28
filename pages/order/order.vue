@@ -24,7 +24,8 @@
 			<template slot-scope="scope" slot="numberForm">
 				<div>
 					<el-button v-if="dialogType == 'add'" type="primary" @click="selectGoods">点菜</el-button>
-					<el-card style="margin-top:5px;" v-for="(item,key) in scope.row.goods_list" :key="key">
+					<el-card v-if="dialogType == 'add'" style="margin-top:5px;"
+						v-for="(item,key) in scope.row.goods_list" :key="key">
 						<el-row :gutter="20">
 							<el-col :span="6" style="text-align: center;">
 								{{ item.goodsName }}
@@ -43,13 +44,21 @@
 							</el-col>
 						</el-row>
 					</el-card>
+					<div v-if="dialogType == 'add' && form.order_type == 2 && form.allPackingPrice"
+						style="text-align: right;padding:0 20px;">
+						包装费：<span style="color:#e4393c;font-weight: bold;">{{form.allPackingPrice}}元</span>
+					</div>
+					<div v-if="dialogType == 'add' && form.order_type == 1 && form.utensilsPrice"
+						style="text-align: right;padding:0 20px;">
+						餐具费：<span style="color:#e4393c;font-weight: bold;">{{form.utensilsPrice}}元</span>
+					</div>
 					<el-tabs v-if="dialogType !== 'add'" v-model="activeName" type="border-card"
 						style="margin-top:10px;">
 						<el-tab-pane label="支付情况" name="zhiFu">
 							<div v-for="(foodList,key) in scope.row.foodsMapZhiFu" :key="key">
 								<el-alert style="margin-top:5px;" :title="dishesZhiFuMap[key]"
 									:type="key==1 || key==3? 'error': 'success'" :closable="false"></el-alert>
-								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
+								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :class="{disabled: item.status==4}" :key="key">
 									<el-row :gutter="20">
 										<el-col :span="5" style="text-align: center;">
 											{{ item.goodsName }}
@@ -72,12 +81,22 @@
 									</el-row>
 								</el-card>
 							</div>
+							<div v-if="scope.row.order_type == 2 && scope.row.allPackingPrice"
+								style="text-align: right;padding:20px;">
+								包装费：<span
+									style="color:#e4393c;font-weight: bold;">{{scope.row.allPackingPrice}}元</span>
+							</div>
+							<div v-if="scope.row.order_type == 1 && scope.row.utensilsPrice"
+								style="text-align: right;padding:20px;">
+								餐具费：<span
+									style="color:#e4393c;font-weight: bold;">{{scope.row.utensilsPrice}}元</span>
+							</div>
 						</el-tab-pane>
 						<el-tab-pane label="制作情况" name="zhiZuo">
 							<div v-for="(foodList,key) in scope.row.foodsMapZhiZuo" :key="key">
 								<el-alert style="margin-top:5px;" :title="dishesZhiZuoMap[key]"
 									:type="key==1 ||　key==4? 'error': 'success'" :closable="false"></el-alert>
-								<el-card style="margin-top:5px;" v-for="(item,key) in foodList" :key="key">
+								<el-card style="margin-top:5px;" v-for="(item,key) in foodList"  :class="{disabled: item.status==4}" :key="key">
 									<el-row :gutter="20">
 										<el-col :span="5" style="text-align: center;">
 											{{ item.goodsName }}
@@ -200,16 +219,15 @@
 							label: '下单类型',
 							prop: 'order_type',
 							span: 12,
-							addDisabled: true,
 							type: 'select',
-							value: 2,
+							value: 1,
 							dicData: [],
 							props: {
 								label: 'dict_name',
 								value: 'dict_key'
 							},
 							rules: [{
-								required: false,
+								required: true,
 								message: '请选择下单类型',
 								trigger: 'change'
 							}]
@@ -221,19 +239,13 @@
 							display: false,
 							addDisplay: false,
 							addDisabled: true,
+							rules: [{
+								required: false,
+								message: '请选择餐桌',
+								trigger: 'change'
+							}]
 						},
-						{
-							label: '订单状态',
-							prop: 'status',
-							type: 'select',
-							disabled: true,
-							value: 1,
-							dicData: [],
-							props: {
-								label: 'dict_name',
-								value: 'dict_key'
-							},
-						},
+						
 						{
 							label: '菜品数量',
 							prop: 'number',
@@ -244,6 +256,7 @@
 							label: '就餐人数',
 							prop: 'eatPeople',
 							type: 'number',
+							minRows: 1,
 							value: 1
 						},
 						{
@@ -256,24 +269,20 @@
 							prop: 'amound_price',
 							disabled: false,
 							type: 'number',
+							minRows: 0,
 							precision: 2,
 						},
 						{
-							label: '未付款金额',
-							prop: 'no_order_price',
-							hide: true,
-							addDisplay: false,
-							display: false,
-							disabled: true
-						},
-						{
-							label: '剩余实付金额',
-							prop: 'no_amound_price',
-							type: 'number',
-							hide: true,
-							display: false,
-							addDisplay: false,
-							precision: 2,
+							label: '订单状态',
+							prop: 'status',
+							type: 'select',
+							value: 1,
+							dicData: [],
+							addDisabled: true,
+							props: {
+								label: 'dict_name',
+								value: 'dict_key'
+							},
 						},
 						{
 							label: '备注',
@@ -326,14 +335,17 @@
 
 		},
 		watch: {
-			'form.order_type': (newValue, oldValue) => {
+			'form.order_type': function(newValue, oldValue) {
 				const column = _this.findObject(_this.option.column, "tableName");
 				if (newValue == 1) {
 					column.display = true;
 				} else {
 					column.display = false;
 				}
-
+				this.get_order_price();
+			},
+			'form.eatPeople': function(newValue, oldValue) {
+				this.get_order_price();
 			}
 		},
 		created() {
@@ -394,7 +406,8 @@
 				}).then(() => {
 					foodInvalid({
 						_ids: [item._id],
-						tenantId: item.tenantId
+						tenantId: item.tenantId,
+						orderId: item.orderId
 					}).then(res => {
 						this.$message({
 							message: '作废成功',
@@ -441,22 +454,6 @@
 						this.loadData();
 					});
 				});
-				// this.$confirm('确定将选择数据作废? ', {
-				// 	confirmButtonText: '确定',
-				// 	cancelButtonText: '取消',
-				// 	type: 'warning'
-				// }).then(() => {
-				// 	invalid({
-				// 		_ids: [row._id],
-				// 		tenantId: row.tenantId
-				// 	}).then(res => {
-				// 		this.$message({
-				// 			message: '作废成功',
-				// 			type: 'success'
-				// 		});
-				// 		this.loadData();
-				// 	});
-				// });
 			},
 			addFoodsSubmit(data) {
 				if (data.isLeave == 1) {
@@ -492,14 +489,56 @@
 			get_order_price() {
 				var price = 0;
 				var _this = this;
-				if (this.form.goods_list) {
-					Object.keys(this.form.goods_list).forEach((key) => {
-						var item = this.form.goods_list[key];
+				var packingPriceEveryMap = {};
+				var allPackingPrice = 0;
+				var utensilsPrice = 0;
+				if (_this.form.goods_list) {
+					Object.keys(_this.form.goods_list).forEach((key, idx) => {
+						var item = _this.form.goods_list[key];
 						var currentPrice = parseFloat(_this.$NP.times(item.goodsPrice, item.num));
+						if (_this.form.order_type == 2) {
+							if (item.packingPriceEvery) {
+								allPackingPrice = _this.$NP.plus(allPackingPrice, _this.$NP.times(item
+									.packingPrice, item.num));
+							} else {
+								if (!packingPriceEveryMap[item._id]) {
+									allPackingPrice = _this.$NP.plus(allPackingPrice, item.packingPrice);
+									packingPriceEveryMap[item._id] = true;
+								}
+							}
+
+						}
+						price = _this.$NP.plus(price, currentPrice);
+					})
+				} else if (_this.form.foods && _this.form.foods.length) {
+					_this.form.foods.forEach((item, idx) => {
+						if(item.status == 4) {
+							return;
+						}
+						var currentPrice = parseFloat(_this.$NP.times(item.goodsPrice, 1));
+						if (_this.form.order_type == 2) {
+							if (item.packingPriceEvery) {
+								allPackingPrice = _this.$NP.plus(allPackingPrice, _this.$NP.times(item
+									.packingPrice, 1));
+							} else {
+								if (!packingPriceEveryMap[item._id]) {
+									allPackingPrice = _this.$NP.plus(allPackingPrice, item.packingPrice);
+									packingPriceEveryMap[item._id] = true;
+								}
+							}
+
+						}
 						price = _this.$NP.plus(price, currentPrice);
 					})
 				}
-				this.form.order_price = price;
+				if (_this.form.order_type == 1) {
+					utensilsPrice = _this.$NP.plus(utensilsPrice, _this.$NP.times(_this.$store.state.app.activeTenantInfo
+						.utensils || 0, _this.form.eatPeople));
+				}
+				price = _this.$NP.plus(price, allPackingPrice, utensilsPrice);
+				_this.form.allPackingPrice = allPackingPrice || _this.form.allPackingPrice;
+				_this.form.utensilsPrice = utensilsPrice || _this.form.utensilsPrice;
+				_this.form.order_price = price || _this.form.order_price;
 			},
 			changeNumCar(item) {
 				if (!item.num) {
@@ -525,21 +564,20 @@
 				this.loadData();
 			},
 			beforeOpen(done, type) {
-				this.dialogType = type;
-				const column = this.findObject(this.option.column, "amound_price");
-				const no_order_price = this.findObject(this.option.column, "no_order_price");
-				const no_amound_price = this.findObject(this.option.column, "no_amound_price");
-				if (this.form.no_order_price && this.form.amound_price) {
-					column.disabled = true;
-				} else {
-					column.disabled = false;
-				}
-				if (this.form.no_order_price && this.form.amound_price) {
-					no_order_price.display = true;
-					no_amound_price.display = true;
-				} else {
-					no_order_price.display = false;
-					no_amound_price.display = false;
+				var _this = this;
+				_this.dialogType = type;
+				if (type == 'add') {
+					setTimeout(() => {
+						_this.form.goods_list = {};
+						_this.form.order_type = 1;
+						_this.form.tableName = '';
+						_this.form.table = '';
+						_this.form.status = 1;
+						_this.form.eatPeople = 1;
+						_this.form.order_price = '';
+						_this.form.amound_price = '';
+						_this.form.comment = '';
+					}, 0)
 				}
 				done();
 			},
@@ -613,6 +651,7 @@
 					})
 				}
 				row.goods_list = newList;
+				row.utensils = _this.$store.state.app.activeTenantInfo.utensils || 0;
 				add(row)
 					.then(() => {
 						this.loadData();
@@ -731,4 +770,12 @@
 		}
 	};
 </script>
-<style></style>
+<style>
+	.el-card.disabled{
+		cursor: not-allowed;
+	}
+	.el-card.disabled span{
+		text-decoration:line-through;
+		color: #333 !important;
+	}
+</style>

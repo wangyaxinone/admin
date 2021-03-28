@@ -17,13 +17,13 @@
 					:type="type" size="small">制作</el-button>
 			</template>
 			<template slot-scope="scope" slot="menuLeft">
-				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>临时制作菜品
+				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>临时添加菜品
 				</el-button>
 				<el-button type="danger" v-if="params.status==1 && navBtn.dishes_cook" @click="cookList" size="small" plain>批量制作
 				</el-button>
-				<el-button type="danger" v-if="params.status!=4 && navBtn.dishes_invalid" @click="invalidList"
+				<!-- <el-button type="danger" v-if="params.status!=4 && navBtn.dishes_invalid" @click="invalidList"
 					size="small" plain>批量作废
-				</el-button>
+				</el-button> -->
 			</template>
 			<template slot-scope="scope" slot="update_date">
 				<uniDateformate :date="scope.row.update_date"></uniDateformate>
@@ -314,7 +314,8 @@
 				}).then(() => {
 					invalid({
 						_ids: this.selection.map((item)=>{return item._id}),
-						tenantId: this.selection[0].tenantId
+						tenantId: this.selection[0].tenantId,
+						orderId: this.selection[0].orderId
 					}).then(res => {
 						this.$message({
 							message: '作废成功',
@@ -401,7 +402,8 @@
 				}).then(() => {
 					invalid({
 						_ids: [row._id],
-						tenantId: row.tenantId
+						tenantId: row.tenantId,
+						orderId: row.orderId
 					}).then(res => {
 						this.$message({
 							message: '作废成功',

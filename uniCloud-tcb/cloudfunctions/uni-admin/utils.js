@@ -536,7 +536,44 @@ function format(fmt) {
 	         }
 	     }
 	    return fmt; 
- }         
+}  
+/**
+ * 计算订单总价，包装费，餐具费
+ * */
+function calcOrderPrice(options) {
+	var {foods, order_type, eatPeople, utensils} = options;
+	var price = 0;
+	var number = 0;
+	var packingPriceEveryMap = {};
+	var allPackingPrice = 0;
+	var utensilsPrice = 0;
+	if (foods && foods.length) {
+		foods.forEach((item, idx) => {
+			if(order_type == 2) {
+				if(item.packingPriceEvery) {
+					allPackingPrice = NP.plus(allPackingPrice, item.packingPrice);
+				}else{
+					if(!packingPriceEveryMap[item.goodsId]) {
+						allPackingPrice = NP.plus(allPackingPrice, item.packingPrice);
+						packingPriceEveryMap[item.goodsId] = true;
+					}
+				}
+				
+			}
+			price = NP.plus(price, item.goodsPrice);
+		})
+	}
+	if(order_type == 1) {
+		utensilsPrice = NP.plus(utensilsPrice, NP.times(utensils || 0, eatPeople));
+	}
+	price = NP.plus(price, allPackingPrice,utensilsPrice);
+	return {
+		order_price: price,
+		allPackingPrice,
+		utensilsPrice,
+		number: foods.length
+	}
+}
 module.exports = {
 	getEvertDayCode,
 	getServerDate,
@@ -550,5 +587,6 @@ module.exports = {
 	requestfeieyun,
 	sha1,
 	printPerOrder,
-	printByDept
+	printByDept,
+	calcOrderPrice
 }

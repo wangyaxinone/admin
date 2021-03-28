@@ -10,11 +10,15 @@
 				菜品单价：
 				<text style="font-weight:bold;color: #e4393c;">{{ good.goodsPrice }}元</text>
 			</text>
+			<text class="name">
+				库存数量：
+				<text>{{ good.stockNumber }}</text>
+			</text>
 			<view class="tips" v-if="good.goodsAttr && good.goodsAttr.length">
 				<el-tag style="margin-right:10px" v-for="(item, idx) in good.goodsAttr" :key="idx">{{ item }}</el-tag>
 			</view>
 		</view>
-		<view style="width:160px;"><el-input-number style="width:100px;" @change="changeNum" v-model="good.num" controls-position="right" :min="0"></el-input-number></view>
+		<view style="width:160px;"><el-input-number style="width:100px;" @change="changeNum" v-model="good.num" controls-position="right" :min="0" :max="good.stockNumber"></el-input-number></view>
 		<el-dialog title="规格" append-to-body :visible.sync="goodsAttrfalg" width="30%">
 			<el-radio-group v-model="goodAttrValue">
 			          <el-radio-button :label="item" v-for="(item,idx) in good.goodsAttr" :key="idx"></el-radio-button>

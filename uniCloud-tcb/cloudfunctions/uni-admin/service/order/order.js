@@ -13,7 +13,8 @@ const {
 	requestfeieyun,
 	sha1,
 	printPerOrder,
-	printByDept
+	printByDept,
+	calcOrderPrice
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -26,7 +27,6 @@ module.exports = class MenuService extends Service {
 		delete data.tableName;
 		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: tenantId}).get();
 		var goeasyConfig = tenants[0];
-		data.utensils = goeasyConfig.utensils;// 餐具费
 		var date = getServerDate();
 		data.create_date = date
 		data.update_date = date;
@@ -69,6 +69,9 @@ module.exports = class MenuService extends Service {
 				Object.keys(numMap).forEach((name)=>{
 					var [goodId,goodsAttrValue] = name.split('-');
 					var item = goodsClassMap[goodId];
+					if(item.stockNumber < numMap[name].num) {
+						_this.ctx.throw('stockNumber', `库存数量不足`)
+					}
 					if (numMap[name].num) {
 						for (var i = 0; i < numMap[name].num; i++) {
 							foods.push({
@@ -103,7 +106,16 @@ module.exports = class MenuService extends Service {
 			}
 		}
 		data.isLeave = 2;
-		
+		var allPrice= calcOrderPrice({
+			foods, 
+			order_type: data.order_type, 
+			eatPeople: data.eatPeople, 
+			utensils: data.utensils,
+		})
+		data.order_price = allPrice.order_price;
+		data.allPackingPrice = allPrice.allPackingPrice;
+		data.utensilsPrice = allPrice.utensilsPrice;
+		data.number = allPrice.number;
 		const transaction = await this.db.startTransaction();
 		try {
 			var orderRes = await transaction.collection('opendb-admin-order').add(data);
@@ -117,6 +129,12 @@ module.exports = class MenuService extends Service {
 					foodByDept[item.deptId].push(item);
 					var dishesRes = await transaction.collection('opendb-admin-dishes').add(item);
 					if (!dishesRes.id) {
+						falg = false;
+					}
+					var goodsRes = await transaction.collection('opendb-admin-goods').doc(item.goodsId).update({
+						stockNumber: _this.db.command.inc(-1)
+					});
+					if (!goodsRes.updated) {
 						falg = false;
 					}
 				}
@@ -208,105 +226,98 @@ module.exports = class MenuService extends Service {
 		delete data.foods;
 		delete data.no_order_price;
 		delete data.no_amound_price;
-		if (data.order_type == 1 && !data.table) {
-			_this.ctx.throw('ORDERERR', `堂食餐桌不能为空！`)
-		}
-		var isStartTransaction = false;
-		if (no_order_price) {
-			if (no_order_price == data.order_price && data.amound_price) {
-				isStartTransaction = true;
-				if (data.status != 3) {
-					data.status = 2;
-				}
-			} else if (no_order_price !== data.order_price && data.amound_price && no_amound_price) {
-				isStartTransaction = true;
-				data.amound_price = NP.plus(data.amound_price, no_amound_price);
-				if (data.status != 3) {
-					data.status = 2;
-				}
-			}
-		} else if (!no_order_price && !data.amound_price) {
-			isStartTransaction = true;
-			data.amound_price = 0;
-			if (data.status != 3) {
-				data.status = 1;
-			}
-		}
+		
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
-		if (isStartTransaction) {
-			const transaction = await this.db.startTransaction();
-			try {
-				delete data.order_price;
-				var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
-				if (orderRes.updated) {
-					for (var i = 0; i < foods.length; i++) {
-						var item = foods[i];
-						var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
-							order_status: item.order_status == 3 ? item.order_status : data.status,
-							table: data.table,
-							order_type: data.order_type,
-							order_comment: data.comment,
-							update_date: getServerDate(),
-						});
-						if (!dishesRes.updated) {
-							await transaction.rollback()
-							return {
-								code: 500,
-								data: dishesRes,
-								message: '修改失败！'
-							}
+		
+		var {
+			data: dishes
+		} = await this.db.collection('opendb-admin-dishes').where({
+			'orderId': _id,
+			'status': this.db.command.neq(4)
+		}).get();
+		var allPrice= calcOrderPrice({
+			foods: dishes, 
+			order_type: data.order_type, 
+			eatPeople: data.eatPeople, 
+			utensils: data.utensils,
+		})
+		data.order_price = allPrice.order_price;
+		data.allPackingPrice = allPrice.allPackingPrice;
+		data.utensilsPrice = allPrice.utensilsPrice;
+		data.number = allPrice.number;
+		const transaction = await this.db.startTransaction();
+		try {
+			var orderRes = await transaction.collection('opendb-admin-order').doc(_id).update(data);
+			if (orderRes.updated) {
+				for (var i = 0; i < foods.length; i++) {
+					var item = foods[i];
+					var dishesRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
+						order_status: item.order_status == 3 ? item.order_status : data.status,
+						table: data.table,
+						order_type: data.order_type,
+						order_comment: data.comment,
+						update_date: getServerDate(),
+					});
+					if (!dishesRes.updated) {
+						await transaction.rollback()
+						return {
+							code: 500,
+							data: dishesRes,
+							message: '修改失败！'
 						}
 					}
-					await goeasyPushByTenant({
-						tenantId: tenantId,
-						_this: this,
-						goeasyConfig
-					})
-					await goeasyPushByFood({
-						orderId: _id,
-						_this: this,
-						goeasyConfig
-					})
-					await transaction.commit();
-					return orderRes;
-				} else {
-					await transaction.rollback()
-					return {
-						code: 500,
-						data: orderRes,
-						message: '修改失败！'
-					}
 				}
-			} catch (e) {
+				await goeasyPushByTenant({
+					tenantId: tenantId,
+					_this: this,
+					goeasyConfig
+				})
+				await goeasyPushByFood({
+					orderId: _id,
+					_this: this,
+					goeasyConfig
+				})
+				await transaction.commit();
+				return orderRes;
+			} else {
 				await transaction.rollback()
 				return {
 					code: 500,
-					message: e
+					data: orderRes,
+					message: '修改失败！'
 				}
 			}
-		} else {
-			var res = await this.db.collection('opendb-admin-dishes').where({
-				orderId: _id
-			}).update({
-				table: data.table,
-				order_type: data.order_type,
-				order_comment: data.comment,
-				update_date: getServerDate()
-			})
-			await goeasyPushByFood({
-				orderId: _id,
-				_this: this,
-				goeasyConfig
-			})
-			await goeasyPushByTenant({
-				tenantId: tenantId,
-				_this: this,
-				goeasyConfig
-			})
-			delete data.order_price;
-			return await this.db.collection('opendb-admin-order').doc(_id).update(data);
+		} catch (e) {
+			await transaction.rollback()
+			return {
+				code: 500,
+				message: e
+			}
 		}
+		// if (isStartTransaction) {
+			
+		// } else {
+		// 	var res = await this.db.collection('opendb-admin-dishes').where({
+		// 		orderId: _id
+		// 	}).update({
+		// 		table: data.table,
+		// 		order_type: data.order_type,
+		// 		order_comment: data.comment,
+		// 		update_date: getServerDate()
+		// 	})
+		// 	await goeasyPushByFood({
+		// 		orderId: _id,
+		// 		_this: this,
+		// 		goeasyConfig
+		// 	})
+		// 	await goeasyPushByTenant({
+		// 		tenantId: tenantId,
+		// 		_this: this,
+		// 		goeasyConfig
+		// 	})
+		// 	return await this.db.collection('opendb-admin-order').doc(_id).update(data);
+		// }
 
 	}
 	async remove(_ids, tenantId) {
@@ -340,6 +351,18 @@ module.exports = class MenuService extends Service {
 					return {
 						code: 500,
 						message: '删除失败'
+					}
+				}
+				if(item.status != 4){
+					var goodsRes = await transaction.collection('opendb-admin-goods').doc(item.goodsId).update({
+						stockNumber: _this.db.command.inc(1)
+					});
+					if (!goodsRes.updated) {
+						await transaction.rollback()
+						return {
+							code: 500,
+							message: '删除失败'
+						}
 					}
 				}
 			}
@@ -446,35 +469,7 @@ module.exports = class MenuService extends Service {
 				as: 'operatorShow',
 			})
 			.end();
-			var packingPriceEveryMap = {};
-			if(data && data.length) {
-				data.forEach((item) =>{
-					item.number = 0;
-					item.order_price = 0;
-					if(item.foods && item.foods.length) {
-						item.foods.forEach((food)=>{
-							if(food.status != 4) {
-								item.number = NP.plus(item.number, 1);
-								item.order_price = NP.plus(item.order_price, food.goodsPrice || 0);
-								if(item.order_type == 2) {
-									if(food.packingPriceEvery) {
-										if(!packingPriceEveryMap[food._id]) {
-											packingPriceEveryMap[food._id] = true;
-											item.order_price = NP.plus(item.order_price, food.packingPrice || 0);
-										}
-									}else{
-										item.order_price = NP.plus(item.order_price, food.packingPrice || 0);
-									}
-								}
-							}
-						})
-						if(item.order_type == 1 ){
-							var utensils = NP.times(item.utensils || 0, item.eatPeople || 0);
-							item.order_price = NP.plus(item.order_price, utensils|| 0);
-						}
-					}
-				})
-			}
+			
 		return {
 			total,
 			page,
@@ -562,6 +557,18 @@ module.exports = class MenuService extends Service {
 					return {
 						code: 500,
 						message: '作废失败'
+					}
+				}
+				if(item.status != 4){
+					var goodsRes = await transaction.collection('opendb-admin-goods').doc(item.goodsId).update({
+						stockNumber: _this.db.command.inc(1)
+					});
+					if (!goodsRes.updated) {
+						await transaction.rollback()
+						return {
+							code: 500,
+							message: '作废失败'
+						}
 					}
 				}
 			}
@@ -706,6 +713,22 @@ module.exports = class MenuService extends Service {
 				})
 			}
 		}
+		var {
+			data: dishes
+		} = await this.db.collection('opendb-admin-dishes').where({
+			'orderId': data._id,
+			'status': this.db.command.neq(4)
+		}).get();
+		var allPrice= calcOrderPrice({
+			foods: foods.concat(dishes), 
+			order_type: data.order_type, 
+			eatPeople: data.eatPeople, 
+			utensils: data.utensils,
+		})
+		updateData.order_price = allPrice.order_price;
+		updateData.allPackingPrice = allPrice.allPackingPrice;
+		updateData.utensilsPrice = allPrice.utensilsPrice;
+		updateData.number = allPrice.number;
 		const transaction = await this.db.startTransaction();
 		try {
 			var orderRes = await transaction.collection('opendb-admin-order').doc(data._id).update(updateData);
@@ -719,6 +742,12 @@ module.exports = class MenuService extends Service {
 					foodByDept[item.deptId]++;
 					var dishesRes = await transaction.collection('opendb-admin-dishes').add(item);
 					if (!dishesRes.id) {
+						falg = false;
+					}
+					var goodsRes = await transaction.collection('opendb-admin-goods').doc(item.goodsId).update({
+						stockNumber: _this.db.command.inc(-1)
+					});
+					if (!goodsRes.updated) {
 						falg = false;
 					}
 				}

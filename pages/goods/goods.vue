@@ -174,19 +174,10 @@
 							},
 						},
 						{
-							label: "商品成本",
-							prop: "goodsCost",
-							type: 'number',
-							rules: [{
-								required: true,
-								message: "请输入商品成本",
-								trigger: "change"
-							}]
-						},
-						{
 							label: "商品售价",
 							prop: "goodsPrice",
 							type: 'number',
+							minRows: 0.1,
 							rules: [{
 								required: true,
 								message: "请输入商品售价",
@@ -196,11 +187,24 @@
 						{
 							label: "商品会员价格",
 							prop: "goodsVipPrice",
+							minRows: 0.1,
 							type: 'number',
+						},
+						{
+							label: "商品成本",
+							prop: "goodsCost",
+							minRows: 0.1,
+							type: 'number',
+							rules: [{
+								required: true,
+								message: "请输入商品成本",
+								trigger: "change"
+							}]
 						},
 						{
 							label: "包装费",
 							prop: "packingPrice",
+							minRows: 0,
 							type: 'number',
 						},
 						{
@@ -220,6 +224,7 @@
 							label: "库存",
 							value: 9999,
 							prop: "stockNumber",
+							minRows: 0,
 							type: 'number',
 						},
 						{

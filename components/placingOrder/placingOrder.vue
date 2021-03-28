@@ -26,6 +26,12 @@
 								</el-col>
 							</el-row>
 						</el-card>
+						<div v-if="form.allPackingPrice" style="text-align: right;padding:0 20px;">
+							包装费：<span style="color:#e4393c;font-weight: bold;">{{form.allPackingPrice}}元</span>
+						</div>
+						<div v-if="form.utensilsPrice" style="text-align: right;padding:0 20px;">
+							餐具费：<span style="color:#e4393c;font-weight: bold;">{{form.utensilsPrice}}元</span>
+						</div>
 					</div>
 				</template>
 			</avue-form>
@@ -78,6 +84,34 @@
 							prop: 'tableName',
 							disabled: true
 						},
+						
+						{
+							label: '菜品数量',
+							prop: 'number',
+							formslot:true,
+							span: 24
+						},
+						{
+							label: '就餐人数',
+							prop: 'eatPeople',
+							type: 'number',
+							minRows: 1,
+							value: 1
+						},
+						{
+							label: '订单总价',
+							prop: 'order_price',
+							minRows: 0,
+							disabled: true
+						},
+						{
+							label: '实付金额',
+							prop: 'amound_price',
+							disabled: false,
+							minRows: 0,
+							type: 'number',
+							precision: 2,
+						},
 						{
 							label: '订单状态',
 							prop: 'status',
@@ -89,47 +123,6 @@
 								label: 'dict_name',
 								value: 'dict_key'
 							},
-						},
-						{
-							label: '菜品数量',
-							prop: 'number',
-							formslot:true,
-							span: 24
-						},
-						{
-							label: '就餐人数',
-							prop: 'eatPeople',
-							type: 'number',
-							value: 1
-						},
-						{
-							label: '订单总价',
-							prop: 'order_price',
-							disabled: true
-						},
-						{
-							label: '实付金额',
-							prop: 'amound_price',
-							disabled: false,
-							type: 'number',
-							precision: 2,
-						},
-						{
-							label: '未付款金额',
-							prop: 'no_order_price',
-							hide: true,
-							addDisplay: false,
-							display: false,
-							disabled: true
-						},
-						{
-							label: '剩余实付金额',
-							prop: 'no_amound_price',
-							type: 'number',
-							hide: true,
-							display: false,
-							addDisplay: false,
-							precision: 2,
 						},
 						{
 							label: '备注',
@@ -180,6 +173,11 @@
 				column.dicData = res;
 			})
 		},
+		watch: {
+			'form.eatPeople': function(newValue, oldValue){
+				this.get_order_price();
+			}
+		},
 		methods:{
 			show(data){
 				this.form.table = data.table;
@@ -212,14 +210,34 @@
 			get_order_price() {
 				var price = 0;
 				var _this = this;
-				if(this.form.goods_list) {
-					Object.keys(this.form.goods_list).forEach((key)=>{
-						var item = this.form.goods_list[key];
-						var currentPrice =parseFloat(_this.$NP.times(item.goodsPrice, item.num));
+				var packingPriceEveryMap = {};
+				var allPackingPrice = 0;
+				var utensilsPrice = 0;
+				if (_this.form.goods_list) {
+					Object.keys(_this.form.goods_list).forEach((key, idx) => {
+						var item = _this.form.goods_list[key];
+						var currentPrice = parseFloat(_this.$NP.times(item.goodsPrice, item.num));
+						if(_this.form.order_type == 2) {
+							if(item.packingPriceEvery) {
+								allPackingPrice = _this.$NP.plus(allPackingPrice, _this.$NP.times(item.packingPrice, item.num));
+							}else{
+								if(!packingPriceEveryMap[item._id]) {
+									allPackingPrice = _this.$NP.plus(allPackingPrice, item.packingPrice);
+									packingPriceEveryMap[item._id] = true;
+								}
+							}
+							
+						}
 						price = _this.$NP.plus(price, currentPrice);
 					})
 				}
-				this.form.order_price = price;
+				if(_this.form.order_type == 1) {
+					utensilsPrice = _this.$NP.plus(utensilsPrice, _this.$NP.times(_this.$store.state.app.activeTenantInfo.utensils || 0, _this.form.eatPeople));
+				}
+				price = _this.$NP.plus(price, allPackingPrice,utensilsPrice);
+				_this.form.allPackingPrice = allPackingPrice;
+				_this.form.utensilsPrice = utensilsPrice;
+				_this.form.order_price = price;
 			},
 			handleSubmit() {
 				var row = JSON.parse(JSON.stringify(this.form));
@@ -243,6 +261,7 @@
 					})	
 				}
 				row.goods_list = newList;
+				row.utensils = this.$store.state.app.activeTenantInfo.utensils || 0;
 				add(row)
 					.then(() => {
 						this.$message({

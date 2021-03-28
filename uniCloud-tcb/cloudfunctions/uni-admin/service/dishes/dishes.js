@@ -6,7 +6,8 @@ const {
 	getServerDate,
 	getTree,
 	appendTenantParams,
-	goeasyPushBydishes
+	goeasyPushBydishes,
+	calcOrderPrice 
 } = require('../../utils.js');
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
@@ -78,11 +79,57 @@ module.exports = class MenuService extends Service {
 		var operator = this.ctx.auth.uid;
 		var {
 			_ids,
-			tenantId
+			tenantId,
+			orderId
 		} = data;
+		
+		var {
+			data: dishes
+		} = await this.db.collection('opendb-admin-dishes').where({
+			'orderId':orderId,
+			'status': this.db.command.neq(4)
+		}).get();
+		var goodsIdMap = {};
+		dishes.forEach((item)=>{
+			goodsIdMap[item._id] = item;
+		})
+		var {
+			data: orders
+		} = await this.db.collection('opendb-admin-order').where({
+			'_id':orderId
+		}).get();
+		var allPrice= calcOrderPrice({
+			foods: dishes.filter((item)=>{
+				if(_ids.indexOf(item._id)>-1) {
+					return false;
+				}else{
+					return true;
+				}
+			}), 
+			order_type: orders[0].order_type, 
+			eatPeople: orders[0].eatPeople, 
+			utensils: orders[0].utensils,
+		})
+		var updateData = {
+			update_date,
+			operator
+		}
+		updateData.order_price = allPrice.order_price;
+		updateData.allPackingPrice = allPrice.allPackingPrice;
+		updateData.utensilsPrice = allPrice.utensilsPrice;
+		updateData.number = allPrice.number;
+		
 		const transaction = await this.db.startTransaction();
 		try {
-			
+			var orderRes = await transaction.collection('opendb-admin-order').doc(orderId).update(updateData);
+			if (!orderRes.updated) {
+				await transaction.rollback()
+				return {
+					code: 500,
+					data: orderRes,
+					message: '作废失败！'
+				}
+			}
 			for (var i = 0; i < _ids.length; i++) {
 				var id = _ids[i];
 				var dishesRes = await transaction.collection('opendb-admin-dishes').doc(id).update({
@@ -100,10 +147,20 @@ module.exports = class MenuService extends Service {
 						message: '作废失败！'
 					}
 				}
+				if(goodsIdMap[id].status != 4) {
+					var goodsRes = await transaction.collection('opendb-admin-goods').doc(goodsIdMap[id].goodsId).update({
+						stockNumber: _this.db.command.inc(1)
+					});
+					if (!goodsRes.updated) {
+						await transaction.rollback()
+						return {
+							code: 500,
+							message: '作废失败'
+						}
+					}
+				}
 			}
-			var {data: dishes} = await this.db.collection('opendb-admin-dishes').where({
-				'_id': this.db.command.in(_ids)
-			}).get();
+			
 			await goeasyPushBydishes({
 				_ids: _ids,
 				_this: _this,

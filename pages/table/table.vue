@@ -38,6 +38,7 @@
 								<div style="user-select:none;">
 									<span style="font-size: 18px;">{{ item.name }}</span>
 									<span style="font-size: 12px;margin-left:5px;">({{ statusMap[item.status] }})</span>
+									<span v-if="item.order && item.order.order_price">（{{item.order && item.order.order_price}}元）</span>
 								</div>
 							</el-card>
 							
