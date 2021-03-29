@@ -1,31 +1,10 @@
 <template>
-	<scroll-view class="sidebar" :style="{width:`${platform=='ipad'?56:200}px`}" scroll-y="true">
+	<scroll-view class="sidebar"  scroll-y="true">
 		<template v-if="inited">
-			<uni-nav-menu :active="active" :style="{width:`${platform=='ipad'?56:200}px`}" activeKey="url" activeTextColor="#409eff" @select="select">
+			<uni-nav-menu  :uniqueOpened="true" :active="active" :style="{width:`${platform=='ipad'?56:200}px`}" activeKey="url" activeTextColor="#409eff" @select="select">
 				<uni-menu-sidebar :data="navMenu"></uni-menu-sidebar>
 				<uni-menu-sidebar :data="staticMenu"></uni-menu-sidebar>
 			</uni-nav-menu>
-			<!-- <el-menu default-active="1-1" class="el-menu-vertical-demo" menu-trigger="click" :collapse="isCollapse" @select="select">
-				<template v-for="(item,idx) in navMenu">
-					<el-submenu :index="`${idx}`" v-if="item.children && item.children.length">
-						<template slot="title">
-							<i :class="item.icon"></i>
-							<span slot="title">{{item.name}}</span>
-						</template>
-						<el-menu-item-group>
-							<el-menu-item :index="`${idx}-${childIdx}`" v-for="(child,childIdx) in item.children">
-								<i :class="child.icon"></i>
-								<span slot="title">{{child.name}}</span>
-							</el-menu-item>
-						</el-menu-item-group>
-					</el-submenu>
-					<el-menu-item :index="`${idx}`" v-else>
-						<i :class="item.icon"></i>
-						<span slot="title">{{item.name}}</span>
-					</el-menu-item>
-				</template>
-
-			</el-menu> -->
 		</template>
 	</scroll-view>
 </template>
@@ -127,7 +106,7 @@
 	.sidebar {
 		position: fixed;
 		top: var(--window-top);
-		width: 56px;
+		width: 200px;
 		height: calc(100vh - (var(--window-top)));
 		box-sizing: border-box;
 		border-right: 1px solid darken($left-window-bg-color, 8%);
