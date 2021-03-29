@@ -88,7 +88,7 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-dishes').where({
 			'orderId':orderId,
 			'status': this.db.command.neq(4)
-		}).get();
+		}).limit(500).get();
 		var goodsIdMap = {};
 		dishes.forEach((item)=>{
 			goodsIdMap[item._id] = item;

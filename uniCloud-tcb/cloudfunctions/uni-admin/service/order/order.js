@@ -235,7 +235,7 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-dishes').where({
 			'orderId': _id,
 			'status': this.db.command.neq(4)
-		}).get();
+		}).limit(500).get();
 		var allPrice= calcOrderPrice({
 			foods: dishes, 
 			order_type: data.order_type, 
@@ -342,7 +342,7 @@ module.exports = class MenuService extends Service {
 				data: dishesyes
 			} = await this.db.collection('opendb-admin-dishes').where({
 				'orderId': this.db.command.in(_ids)
-			}).get();
+			}).limit(500).get();
 			for (var i = 0; i < dishesyes.length; i++) {
 				var item = dishesyes[i];
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).remove();
@@ -542,7 +542,7 @@ module.exports = class MenuService extends Service {
 				data: dishesyes
 			} = await this.db.collection('opendb-admin-dishes').where({
 				'orderId': this.db.command.in(_ids)
-			}).get();
+			}).limit(500).get();
 			for (var i = 0; i < dishesyes.length; i++) {
 				var item = dishesyes[i];
 				var remobeRes = await transaction.collection('opendb-admin-dishes').doc(item._id).update({
@@ -718,7 +718,7 @@ module.exports = class MenuService extends Service {
 		} = await this.db.collection('opendb-admin-dishes').where({
 			'orderId': data._id,
 			'status': this.db.command.neq(4)
-		}).get();
+		}).limit(500).get();
 		var allPrice= calcOrderPrice({
 			foods: foods.concat(dishes), 
 			order_type: data.order_type, 

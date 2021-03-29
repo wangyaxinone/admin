@@ -17,7 +17,7 @@
 					:type="type" size="small">制作</el-button>
 			</template>
 			<template slot-scope="scope" slot="menuLeft">
-				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" size="small" plain>临时添加菜品
+				<el-button type="primary" v-if="params.status==1 && navBtn.dishes_cook" @click="addDishesHandle" size="small" plain>临时添加菜品
 				</el-button>
 				<el-button type="danger" v-if="params.status==1 && navBtn.dishes_cook" @click="cookList" size="small" plain>批量制作
 				</el-button>
@@ -43,6 +43,7 @@
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
 		<addFoods ref="addFoods" @submit="addFoodsSubmit"></addFoods>
 		<cookFoods ref="cookFoods" @load="loadData"></cookFoods>
+		<addDishes ref="addDishes"></addDishes>
 	</view>
 </template>
 
@@ -59,6 +60,7 @@
 	import addFoods from '@/components/addFoods/addFoods.vue';
 	import selectTable from '@/components/selectTable/selectTable.vue';
 	import cookFoods from '@/components/cookFoods/cookFoods.vue';
+	import addDishes from '@/components/addDishes/addDishes.vue';
 	import {
 		mapState,
 		mapActions
@@ -73,7 +75,8 @@
 			selectGoods,
 			addFoods,
 			selectTable,
-			cookFoods
+			cookFoods,
+			addDishes
 		},
 		computed: {
 			...mapState('app', ['navBtn']),
@@ -88,6 +91,7 @@
 		},
 		data() {
 			return {
+				addDishesFalg: false,
 				activeName: 'zhiFu',
 				dept_name: '',
 				foodNum: 1,
@@ -302,6 +306,9 @@
 			this.$refs.cookFoods.show();
 		},
 		methods: {
+			addDishesHandle() {
+				this.$refs.addDishes.show();
+			},
 			invalidList() {
 				if(!this.selection.length){
 					this.$message.warning('至少选择一项！')
@@ -481,21 +488,6 @@
 			},
 			beforeOpen(done, type) {
 				this.dialogType = type;
-				const column = this.findObject(this.option.column, "amound_price");
-				const no_order_price = this.findObject(this.option.column, "no_order_price");
-				const no_amound_price = this.findObject(this.option.column, "no_amound_price");
-				if (this.form.no_order_price && this.form.amound_price) {
-					column.disabled = true;
-				} else {
-					column.disabled = false;
-				}
-				if (this.form.no_order_price && this.form.amound_price) {
-					no_order_price.display = true;
-					no_amound_price.display = true;
-				} else {
-					no_order_price.display = false;
-					no_amound_price.display = false;
-				}
 				done();
 			},
 			rowDel(row) {
