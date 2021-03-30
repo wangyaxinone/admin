@@ -1,6 +1,6 @@
 <template>
-	<scroll-view class="sidebar"  scroll-y="true">
-		<template v-if="inited">
+	<scroll-view class="sidebar"  v-if="inited" scroll-y="true">
+		<template>
 			<uni-nav-menu  :uniqueOpened="true" :active="active" :style="{width:`${platform=='ipad'?56:200}px`}" activeKey="url" activeTextColor="#409eff" @select="select">
 				<uni-menu-sidebar :data="navMenu"></uni-menu-sidebar>
 				<uni-menu-sidebar :data="staticMenu"></uni-menu-sidebar>
@@ -102,7 +102,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.sidebar {
 		position: fixed;
 		top: var(--window-top);

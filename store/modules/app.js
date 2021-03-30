@@ -49,6 +49,10 @@ export default {
 			setItem('app_inited', true)
 			setItem('app_navMenu', navMenu)
 		},
+		SET_INITED: (state, bool) => {
+			state.inited = bool
+			setItem('app_inited', bool)
+		},
 		SET_NAV_BTN: (state, navBtn) => {
 			state.navBtn = navBtn
 			setItem('app_navBtn', navBtn)

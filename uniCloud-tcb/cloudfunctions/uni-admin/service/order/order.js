@@ -505,6 +505,40 @@ module.exports = class MenuService extends Service {
 		
 		return total;
 	}
+	async getOrderPrice(param) {
+		var _this = this;
+		var dbCmd = this.db.command;
+		var $ = this.db.command.aggregate;
+		var match = {
+			_id: param._id ? param._id : this.db.command.exists(true)
+		};
+		appendTenantParams({
+			match,
+			_this: this,
+			_id: 'tenantId'
+		});
+		param.tenantId && (match.tenantId = param.tenantId);
+		if(param.startTime) {
+			match.create_date = dbCmd.gte(new Date(param.startTime))
+		}
+		if(param.endTime) {
+			match.create_date = dbCmd.lte(new Date(param.startTime))
+		}
+		param.table && (match.table = param.table);
+		param.order_type && (match.order_type = param.order_type);
+		param.status && (match.status = this.db.command.in(param.status));
+		let {
+			data
+		} = await this.db.collection('opendb-admin-order').aggregate()
+			.match(match)
+			.group({
+				_id: 'alias',
+				num: $.sum('$order_price')
+			})
+			.end()
+		
+		return data && data[0] ? data[0].num : 0;
+	}
 	async invalid(data) {
 		var _this = this;
 		var {

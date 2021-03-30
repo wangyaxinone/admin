@@ -135,7 +135,7 @@
 			}).then((res) => {
 				this.todayList[0].count = res.todayOrderCount || 0;
 				this.todayList[1].count = res.todayDishesCount || 0;
-				this.todayList[2].count = res.todayDishesPrice || 0;
+				this.todayList[2].count = res.todayOrderPrice || 0;
 				
 				this.option.data[0].count = res.todayInvalidOrderCount || 0;
 				this.option.data[1].count = res.todayInvalidDishesCount || 0;

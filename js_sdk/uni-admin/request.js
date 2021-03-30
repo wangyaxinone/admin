@@ -32,6 +32,11 @@ export function request(action, data, options,{
 				store.commit('app/SET_MODE', 1)
 				store.commit('app/SET_ACTIVETENANT', '')
 				store.commit('user/SET_USER_INFO', {})
+				store.commit('user/SET_TOKEN', {
+					token:'',
+					tokenExpired:''
+				})
+				store.commit('app/SET_INITED', false)
 				uni.reLaunch({
 					url: config.login.url
 				})

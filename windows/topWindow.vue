@@ -141,7 +141,6 @@
 					var foodPush = false, orderPush = false;
 					
 					if(this.$store.state.user.userInfo && this.$store.state.user.userInfo.roles && this.$store.state.user.userInfo.roles.length){
-						debugger
 						this.$store.state.user.userInfo.roles.forEach((item)=>{
 							if(!foodPush) {
 								foodPush = item.foodPush;

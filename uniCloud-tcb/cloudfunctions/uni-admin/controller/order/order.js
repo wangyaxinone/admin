@@ -82,6 +82,7 @@ module.exports = class UserController extends Controller {
 	async getTodayCount() {
 		return {
 			todayOrderCount: await this.service.order.order.getOrderCount(Object.assign(this.ctx.data,{status: [1,2]})),
+			todayOrderPrice: await this.service.order.order.getOrderPrice(Object.assign(this.ctx.data,{status: [1,2]})),
 			todayInvalidOrderCount: await this.service.order.order.getOrderCount(Object.assign(this.ctx.data,{status: [3]})),
 			todayDishesCount: await this.service.dishes.dishes.getDishesCount(Object.assign(this.ctx.data,{status: [1,2,3]})),
 			todayInvalidDishesCount: await this.service.dishes.dishes.getDishesCount(Object.assign(this.ctx.data,{status: [4]})),
