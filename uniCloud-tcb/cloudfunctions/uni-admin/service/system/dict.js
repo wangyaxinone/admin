@@ -1,7 +1,10 @@
 const {
 	Service
 } = require('uni-cloud-router')
-const {getServerDate, getTree} = require('../../utils.js');
+const {
+	getServerDate,
+	getTree
+} = require('../../utils.js');
 module.exports = class MenuService extends Service {
 	async add(data) {
 		data.create_date = getServerDate();
@@ -14,7 +17,7 @@ module.exports = class MenuService extends Service {
 		const {
 			_id
 		} = data;
-		if(data._id === data.parent_id) {
+		if (data._id === data.parent_id) {
 			this.throw('DICT_ERROR', `上级字典不能是当前字典`);
 		}
 		data.update_date = getServerDate();
@@ -43,19 +46,47 @@ module.exports = class MenuService extends Service {
 		let {
 			data: list
 		} = await this.db.collection('opendb-admin-dict').where(match).orderBy('sort', "asc").get();
-		return getTree(list,{
+		return getTree(list, {
 			id: '_id',
 			parentId: 'parent_id',
 		});
 	}
 	async getDictByDictCode(param) {
-		let {dict_code} = param;
+		let {
+			dict_code
+		} = param;
 		let {
 			data: list
 		} = await this.db.collection('opendb-admin-dict').where({
 			dict_code,
-			parent_id: this.db.command.and(this.db.command.neq('0'),this.db.command.neq(''))
+			parent_id: this.db.command.and(this.db.command.neq('0'), this.db.command.neq(''))
 		}).orderBy('sort', "asc").get();
 		return list;
+	}
+	async getDicts() {
+		let {
+			data: nodes
+		} = await this.db.collection('opendb-admin-dict').where({
+			'_id': this.db.command.exists(true)
+		}).orderBy('sort', "asc").get();
+		var map = {},
+			node, roots = {};
+		nodes.forEach((item,idx)=>{
+			map[item._id] = idx;
+		})
+		for (var i = 0; i < nodes.length; i += 1) {
+			node = nodes[i];
+			if (node.parent_id) {
+				nodes[map[node.parent_id]].children = nodes[map[node.parent_id]].children || [];
+				nodes[map[node.parent_id]].children.push({
+					label: node.dict_name,
+					value: node.dict_key,
+					disabled: node.disabled,
+				});
+			} else {
+				roots[node.dict_code] = node.children;
+			}
+		}
+		return roots;
 	}
 }

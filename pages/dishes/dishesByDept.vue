@@ -352,7 +352,6 @@
 						var _ids = foods.map((item) => {
 							return item._id;
 						})
-						debugger
 						var tenantId = foods[0].tenantId;
 						cook({
 							_ids,

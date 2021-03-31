@@ -7,12 +7,14 @@ import {
 } from '@/js_sdk/uni-admin/localStorage.js'
 import {getDeptByUser} from "@/api/system/user.js"
 import getList from "@/api/system/dept.js"
+import {getDicts} from '@/api/system/dict.js';
 export default {
 	namespaced: true,
 	state: {
 		inited: getItem("app_inited") || false,
 		navBtn: getItem("app_navBtn") || {},
 		navMenu: getItem("app_navMenu") || [],
+		dicts: {},
 		active:  '',
 		appName: process.env.VUE_APP_NAME || '',
 		
@@ -24,6 +26,9 @@ export default {
 		deptlist:  getItem("app_deptlist") || [],
 	},
 	mutations: {
+		SET_DICTS: (state, dicts) => {
+			state.dicts = dicts;
+		},
 		set_ACTIVETENANTINFO: (state, activeTenantInfo) => {
 			state.activeTenantInfo = activeTenantInfo;
 			setItem('app_activeTenantInfo', activeTenantInfo)
@@ -109,6 +114,11 @@ export default {
 			commit
 		}, url) {
 			commit('TOGGLE_MENU_ACTIVE', url)
+		},
+		getDicts({commit}){
+			getDicts().then((res)=>{
+				commit('SET_DICTS', res);
+			})
 		},
 		getCurrentDepts({
 			state,

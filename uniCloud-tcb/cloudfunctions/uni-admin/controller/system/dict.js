@@ -59,4 +59,7 @@ module.exports = class UserController extends Controller {
 	async getDictByDictCode() {
 		return await this.service.system.dict.getDictByDictCode(this.ctx.data);
 	}
+	async getDicts() {
+		return await this.service.system.dict.getDicts(this.ctx.data);
+	}
 }

@@ -5,7 +5,6 @@
 		mapActions
 	} from 'vuex'
 	import config from '@/admin.config.js'
-	
 	export default {
 		data(){
 			return {
@@ -17,7 +16,7 @@
 				isTokenValid: 'user/isTokenValid'
 			}),
 			...mapState('app', ['appName', 'mode', 'isTenantAdminOrAdmin', 'activeTenant', 'activeTenantInfo']),
-			...mapState('user', ['userInfo']),
+			...mapState('user', ['userInfo','token']),
 		},
 		watch:{
 			'mode': {
@@ -69,7 +68,7 @@
 				}else{
 					await this.init()
 				}
-				
+				this.$store.dispatch('app/getDicts')
 			}
 		},
 		onShow: function() {

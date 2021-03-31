@@ -30,7 +30,6 @@
 	import {getList, add, update, remove} from "@/api/system/user.js"
 	import {tree as tenantTree} from "@/api/tenant/tenant.js"
 	import {tree as roleTree} from "@/api/system/role.js"
-	import {getDictByDictCode} from "@/api/system/dict.js"
 	import {tree as deptTree} from "@/api/system/dept.js"
 	import {
 		mapState,
@@ -112,11 +111,11 @@
 							prop: "gender",
 							span: 12,
 							type: 'select',
-							props: {
-								label: "dict_name",
-								value: "dict_key"
-							},
-							dicData:[],
+							// props: {
+							// 	label: "dict_name",
+							// 	value: "dict_key"
+							// },
+							dicData:this.$store.state.app.dicts.gender,
 						},
 						{
 							label: "所属门店",
@@ -180,12 +179,7 @@
 							prop: "status",
 							type: 'select',
 							value: 0,
-							props: {
-								label: "dict_name",
-								value: "dict_key",
-								disabled: "disabled"
-							},
-							dicData:[],
+							dicData:this.$store.state.app.dicts.user_status,
 							span: 12,
 							rules: [{
 								required: true,
@@ -228,14 +222,6 @@
 				const column = this.findObject(this.option.column, "tenantId");
 				column.dicData = tree;
 			})
-			getDictByDictCode({dict_code: 'gender'}).then((res)=>{
-				const column = this.findObject(this.option.column, "gender");
-				column.dicData = res;
-			})
-			getDictByDictCode({dict_code: 'user_status'}).then((res)=>{
-				const column = this.findObject(this.option.column, "status");
-				column.dicData = res;
-			})
 		},
 		watch:{
 			'form.tenantId':{
@@ -256,7 +242,14 @@
 					}
 				},
 				deep: true
-			}
+			},
+			'$store.state.app.dicts': function() {
+				const status = this.findObject(this.option.column, "status");
+				status.dicData = this.$store.state.app.dicts.user_status;
+				
+				const gender = this.findObject(this.option.column, "gender");
+				gender.dicData = this.$store.state.app.dicts.gender;
+			},
 		},
 		methods: {
 			rowDel(row) {

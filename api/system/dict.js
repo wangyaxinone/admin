@@ -25,3 +25,7 @@ export const tree = (params) => {
 export const getDictByDictCode = (params) => {
   return request('system/dict/getDictByDictCode', params);
 }
+
+export const getDicts = (params) => {
+  return request('system/dict/getDicts', params);
+}
