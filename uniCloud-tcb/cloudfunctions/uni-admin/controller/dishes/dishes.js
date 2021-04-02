@@ -7,19 +7,15 @@ module.exports = class UserController extends Controller {
 			tenantId,
 			order_type,
 			goods_list,
-			status,
-			table,
-			amound_price,
-			comment
+			tableName,
+			order_comment
 		} = this.ctx.data
 		return await this.service.dishes.dishes.add({
 			tenantId,
 			order_type,
 			goods_list,
-			status,
-			table,
-			amound_price,
-			comment
+			tableName,
+			order_comment
 		});
 	}
 	async cook() {

@@ -12,6 +12,8 @@ const {
 const NP = require('number-precision');
 module.exports = class MenuService extends Service {
 	async add(data) {
+		var _this = this;
+		var date = getServerDate();
 		data.create_date = getServerDate();
 		data.update_date = getServerDate();
 		data.operator = this.ctx.auth.uid;
@@ -21,7 +23,64 @@ module.exports = class MenuService extends Service {
 		}
 		var {data: tenants} =await this.db.collection('opendb-admin-tenant').where({_id: data.tenantId}).get();
 		var goeasyConfig = tenants[0];
-		return await this.db.collection('opendb-admin-dishes').add(data);
+		
+		var goodIds = [];
+		var numMap = {};
+		var foods = [];
+		var goodsClassMap = {};
+		if (data.goods_list) {
+			Object.keys(data.goods_list).forEach((key) => {
+				var item = data.goods_list[key];
+				goodIds.push(item._id);
+				numMap[item._id+(item.goodsAttrValue?`-${item.goodsAttrValue}`:'')] = item;
+			})
+			var {
+				data: goods
+			} = await this.db.collection('opendb-admin-goods').where({
+				'_id': this.db.command.in(goodIds)
+			}).get();
+			if (goods && goods.length) {
+				goods.forEach((item) => {
+					goodsClassMap[item._id] = item;
+				})
+				Object.keys(numMap).forEach((name)=>{
+					var [goodId,goodsAttrValue] = name.split('-');
+					var item = goodsClassMap[goodId];
+					if(item.stockNumber < numMap[name].num) {
+						_this.ctx.throw('stockNumber', `库存数量不足`)
+					}
+					if (numMap[name].num) {
+						for (var i = 0; i < numMap[name].num; i++) {
+							foods.push({
+								goodsId: item._id,
+								goodsName: item.goodsName,
+								goodsPrice: item.goodsPrice,
+								goodsCost: item.goodsCost,
+								goodsVipPrice: item.goodsVipPrice,
+								goodsAttrValue: numMap[name].goodsAttrValue || '',
+								order_comment: data.order_comment || '',
+								order_type: data.order_type,
+								tenantId: item.tenantId,
+								deptId: item.deptId,
+								goodsBigImg: item.goodsBigImg,
+								goodsSmallImg: item.goodsSmallImg,
+								goodsType: item.goodsType,
+								status: 1,
+								sourceType: '1',
+								tableName: data.tableName,
+								create_date: date,
+								update_date: date,
+								packingPrice: item.packingPrice,
+								packingPriceEvery: item.packingPriceEvery,
+								operator: '',
+								creater: _this.ctx.auth.uid,
+							})
+						}
+					}
+				})
+			}
+		}
+		return await this.db.collection('opendb-admin-dishes').add(foods);
 	}
 	async cook(data) {
 		var _this = this;
@@ -213,6 +272,7 @@ module.exports = class MenuService extends Service {
 			.aggregate()
 			.match(match)
 			.sort({
+				'sourceType': -1,
 				'create_date': 1
 			})
 			.skip((page - 1) * size)

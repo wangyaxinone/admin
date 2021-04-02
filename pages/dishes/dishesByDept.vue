@@ -43,7 +43,7 @@
 		<selectGoods ref="selectGoods" :goodsList="form.goods_list || {}" @submit="submit"></selectGoods>
 		<addFoods ref="addFoods" @submit="addFoodsSubmit"></addFoods>
 		<cookFoods ref="cookFoods" @load="loadData"></cookFoods>
-		<addDishes ref="addDishes"></addDishes>
+		<addDishes ref="addDishes" @submit="addDishesSubmit"></addDishes>
 	</view>
 </template>
 
@@ -306,6 +306,14 @@
 			this.$refs.cookFoods.show();
 		},
 		methods: {
+			addDishesSubmit({form,done,loading}) {
+				form.tenantId = this.$store.state.app.activeTenant;
+				add(form).then((res)=>{
+					done();
+					this.$refs.addDishes.hide();
+					this.loadData();
+				})
+			},
 			addDishesHandle() {
 				this.$refs.addDishes.show();
 			},
@@ -616,7 +624,7 @@
 											tableName.push(child.name);
 										})
 									}
-									item.tableName = tableName.join(',');
+									item.tableName = item.tableName || tableName.join(',');
 								})
 							}
 							this.data = res.data;
